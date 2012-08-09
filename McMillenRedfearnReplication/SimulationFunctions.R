@@ -34,7 +34,7 @@ LWR = function(observation, bandwidth, data) {
      weights = weights  )
 }
 
-Simulation = function(i, Total.observations = 2000, Error.sd = .3, Bandwidths = c(.1. 4)) {
+Simulation = function(i, Total.observations = 2000, Error.sd = .3, Bandwidths = c(.1, .4)) {
   # this function runs replicates the McMillen and Redfearn simulation
   # the goal is to use this function in "lapply" in order to avoid loops and speed up the code
   # therefore, the first argument is not used, it is just a placeholder for lapply
