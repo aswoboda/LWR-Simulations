@@ -16,6 +16,7 @@ print(system.time(source("LoopBenchmarker.R")))
 print(system.time(simulation.out <- lapply(1:Replications, Simulation)))
 
 require(multicore)
+options(cores = 4)
 #### NOTE: DO NOT run this line of code within RStudio
 print(system.time(simulation.out <- mclapply(1:Replications, Simulation)))
 
