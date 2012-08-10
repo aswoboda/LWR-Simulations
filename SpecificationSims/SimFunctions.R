@@ -48,8 +48,8 @@ LWR = function( my.observation, Data.Frame, my.model = "dep.var ~ indep.var1 + i
   # Creates containers for our parameters/metrics. 
   temp.est.betas = matrix(-99, numBetas, numK) # Need a matrix, row for each B, columns for each k
   temp.st.errors = matrix(-99, numBetas, numK) # Same as above
-  temp.est.dep.var = matrix(-99, numK, 1) # Matrix to be consistent with above, but only 1 value per k
-  temp.leverage = matrix(-99, numK, 1) # Same as temp.est.dep.var
+  temp.est.dep.var = matrix(-99, 1, numK ) # Matrix to be consistent with above, but only 1 value per k
+  temp.leverage = matrix(-99, 1, numK) # Same as temp.est.dep.var
   
   # Calculate distance
   
