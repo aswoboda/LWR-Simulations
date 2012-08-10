@@ -16,3 +16,8 @@ lapply(1:36, testfun, data = parameters)
 
 # to use the expand.grid and lapply for the simulations... we'll want a sim function 
 # that expects a data.frame of parameters and is told which row of the parameters to use
+
+testsim = function(i, parameters) {
+  myparams = parameters[i, ]
+  myfunction(myparams)
+}
