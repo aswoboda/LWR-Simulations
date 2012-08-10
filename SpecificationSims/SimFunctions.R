@@ -79,3 +79,40 @@ LWR = function( my.observation, Data.Frame, my.model = "dep.var ~ indep.var1 + i
   list(betas = temp.est.betas, st.errors = temp.st.errors, dep.vars = temp.est.dep.var, leverages = temp.leverage)
 }
 
+Reorganizer = function(lapplyoutput) {
+  ### Write a function that takes as input the output from lapply(1:n, LWR, ...) 
+  ### and reorganizes from a list of items for each observations
+  ### into a list with an item for each type of thing we want to compare ...
+  ### for instance, betahats for each variable, se's for each beta, dependent var est, leverage
+
+  n = length(lapplyoutput) # essentially the number of observations from our dataset we ran LWR on
+  ks = dim(lapplyoutput[[1]][[1]])[2] # should give us the number of ks we used running LWR
+  # betas
+  temp = sapply(lapplyoutput, "[", 1) # grabbing the estimated beta values
+  temp1 = unlist(temp)
+  beta0hats = matrix(temp1[seq(1, length(temp1), 3)], n, ks, byrow = T)
+  beta1hats = matrix(temp1[seq(2, length(temp1), 3)], n, ks, byrow = T)
+  beta2hats = matrix(temp1[seq(3, length(temp1), 3)], n, ks, byrow = T)
+  
+  # standard errors
+  temp = sapply(lapplyoutput, "[", 2) # grabbing the estimated beta values
+  temp1 = unlist(temp)
+  ses0 = matrix(temp1[seq(1, length(temp1), 3)], n, ks, byrow = T)
+  ses1 = matrix(temp1[seq(2, length(temp1), 3)], n, ks, byrow = T)
+  ses2 = matrix(temp1[seq(3, length(temp1), 3)], n, ks, byrow = T)
+  
+  # dependent variable estimates
+  temp = sapply(lapplyoutput, "[", 3) # grabbing the estimated dependent variable values
+  temp1 = unlist(temp)
+  yhats = matrix(temp1, length(temp1)/ks, ks, byrow = T)
+  
+  # leverage values
+  temp = sapply(lapplyoutput, "[", 4) # grabbing the estimated dependent variable values
+  temp1 = unlist(temp)
+  leverages = matrix(temp1, length(temp1)/ks, ks, byrow = T)
+  
+  # put everything together as output for the function
+  list(beta0hats = beta0hats, beta1hats = beta1hats, beta2hats = beta2hats,
+       ses0 = ses0, ses1 = ses1, ses2 = ses2,
+       yhats = yhats, leverages = leverages)
+}
