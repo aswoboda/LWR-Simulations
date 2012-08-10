@@ -11,12 +11,17 @@ Bandwidths = c( .1, .4) # proportion of data receiving positives weights in LWR
 
 Replications = 10 # number of times we regenerate a dataset for the simulation
 
+print("Time for looped code:")
 print(system.time(source("LoopBenchmarker.R")))
 
+print("Time for lapply code:")
 print(system.time(simulation.out <- lapply(1:Replications, Simulation)))
 
+print("Time for mclapply code:")
 require(multicore)
+options(cores = 4)
 #### NOTE: DO NOT run this line of code within RStudio
 print(system.time(simulation.out <- mclapply(1:Replications, Simulation)))
+
 
 
