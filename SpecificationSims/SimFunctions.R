@@ -40,7 +40,8 @@ LWR = function( my.observation, Data.Frame, my.model = "dep.var ~ indep.var1 + i
   # Creates a vector of ks for each observation.
   up.by = 5
   minimumk = 5
-  kvector <- c(seq(minimumk, sample.size - 1, up.by), sample.size-1) 
+  kvector <- seq(minimumk, sample.size - 1, up.by)
+  if (sample.size %% up.by != 1)  kvector = c(kvector, sample.size - 1)  #!= does not equal
   numK <- length(kvector)
   numBetas = 3
   
