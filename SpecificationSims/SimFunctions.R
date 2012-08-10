@@ -11,7 +11,7 @@ DataGen = function(sample.size, error.sd, B1.spatial.var, B2.spatial.var) {
   indep.var2 = runif(sample.size)*10 # random indep.var2's
   
   trueB0 = 0
-  trueB1 = B1.spatial.var*north/4 + 1 - 5*B1.spatial.var
+  trueB1 = B1.spatial.var*north/4 + 1 - .5*B1.spatial.var
   trueB2 = B2.spatial.var*5 + 1 - B2.spatial.var*east
   
   
