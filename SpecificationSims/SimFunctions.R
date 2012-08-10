@@ -32,9 +32,9 @@ DataGen = function(sample.size, error.sd, B1.spatial.var, B2.spatial.var) {
 
 # Model in quotes is default model, don't need anything entered for it to run
 LWR = function( my.observation, Data.Frame, my.model = "dep.var ~ indep.var1 + indep.var2") {
-  my.observation = 2
-  Data.Frame = test.data
-  my.model = "dep.var ~ indep.var1 + indep.var2"
+  #my.observation = 2
+  #Data.Frame = test.data
+  #my.model = "dep.var ~ indep.var1 + indep.var2"
   sample.size = dim(Data.Frame)[1]
   
   # Creates a vector of ks for each observation.
