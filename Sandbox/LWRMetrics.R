@@ -27,13 +27,20 @@ dep.var.cor.results = cor(new.output$yhats), Data$dep.var) #dependent variable
 # Residuals: For B0, B1, B2
 # Want to meausure residual of each B for each k for each observation 
 # against the trueB for that observation. 
-beta.Residual.Calc = function(betahats, truebetas) {
-  sum(([ i, ] - Data$trueB1[ , i])^2)
-}
 
+# beta.Residual.calc is a function defined in SimFunctions and can be sourced
+
+# For beta0
+beta.Residual.Calc(new.output[["beta0hats"]], Data$trueB0)
+# For beta1
+beta.Residual.Calc(new.output[["beta1hats"]], Data$trueB1)
+# For beta2
+beta.Residual.Calc(new.output[["beta2hats"]], Data$trueB2)
 
 
 # T-tests
+t.tester = function()
+
 lm(dep.var ~ indep.var1 + indep.var2, data = Data.Frame)
 # Want to test for significance the difference between each betahat and its corresponding truebeta.
 kvector <- seq(minimumk, sample.size - 1, up.by)

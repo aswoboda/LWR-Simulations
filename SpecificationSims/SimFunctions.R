@@ -113,3 +113,8 @@ Reorganizer = function(lapplyoutput) {
        ses0 = ses0, ses1 = ses1, ses2 = ses2,
        yhats = yhats, leverages = leverages)
 }
+
+beta.Residual.Calc = function(betahats, truebetas) {
+  
+  colSums((betahats - truebetas)^2)
+}
