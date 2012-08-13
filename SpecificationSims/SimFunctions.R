@@ -198,7 +198,26 @@ LWRMetrics = function(LWRinput, Data) {
 } 
 
 min.Generator = function(LWRMetrics.output) {
-  min.bandwidth.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics$gcv.values)]
-  min.bandwidth.stan.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics$stan.values)]
+  min.bwidth.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$gcv.values)]
+  min.bwidth.stan.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$stan.gcv.values)]
   
+  min.bwidth.beta0.resid = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta0.residuals)]
+  min.bwidth.beta1.resid = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta1.residuals)]
+  min.bwidth.beta2.resid = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta2.residuals)]
+  
+  max.bwidth.beta0.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta0.ttest.percent)]
+  max.bwidth.beta1.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta1.ttest.percent)]
+  max.bwidth.beta2.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta2.ttest.percent)]
+  
+  max.bwidth.beta1.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta1.cor.results)]
+  max.bwidth.beta2.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta2.cor.results)]
+  max.bwidth.dep.var.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$dep.var.cor.results)]
+  
+  list(min.bwidth.gcv = min.bwidth.gcv, min.bwidth.stan.gcv = min.bwidth.stan.gcv,
+       min.bwidth.beta0.resid = min.bwidth.beta0.resid, min.bwidth.beta1.resid = min.bwidth.beta1.resid,
+       min.bwidth.beta2.resid = min.bwidth.beta2.resid,
+       max.bwidth.beta0.ttest.percent = max.bwidth.beta0.ttest.percent, max.bwidth.beta1.ttest.percent = max.bwidth.beta1.ttest.percent,
+       max.bwidth.beta2.ttest.percent = max.bwidth.beta2.ttest.percent,
+       max.bwidth.beta1.cor.results = max.bwidth.beta1.cor.results, max.bwidth.beta2.cor.results = max.bwidth.beta2.cor.results,
+       max.bwidth.dep.var.cor.results = max.bwidth.dep.var.cor.results)
 }
