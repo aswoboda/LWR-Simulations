@@ -36,4 +36,4 @@ beta.Residual.Calc = function(betahats, truebetas) {
 # T-tests
 lm(dep.var ~ indep.var1 + indep.var2, data = Data.Frame)
 # Want to test for significance the difference between each betahat and its corresponding truebeta.
-t.test(Reorganizer(output)$beta0hats, y = Data$trueb0)
+t.test(Reorganizer(output)$beta0hats, y=Data$trueb0)
