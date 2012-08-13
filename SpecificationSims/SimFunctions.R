@@ -48,7 +48,7 @@ LWR = function( my.observation, Data.Frame, my.model = "dep.var ~ indep.var1 + i
   temp.st.errors = matrix(-99, numBetas, numK) # Same as above
   temp.est.dep.var = matrix(-99, 1, numK ) # Matrix to be consistent with above, but only 1 value per k
   temp.leverage = matrix(-99, 1, numK) # Same as temp.est.dep.var
-  
+  temp.est.dep.var.without = matrix(-99, 1, numK)
   # Calculate distance
   
     Di<-((Data.Frame$north-Data.Frame$north[my.observation])^2+(Data.Frame$east-Data.Frame$east[my.observation])^2)^.5
@@ -72,8 +72,14 @@ LWR = function( my.observation, Data.Frame, my.model = "dep.var ~ indep.var1 + i
     temp.est.dep.var[j] <- lmreg$fitted.values[my.observation] # keep track of the predicted value of y
     temp.leverage[j] <- lm.influence(lmreg)$hat[as.character(my.observation)] # the leverage value
     
+    #Now we are going to exclude the observation itself.
+    Data.Frame$Weights[my.observation] = 0
+    lmreg = lm(my.model, data = Data.Frame, weights = Weights)
+    
+    temp.est.dep.var.without[j] = lmreg$fitted.values[my.observation] 
   }
-  list(betas = temp.est.betas, st.errors = temp.st.errors, dep.vars = temp.est.dep.var, leverages = temp.leverage)
+  list(betas = temp.est.betas, st.errors = temp.st.errors, dep.vars = temp.est.dep.var, leverages = temp.leverage,
+       dep.vars.without = temp.est.dep.var.without)
 }
 
 Reorganizer = function(lapplyoutput) {
@@ -98,10 +104,15 @@ Reorganizer = function(lapplyoutput) {
   ses1 = matrix(temp1[seq(2, length(temp1), 3)], n, ks, byrow = T)
   ses2 = matrix(temp1[seq(3, length(temp1), 3)], n, ks, byrow = T)
   
-  # dependent variable estimates
+  # dependent variable estimates with observation
   temp = sapply(lapplyoutput, "[", 3) # grabbing the estimated dependent variable values
   temp1 = unlist(temp)
   yhats = matrix(temp1, length(temp1)/ks, ks, byrow = T)
+  
+  # dependent variable estimates without observation
+  temp = sapply(lapplyoutput, "[", 5) # grabbing the estimated dependent variable values
+  temp1 = unlist(temp)
+  yhats.without = matrix(temp1, length(temp1)/ks, ks, byrow = T)
   
   # leverage values
   temp = sapply(lapplyoutput, "[", 4) # grabbing the estimated dependent variable values
@@ -111,10 +122,43 @@ Reorganizer = function(lapplyoutput) {
   # put everything together as output for the function
   list(beta0hats = beta0hats, beta1hats = beta1hats, beta2hats = beta2hats,
        ses0 = ses0, ses1 = ses1, ses2 = ses2,
-       yhats = yhats, leverages = leverages)
+       yhats = yhats, leverages = leverages, yhats.without = yhats.without)
 }
 
 beta.Residual.Calc = function(betahats, truebetas) {
   
   colSums((betahats - truebetas)^2)
+}
+
+# We need to get a better name for this function. It is doing more than just performing a t-test..
+beta.ttest = function(betahats, ses, truebetas) {
+  # Want to test for significance the difference between each betahat and its corresponding truebeta.
+  kvector <- seq(minimumk, sample.size - 1, up.by)
+  if (sample.size %% up.by != 1)  kvector = c(kvector, sample.size - 1)
+  
+  t.percent = c() # Flexible length vector
+  
+  t.obs = ((betahats - truebetas)/ses)
+  critical.ts = qt(.975, kvector-2) # .975 = our significance level, kvector-2 tells us our DoF, K+observation-3 betas
+  for (j in 1: length(critical.ts)) {
+    t.percent[j] = sum(t.obs[ , j] > critical.ts[j])/dim(t.obs)[1]
+  } 
+  t.percent
+}
+
+# Generalized Cross Validation for each k
+GCV = function(leverages, yhats, dep.var) {
+  sample.size = dim(yhats)[1]
+  v1 <- colSums(leverages)
+  SE <- colSums((dep.var-yhats)^2)
+  gcv <- sample.size*SE/(sample.size-v1)^2   
+  gcv
+}
+
+# Standardized CV from Paez et all
+# Need to make sure that we are supposed to square denominator
+standardized.CV = function(dep.var, yhats.without) {
+  numer = ((dep.var - yhats.without)^2)
+  denom = rowSums(numer) 
+  stan.CV.values = colSums(numer/denom)
 }

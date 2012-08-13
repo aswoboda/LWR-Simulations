@@ -24,35 +24,23 @@ beta2.cor.results = cor(new.output$beta2hats, Data$trueB2) #B2
 dep.var.cor.results = cor(new.output$yhats), Data$dep.var) #dependent variable
 
 
-# Residuals: For B0, B1, B2
-# Want to meausure residual of each B for each k for each observation 
-# against the trueB for that observation. 
-
+# Residuals: For beta0/1/2
 # beta.Residual.calc is a function defined in SimFunctions and can be sourced
-
-# For beta0
 beta.Residual.Calc(new.output[["beta0hats"]], Data$trueB0)
-# For beta1
 beta.Residual.Calc(new.output[["beta1hats"]], Data$trueB1)
-# For beta2
 beta.Residual.Calc(new.output[["beta2hats"]], Data$trueB2)
 
-
-# T-tests
-t.tester = function()
-
-lm(dep.var ~ indep.var1 + indep.var2, data = Data.Frame)
-# Want to test for significance the difference between each betahat and its corresponding truebeta.
-kvector <- seq(minimumk, sample.size - 1, up.by)
-if (sample.size %% up.by != 1)  kvector = c(kvector, sample.size - 1)
-
-t.percent = c() # Flexible length vector
-
-t.obs = ((new.output[["beta0hats"]] - Data$trueB0)/new.output[["ses0"]])
-critical.ts = qt(.975, kvector-2) # .975 = our significance level, kvector-2 tells us our DoF, K+observation-3 betas
-for (j in 1: length(critical.ts)) {
-t.percent[j] = sum(t.obs[ , j] > critical.ts[j])/dim(t.obs)[1]
-}
+# Now calculate for each beta the % of t-tests with values > critical t, for each k.
+beta.ttest(new.output[["beta0hats"]], new.output[["ses0"]], Data$trueB0)
+beta.ttest(new.output[["beta1hats"]], new.output[["ses1"]], Data$trueB1)
+beta.ttest(new.output[["beta2hats"]], new.output[["ses2"]], Data$trueB2)
      
-# Calculate critical t for each k
-# Find % for each k > critical t
+# Generalized Cross-validation score
+
+GCV(new.output[["leverages"]], new.output[["yhats"]], Data$dep.var)
+         ##Define GCV score
+
+# Standardized CV a la Paez 2007
+standardized.CV = function(Data$dep.var, new.output[["yhats.without"]]) 
+
+
