@@ -24,9 +24,6 @@ DataGen = function(sample.size, error.sd, B1.spatial.var, B2.spatial.var) {
  
 }
 
-
-
-
 # LWR for all Ks - specify a model as a parameter
 # Generate weights, proximities
 
