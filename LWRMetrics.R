@@ -15,13 +15,18 @@ source("SpecificationSims/SimFunctions.R")
 # B residuals
 
 # Correlations: For 3 Bs and the dep. var:
-cor(aarons.list$betahat0, Data$trueB0) #B0
-cor(aarons.list$betahat1, Data$trueB1) #B1
-cor(aarons.list$betahat2, Data$trueB2) #B2
-cor(aarons.list$est.dep.var, Data$dep.var) #dependent variable
+# Could probably make this less repetitive. Create a function that correlates all Bs and dep.var
+# and then stores them in matrices. 
+
+beta0.cor.results = cor(Reorganizer(output)[1], Data$trueB0) #B0
+beta1.cor.results = cor(Reorganizer(output)[2], Data$trueB1) #B1
+beta2.cor.results = cor(Reorganizer(output)[3], Data$trueB2) #B2
+dep.var.cor.results = cor(Reorganizer(output)[7]), Data$dep.var) #dependent variable
 
 # Residuals: For B0, B1, B2
-
+betaResidual.Calc = function(i, betas) {
+  sum((betas[, 1] - betas[, i])^2)
+}
 
 # T-tests
 lm(dep.var ~ indep.var1 + indep.var2, data = Data.Frame)
