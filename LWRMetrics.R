@@ -18,16 +18,22 @@ source("SpecificationSims/SimFunctions.R")
 # Could probably make this less repetitive. Create a function that correlates all Bs and dep.var
 # and then stores them in matrices. 
 
-beta0.cor.results = cor(Reorganizer(output)[1], Data$trueB0) #B0
-beta1.cor.results = cor(Reorganizer(output)[2], Data$trueB1) #B1
-beta2.cor.results = cor(Reorganizer(output)[3], Data$trueB2) #B2
-dep.var.cor.results = cor(Reorganizer(output)[7]), Data$dep.var) #dependent variable
+beta0.cor.results = cor(Reorganizer(output)$beta0hats, Data$trueB0) #B0  #Can't use a function?
+beta1.cor.results = cor(Reorganizer(output)$beta1hats, Data$trueB1) #B1
+beta2.cor.results = cor(Reorganizer(output)$beta2hats, Data$trueB2) #B2
+dep.var.cor.results = cor(Reorganizer(output)$yhats), Data$dep.var) #dependent variable
+
 
 # Residuals: For B0, B1, B2
-betaResidual.Calc = function(i, betas) {
-  sum((betas[, 1] - betas[, i])^2)
+# Want to meausure residual of each B for each k for each observation 
+# against the trueB for that observation. 
+beta.Residual.Calc = function(betahats, truebetas) {
+  sum((betahats[ i, ] - truebetas[ , i])^2)
 }
+
+
 
 # T-tests
 lm(dep.var ~ indep.var1 + indep.var2, data = Data.Frame)
-t-test()
+# Want to test for significance the difference between each betahat and its corresponding truebeta.
+t.test(Reorganizer(output)$beta0hats, y = Data$trueb0)
