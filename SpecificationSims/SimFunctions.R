@@ -79,7 +79,7 @@ LWR = function( my.observation, Data.Frame, my.model = "dep.var ~ indep.var1 + i
     temp.est.dep.var.without[j] = lmreg$fitted.values[my.observation] 
   }
   list(betas = temp.est.betas, st.errors = temp.st.errors, dep.vars = temp.est.dep.var, leverages = temp.leverage,
-       dep.vars.without = temp.est.dep.var.without)
+       dep.vars.without = temp.est.dep.var.without, bandwidths = kvector)
 }
 
 Reorganizer = function(lapplyoutput) {
@@ -122,7 +122,7 @@ Reorganizer = function(lapplyoutput) {
   # put everything together as output for the function
   list(beta0hats = beta0hats, beta1hats = beta1hats, beta2hats = beta2hats,
        ses0 = ses0, ses1 = ses1, ses2 = ses2,
-       yhats = yhats, leverages = leverages, yhats.without = yhats.without)
+       yhats = yhats, leverages = leverages, yhats.without = yhats.without, bandwidths = output[[1]]$bandwidths)
 }
 
 beta.Residual.Calc = function(betahats, truebetas) {
@@ -161,4 +161,44 @@ standardized.CV = function(dep.var, yhats.without) {
   numer = ((dep.var - yhats.without)^2)
   denom = rowSums(numer) 
   stan.CV.values = colSums(numer/denom)
+}
+
+LWRMetrics = function(LWRinput, Data) {
+  bandwidths = LWRinput$bandwidths
+  beta1.cor.results = t(cor(LWRinput$beta1hats, Data$trueB1))#B1
+  beta2.cor.results = t(cor(LWRinput$beta2hats, Data$trueB2)) #B2
+  dep.var.cor.results = t(cor(LWRinput$yhats, Data$dep.var)) #dependent variable
+  
+  
+  # Residuals: For beta0/1/2
+  # beta.Residual.calc is a function defined in SimFunctions and can be sourced
+  beta0.residuals = beta.Residual.Calc(LWRinput[["beta0hats"]], Data$trueB0)
+  beta1.residuals = beta.Residual.Calc(LWRinput[["beta1hats"]], Data$trueB1)
+  beta2.residuals = beta.Residual.Calc(LWRinput[["beta2hats"]], Data$trueB2)
+  
+  # Now calculate for each beta the % of t-tests with values > critical t, for each k.
+  beta0.ttest.percent = beta.ttest(LWRinput[["beta0hats"]], LWRinput[["ses0"]], Data$trueB0)
+  beta1.ttest.percent = beta.ttest(LWRinput[["beta1hats"]], LWRinput[["ses1"]], Data$trueB1)
+  beta2.ttest.percent = beta.ttest(LWRinput[["beta2hats"]], LWRinput[["ses2"]], Data$trueB2)
+  
+  # Generalized Cross-validation score
+  
+  gcv.values = GCV(LWRinput[["leverages"]], LWRinput[["yhats"]], Data$dep.var)
+  ##Define GCV score
+  
+  # Standardized CV a la Paez 2007
+  stan.gcv.values = standardized.CV(Data$dep.var, LWRinput[["yhats.without"]]) 
+  
+  list(beta1.cor.results = beta1.cor.results, beta2.cor.results = beta2.cor.results, 
+       dep.var.cor.results = dep.var.cor.results, beta0.residuals = beta0.residuals, 
+       beta1.residuals = beta1.residuals, beta2.residuals = beta2.residuals, 
+       beta0.ttest.percent = beta0.ttest.percent, beta1.ttest.percent = beta1.ttest.percent,
+       beta2.ttest.percent = beta2.ttest.percent, gcv.values = gcv.values, 
+       stan.gcv.values = stan.gcv.values, bandwidths = bandwidths)
+} 
+
+min.Generator = function(LWRMetrics.output) {
+  min.bandwidth.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics$gcv.values)]
+  min.bandwidth.stan.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics$stan.values)]
+  
 }
