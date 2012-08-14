@@ -211,7 +211,7 @@ min.Generator = function(LWRMetrics.output) {
   max.bwidth.beta2.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta2.cor.results)]
   max.bwidth.dep.var.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$dep.var.cor.results)]
   
-  list(min.bwidth.gcv = min.bwidth.gcv, min.bwidth.stan.gcv = min.bwidth.stan.gcv,
+  c(min.bwidth.gcv = min.bwidth.gcv, min.bwidth.stan.gcv = min.bwidth.stan.gcv,
        min.bwidth.beta0.resid = min.bwidth.beta0.resid, min.bwidth.beta1.resid = min.bwidth.beta1.resid,
        min.bwidth.beta2.resid = min.bwidth.beta2.resid,
        max.bwidth.beta0.ttest.percent = max.bwidth.beta0.ttest.percent, max.bwidth.beta1.ttest.percent = max.bwidth.beta1.ttest.percent,
