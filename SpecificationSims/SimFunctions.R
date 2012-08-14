@@ -235,9 +235,11 @@ simulation = function(iteration, DGPparameters) {
 
 simulationReplicator = function(N = 2, DGPparameters, MC = FALSE){
   require(multicore, quietly = TRUE)
-  temp = ifelse(MC == FALSE,
-                lapply(1:N, simulation, DGPparameters = DGPparameters),
-                mclapply(1:N, simulation, DGPparameters = DGPparameters))
+  if(MC == TRUE) {
+    temp = mclapply(1:N, simulation, DGPparameters = DGPparameters)
+  }
+  else temp = lapply(1:N, simulation, DGPparameters = DGPparameters)
+   #temp = lapply(1:N, simulation, DGPparameters = DGPparameters)
   temp2 = unlist(temp)
   data.temp = data.frame(matrix(unlist(temp2), N, 11, byrow = T))
   names(data.temp) = names(temp2)[1:11]

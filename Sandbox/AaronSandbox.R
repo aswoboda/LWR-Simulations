@@ -10,4 +10,12 @@ sim.parameters = data.frame(sample.size = 100,
                             B1.spatial.var = 1,
                             B2.spatial.var = .5)
 
-simulationReplicator(2, sim.parameters)
+start = Sys.time()
+simData = simulationReplicator(10, sim.parameters, MC=FALSE)
+end = Sys.time()
+print(end-start)
+
+start = Sys.time()
+simData = simulationReplicator(10, sim.parameters, MC=TRUE)
+end = Sys.time()
+print(end-start)
