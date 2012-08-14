@@ -20,7 +20,7 @@ simulation = function(iteration, DGPparameters) {
   list(simMetrics, optimal.bandwidths)
 }
 
-sim.parameters = data.frame(sample.size = 200, 
+sim.parameters = data.frame(sample.size = 100, 
                             error.sd = .5,
                             B1.spatial.var = 1,
                             B2.spatial.var = .5)

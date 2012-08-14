@@ -122,7 +122,7 @@ Reorganizer = function(lapplyoutput) {
   # put everything together as output for the function
   list(beta0hats = beta0hats, beta1hats = beta1hats, beta2hats = beta2hats,
        ses0 = ses0, ses1 = ses1, ses2 = ses2,
-       yhats = yhats, leverages = leverages, yhats.without = yhats.without, bandwidths = output[[1]]$bandwidths)
+       yhats = yhats, leverages = leverages, yhats.without = yhats.without, bandwidths = lapplyoutput[[1]]$bandwidths)
 }
 
 beta.Residual.Calc = function(betahats, truebetas) {
