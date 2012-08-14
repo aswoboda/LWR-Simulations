@@ -131,15 +131,13 @@ beta.Residual.Calc = function(betahats, truebetas) {
 }
 
 # We need to get a better name for this function. It is doing more than just performing a t-test..
-beta.ttest = function(betahats, ses, truebetas) {
+beta.ttest = function(betahats, ses, truebetas, bandwidths) {
   # Want to test for significance the difference between each betahat and its corresponding truebeta.
-  kvector <- seq(minimumk, sample.size - 1, up.by)
-  if (sample.size %% up.by != 1)  kvector = c(kvector, sample.size - 1)
   
   t.percent = c() # Flexible length vector
   
   t.obs = ((betahats - truebetas)/ses)
-  critical.ts = qt(.975, kvector-2) # .975 = our significance level, kvector-2 tells us our DoF, K+observation-3 betas
+  critical.ts = qt(.975, bandwidths-2) # .975 = our significance level, kvector-2 tells us our DoF, K+observation-3 betas
   for (j in 1: length(critical.ts)) {
     t.percent[j] = sum(t.obs[ , j] > critical.ts[j])/dim(t.obs)[1]
   } 
@@ -177,9 +175,9 @@ LWRMetrics = function(LWRinput, Data) {
   beta2.residuals = beta.Residual.Calc(LWRinput[["beta2hats"]], Data$trueB2)
   
   # Now calculate for each beta the % of t-tests with values > critical t, for each k.
-  beta0.ttest.percent = beta.ttest(LWRinput[["beta0hats"]], LWRinput[["ses0"]], Data$trueB0)
-  beta1.ttest.percent = beta.ttest(LWRinput[["beta1hats"]], LWRinput[["ses1"]], Data$trueB1)
-  beta2.ttest.percent = beta.ttest(LWRinput[["beta2hats"]], LWRinput[["ses2"]], Data$trueB2)
+  beta0.ttest.percent = beta.ttest(LWRinput[["beta0hats"]], LWRinput[["ses0"]], Data$trueB0, LWRinput$bandwidths)
+  beta1.ttest.percent = beta.ttest(LWRinput[["beta1hats"]], LWRinput[["ses1"]], Data$trueB1, LWRinput$bandwidths)
+  beta2.ttest.percent = beta.ttest(LWRinput[["beta2hats"]], LWRinput[["ses2"]], Data$trueB2, LWRinput$bandwidths)
   
   # Generalized Cross-validation score
   
