@@ -1,30 +1,20 @@
 
 source("SpecificationSims/SimFunctions.R")
 
-# Write a function that takes as given some simulation parameters, and runs these commands a number of
-# times so that we can grab average bandwidth values and start to see if there are patterns(which metrics
-# suggest simmilar bandwidths, etc)
+# write a function that takes as given some simulation parameters, and runs the these commands a number of times
+# so that we can start to see if there are patterns (which metrics suggest similar bandwidths, etc.)
+#
 
-simulation = function(iteration, DGPparameters) {
-  
-  Data = DataGen(DGPparameters$sample.size, 
-                 DGPparameters$error.sd, 
-                 DGPparameters$B1.spatial.var, 
-                 DGPparameters$B2.spatial.var)
-  
-  output = lapply(1:dim(Data)[1], LWR, Data.Frame = Data)
-  new.output = Reorganizer(output)
-  simMetrics = LWRMetrics(new.output, Data)
-  optimal.bandwidths = bandwidth.Selector(simMetrics)
-  list(simMetrics, optimal.bandwidths)
+# Need print, paste
+# Paste progress in a .Rout file
+meta.sim.num = 12
+
+for(i in  1:dim(sim.parameters)[1]) { 
+  start = Sys.time()
+  # simulationReplicator(sim.parameters, MC = FALSE)
+ # num = 2^2^2^2 + 3^3^3
+  end = Sys.time()
+  time = end - start
+  print(paste("For loop", i,"of", meta.sim.num, "it took", time))
+  save()
 }
-  
-sim.parameters = data.frame(sample.size = 50, 
-                            error.sd = .5, 
-                            B1.spatial.var = 1, 
-                            B2.spatial.var = .5)
-
-simulation(1, sim.parameters)
-
-lappy(1:20, simulation, DGPparameters = sim.parameters)
-
