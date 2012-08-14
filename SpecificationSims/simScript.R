@@ -14,6 +14,6 @@ simData = simulationReplicator(200, sim.parameters, MC=TRUE)
 end = Sys.time()
 print(end-start)
 
-myout = list(sim.parameters, simData)
+simulationOutput = list(sim.parameters, simData)
 
-save(myout, file = "SpecificationSims/SimulationResults.RData")
+save(simulationOutput, file = "SpecificationSims/SimulationResults.RData")
