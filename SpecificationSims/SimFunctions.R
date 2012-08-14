@@ -211,10 +211,11 @@ bandwidth.Selector = function(LWRMetrics.output) {
   bwidth.B2.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta2.cor.results)]
   bwidth.dep.var.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$dep.var.cor.results)]
   
-  c(bwidth.gcv, bwidth.stan.cv,
-    bwidth.B0.resid, bwidth.B1.resid,
-    bwidth.B2.resid, bwidth.B0.ttest.percent, 
-    bwidth.B1.ttest.percent, bwidth.B2.ttest.percent,
-    bwidth.B1.cor.results, bwidth.B2.cor.results,
-    bwidth.dep.var.cor.results)
+  c(GCV = bwidth.gcv, SCV = bwidth.stan.cv,
+    SSRB0 = bwidth.B0.resid, SSRB1 = bwidth.B1.resid, SSRB2 = bwidth.B2.resid, 
+    "ttest%B0" = bwidth.B0.ttest.percent, 
+    "ttest%B1" = bwidth.B1.ttest.percent, 
+    "ttest%B2" = bwidth.B2.ttest.percent,
+    corB1 = bwidth.B1.cor.results, corB2 = bwidth.B2.cor.results,
+    corDepVar = bwidth.dep.var.cor.results)
 }
