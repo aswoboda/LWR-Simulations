@@ -8,8 +8,3 @@ new.output = Reorganizer(output)
 
 simMetrics = LWRMetrics(new.output)
 
-
-betaComparer = function(i, betas) {
-  sum((betas[, 1] - betas[, i])^2)
-}
-plot(cor(beta1hats)[1, -1], unlist(lapply(2:9, betaComparer, betas = beta1hats)))
