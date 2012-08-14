@@ -15,7 +15,7 @@ simulation = function(iteration, DGPparameters) {
   output = lapply(1:dim(Data)[1], LWR, Data.Frame = Data)
   new.output = Reorganizer(output)
   simMetrics = LWRMetrics(new.output, Data)
-  min.Generator(simMetrics)
+  bandwidth.Selector(simMetrics)
   
 }
   

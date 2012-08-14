@@ -195,7 +195,7 @@ LWRMetrics = function(LWRinput, Data) {
        stan.gcv.values = stan.gcv.values, bandwidths = bandwidths)
 } 
 
-min.Generator = function(LWRMetrics.output) {
+bandwidth.Selector = function(LWRMetrics.output) {
   min.bwidth.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$gcv.values)]
   min.bwidth.stan.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$stan.gcv.values)]
   
