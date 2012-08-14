@@ -5,28 +5,9 @@ source("SpecificationSims/SimFunctions.R")
 
 # write a function that takes as given some simulation parameters, and runs the these commands a number of times
 # so that we can start to see if there are patterns (which metrics suggest similar bandwidths, etc.)
-
-
-simulation = function(iteration, DGPparameters) {
-  
-  Data = DataGen(DGPparameters$sample.size, 
-                 DGPparameters$error.sd, 
-                 DGPparameters$B1.spatial.var, 
-                 DGPparameters$B2.spatial.var)
-  output = lapply(1:dim(Data)[1], LWR, Data.Frame = Data)
-  new.output = Reorganizer(output)
-  simMetrics = LWRMetrics(new.output, Data)
-  optimal.bandwidths = bandwidth.Selector(simMetrics)
-  list(simMetrics, optimal.bandwidths)
-}
-
 sim.parameters = data.frame(sample.size = 100, 
                             error.sd = .5,
                             B1.spatial.var = 1,
                             B2.spatial.var = .5)
 
-simulation(1, sim.parameters)
-
-N = 10
-temp = lapply(1:N, simulation, DGPparameters = sim.parameters)
-matrix(unlist(temp), N, 11, byrow = T)
+simulationReplicator(2, sim.parameters)

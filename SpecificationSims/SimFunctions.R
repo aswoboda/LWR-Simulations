@@ -219,3 +219,27 @@ bandwidth.Selector = function(LWRMetrics.output) {
     corB1 = bwidth.B1.cor.results, corB2 = bwidth.B2.cor.results,
     corDepVar = bwidth.dep.var.cor.results)
 }
+
+simulation = function(iteration, DGPparameters) {
+  
+  Data = DataGen(DGPparameters$sample.size, 
+                 DGPparameters$error.sd, 
+                 DGPparameters$B1.spatial.var, 
+                 DGPparameters$B2.spatial.var)
+  output = lapply(1:dim(Data)[1], LWR, Data.Frame = Data)
+  new.output = Reorganizer(output)
+  simMetrics = LWRMetrics(new.output, Data)
+  optimal.bandwidths = bandwidth.Selector(simMetrics)
+  list(optimal.bandwidths)
+}
+
+simulationReplicator = function(N = 2, DGPparameters, MC = FALSE){
+  require(multicore, quietly = TRUE)
+  temp = ifelse(MC == FALSE,
+                lapply(1:N, simulation, DGPparameters = DGPparameters),
+                mclapply(1:N, simulation, DGPparameters = DGPparameters))
+  temp2 = unlist(temp)
+  data.temp = data.frame(matrix(unlist(temp2), N, 11, byrow = T))
+  names(data.temp) = names(temp2)[1:11]
+  data.temp
+}
