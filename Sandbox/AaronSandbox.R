@@ -16,14 +16,17 @@ simulation = function(iteration, DGPparameters) {
   output = lapply(1:dim(Data)[1], LWR, Data.Frame = Data)
   new.output = Reorganizer(output)
   simMetrics = LWRMetrics(new.output, Data)
-  min.Generator(simMetrics)
+  optimal.bandwidths = bandwidth.Selector(simMetrics)
+  list(simMetrics, optimal.bandwidths)
 }
 
-sim.parameters = data.frame(sample.size = 50, 
+sim.parameters = data.frame(sample.size = 200, 
                             error.sd = .5,
                             B1.spatial.var = 1,
                             B2.spatial.var = .5)
 
 simulation(1, sim.parameters)
 
-lapply(1:20, simulation, DGPparameters = sim.parameters)
+N = 10
+temp = lapply(1:N, simulation, DGPparameters = sim.parameters)
+matrix(unlist(temp), N, 11, byrow = T)
