@@ -25,3 +25,5 @@ sim.parameters = data.frame(sample.size = 50,
                             B2.spatial.var = .5)
 
 simulation(1, sim.parameters)
+
+lapply(1:20, simulation, DGPparameters = sim.parameters)
