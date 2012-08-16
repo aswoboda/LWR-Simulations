@@ -1,23 +1,32 @@
+# empty sandbox
 
 
+source("SpecificationSims/SimFunctions.R")
+
+# set our simulation parameters
+Replications = 500
+sample.size = c(50, 100, 200, 500, 1000, 2000)
+error.sd = c(3)
+B1.spatial.var = 0.25
+B2.spatial.var = 0.25
+
+sim.parameters = expand.grid(sample.size, error.sd, B1.spatial.var, B2.spatial.var)
+names(sim.parameters) = c("sample.size", "error.sd", "B1.spatial.var", "B2.spatial.var")
+
+meta.sim.num = dim(sim.parameters)[1]
+
+DGPparameters = sim.parameters[1, ]
+    
 
 
-# playing around with making plots to display optimal bandwidths under GCV vs SCV
+Data = DataGen(DGPparameters$sample.size, 
+               DGPparameters$error.sd, 
+               DGPparameters$B1.spatial.var, 
+               DGPparameters$B2.spatial.var)
+output = lapply(1:dim(Data)[1], LWR, Data.Frame = Data)
+new.output = Reorganizer(output)
+simMetrics = LWRMetrics(new.output, Data)
+optimal.bandwidths = bandwidth.Selector(simMetrics)
 
-pdf("SpecificationSims/Figures/simOutputFigures.pdf")
-par(mfrow = c(2, 2))
-for (k in 1:4){
-  for (i in 1:2) {
-    for (j in 1:2) {
-      plot(simOutput[k, i, j, 1, , "GCV"], simOutput[k, i, j, 1, , "SCV"],
-           xlim = c(0, 500), xlab = "GCV",
-           ylim = c(0, 500), ylab = "SCV",
-           main = paste("mSCV = ", round(mean(simOutput[k, i, j, 1, , "SCV"]), 0),
-                        "mGCV = ", round(mean(simOutput[k, i, j, 1, , "GCV"]), 0)),
-           pch = 16, cex = .65,
-           col = rgb(red = 0, green = 0, blue = 1, alpha = .05)
-      )
-    }
-  }
-}
-dev.off()
+list(c(optimal.bandwidths, myfunction(Data)))
+
