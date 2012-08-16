@@ -197,7 +197,7 @@ LWRMetrics = function(LWRinput, Data) {
   # Standardized CV a la Paez 2007
   stan.gcv.values = standardized.CV(Data$dep.var, LWRinput[["yhats.without"]]) 
   
-  list(beta1.cor.results = beta1.cor.results, beta2.cor.results = beta2.cor.results, 
+  list(beta0.cor.results = beta0.cor.results, beta1.cor.results = beta1.cor.results, beta2.cor.results = beta2.cor.results, 
        dep.var.cor.results = dep.var.cor.results, beta0.residuals = beta0.residuals, 
        beta1.residuals = beta1.residuals, beta2.residuals = beta2.residuals, 
        beta0.ttest.percent = beta0.ttest.percent, beta1.ttest.percent = beta1.ttest.percent,
@@ -219,7 +219,7 @@ bandwidth.Selector = function(LWRMetrics.output) {
   
   if(is.na(max(LWRMetrics.output$beta0.cor.results)) == T) {
     bwidth.B0.cor.results = NA
-  } else bwidth.B0.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta0.cor.results)]
+   } else bwidth.B0.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta0.cor.results)]
   
   if(is.na(max(LWRMetrics.output$beta1.cor.results)) == T) {
     bwidth.B1.cor.results = NA
