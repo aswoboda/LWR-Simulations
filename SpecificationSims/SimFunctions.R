@@ -217,8 +217,18 @@ bandwidth.Selector = function(LWRMetrics.output) {
   bwidth.B1.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta1.ttest.percent)]
   bwidth.B2.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta2.ttest.percent)]
   
-  bwidth.B1.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta1.cor.results)]
-  bwidth.B2.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta2.cor.results)]
+  if(is.na(max(LWRMetrics.output$beta1.cor.results)) == T) {
+    bwidth.B0.cor.results = NA
+  } else bwidth.B0.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta0.cor.results)]
+  
+  if(is.na(max(LWRMetrics.output$beta1.cor.results)) == T) {
+    bwidth.B1.cor.results = NA
+  } else bwidth.B1.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta1.cor.results)]
+  
+  if(is.na(max(LWRMetrics.output$beta2.cor.results)) == T) {
+    bwidth.B2.cor.results = NA
+  } else bwidth.B2.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta2.cor.results)]
+    
   bwidth.dep.var.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$dep.var.cor.results)]
   
   c(GCV = bwidth.gcv, SCV = bwidth.stan.cv,
@@ -226,6 +236,7 @@ bandwidth.Selector = function(LWRMetrics.output) {
     "ttest%B0" = bwidth.B0.ttest.percent, 
     "ttest%B1" = bwidth.B1.ttest.percent, 
     "ttest%B2" = bwidth.B2.ttest.percent,
+    corB0 = bwidth.B0.cor.results,
     corB1 = bwidth.B1.cor.results, corB2 = bwidth.B2.cor.results,
     corDepVar = bwidth.dep.var.cor.results)
 }
