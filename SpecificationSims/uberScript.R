@@ -3,15 +3,15 @@
 source("SpecificationSims/SimFunctions.R")
 
 # set our simulation parameters
-Replications = 10
+Replications = 150
 sample.size = c(50, 100, 200)
-error.sd = c(.3, 1, 3)
+error.sd = c(1, 3, 5)
 B1.spatial.var = c(0, .25, .75)
-B2.spatial.var = 0
+B2.spatial.var = c(0, .25)
 
 # expand the parameter vectors and create a container for our simulation output
-sim.parameters = expand.grid(sample.size, error.sd, B1.spatial.var, B2.spatial.var)
-names(sim.parameters) = c("sample.size", "error.sd", "B1.spatial.var", "B2.spatial.var")
+sim.parameters = expand.grid(error.sd, B1.spatial.var, B2.spatial.var, sample.size)
+names(sim.parameters) = c("error.sd", "B1.spatial.var", "B2.spatial.var", "sample.size")
 
 meta.sim.num = dim(sim.parameters)[1]
 
@@ -37,13 +37,13 @@ simOutput = array(NA, c(length(sample.size),
 
 for( i in 1:meta.sim.num) { 
   start = Sys.time()
-  simOutput[as.character(sim.parameters[i, 1]),
-            as.character(sim.parameters[i, 2]),
-            as.character(sim.parameters[i, 3]),
-            as.character(sim.parameters[i, 4]), , ] = as.matrix(simulationReplicator(Replications, sim.parameters[i, ], MC = TRUE))
+  simOutput[as.character(sim.parameters[i, "sample.size"]),
+            as.character(sim.parameters[i, "error.sd"]),
+            as.character(sim.parameters[i, "B1.spatial.var"]),
+            as.character(sim.parameters[i, "B2.spatial.var"]), , ] = as.matrix(simulationReplicator(Replications, sim.parameters[i, ], MC = TRUE))
   end = Sys.time()
   mytime = end - start
   print(paste("For loop", i,"of", meta.sim.num))
   print(mytime)
-  save(simOutput, file = "SpecificationSims/uberScriptOutput.RData")
+  #save(simOutput, file = "SpecificationSims/uberScriptOutput.RData")
 }
