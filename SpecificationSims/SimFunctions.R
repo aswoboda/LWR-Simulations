@@ -217,7 +217,7 @@ bandwidth.Selector = function(LWRMetrics.output) {
   bwidth.B1.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta1.ttest.percent)]
   bwidth.B2.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta2.ttest.percent)]
   
-  if(is.na(max(LWRMetrics.output$beta1.cor.results)) == T) {
+  if(is.na(max(LWRMetrics.output$beta0.cor.results)) == T) {
     bwidth.B0.cor.results = NA
   } else bwidth.B0.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta0.cor.results)]
   
