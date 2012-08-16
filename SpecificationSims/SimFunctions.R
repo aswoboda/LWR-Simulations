@@ -19,7 +19,7 @@ DataGen = function(sample.size, error.sd, B1.spatial.var, B2.spatial.var) {
   
   dep.var = trueB0 + indep.var1*trueB1+indep.var2*trueB2 + error
   
- output = data.frame(dep.var, north, east, indep.var1, indep.var2, trueB0, trueB1, trueB2)
+ output = data.frame(dep.var, north, east, indep.var1, indep.var2, trueB0, trueB1, trueB2, error)
  output
  
 }
@@ -220,6 +220,15 @@ bandwidth.Selector = function(LWRMetrics.output) {
     corDepVar = bwidth.dep.var.cor.results)
 }
 
+RsquaredComparer = function(Data) {
+  var.y = var(Data$dep.var)
+  var.error = var(Data$error)
+  
+  ols = lm(dep.var ~ indep.var1 + indep.var2, data = Data)
+  ols.sum = summary(ols)
+  list(R2OLS = ols.sum$r.squared, R2LWR = (1- var.error/var.y))
+}
+
 simulation = function(iteration, DGPparameters) {
   
   Data = DataGen(DGPparameters$sample.size, 
@@ -230,7 +239,8 @@ simulation = function(iteration, DGPparameters) {
   new.output = Reorganizer(output)
   simMetrics = LWRMetrics(new.output, Data)
   optimal.bandwidths = bandwidth.Selector(simMetrics)
-  list(optimal.bandwidths)
+  Rsquareds = RsquaredComparer(Data)
+  list(c(optimal.bandwidths, Rsquareds))
 }
 
 simulationReplicator = function(N = 2, DGPparameters, MC = FALSE){
@@ -241,7 +251,8 @@ simulationReplicator = function(N = 2, DGPparameters, MC = FALSE){
   else temp = lapply(1:N, simulation, DGPparameters = DGPparameters)
    #temp = lapply(1:N, simulation, DGPparameters = DGPparameters)
   temp2 = unlist(temp)
-  data.temp = data.frame(matrix(unlist(temp2), N, 11, byrow = T))
-  names(data.temp) = names(temp2)[1:11]
+  numMetrics = length(temp[[1]][[1]])
+  data.temp = data.frame(matrix(unlist(temp2), N, numMetrics, byrow = T))
+  names(data.temp) = names(temp2)[1:numMetrics]
   data.temp
 }
