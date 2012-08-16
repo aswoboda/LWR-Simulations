@@ -163,6 +163,7 @@ standardized.CV = function(dep.var, yhats.without) {
 
 LWRMetrics = function(LWRinput, Data) {
   bandwidths = LWRinput$bandwidths
+  beta0.cor.results = t(cor(LWRinput$beta0hats, Data$trueB0)) # B0
   beta1.cor.results = t(cor(LWRinput$beta1hats, Data$trueB1))#B1
   beta2.cor.results = t(cor(LWRinput$beta2hats, Data$trueB2)) #B2
   dep.var.cor.results = t(cor(LWRinput$yhats, Data$dep.var)) #dependent variable
