@@ -1,0 +1,89 @@
+
+R version 2.15.1 (2012-06-22) -- "Roasted Marshmallows"
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> 
+> 
+> source("SpecificationSims/SimFunctions.R")
+> 
+> # set our simulation parameters
+> Replications = 500
+> sample.size = c(50, 100, 200, 500)
+> error.sd = c(.3, 1)
+> B1.spatial.var = c(.5, 1)
+> B2.spatial.var = 1
+> 
+> # expand the parameter vectors and create a container for our simulation output
+> sim.parameters = expand.grid(sample.size, error.sd, B1.spatial.var, B2.spatial.var)
+> names(sim.parameters) = c("sample.size", "error.sd", "B1.spatial.var", "B2.spatial.var")
+> 
+> meta.sim.num = dim(sim.parameters)[1]
+> 
+> simOutput = array(NA, c(length(sample.size),
++                         length(error.sd),
++                         length(B1.spatial.var),
++                         length(B2.spatial.var),
++                         Replications,
++                         11),
++                   dimnames = list(ss = sample.size,
++                                   error.sd = error.sd,
++                                   B1sv = B1.spatial.var,
++                                   B2sv = B2.spatial.var,
++                                   simNum = 1:Replications,
++                                   metric = c("GCV", "SCV", "SSRB0", "SSRB1", "SSRB2", 
++                                              "ttest%B0", "ttest%B1", "ttest%B2", "corB1",
++                                              "corB2", "corDepVar")
++                   )
++ )
+> 
+> # now march through the different parameter combinations running the simulations
+> 
+> for( i in 1:meta.sim.num) { 
++   start = Sys.time()
++   simOutput[as.character(sim.parameters[i, 1]),
++             as.character(sim.parameters[i, 2]),
++             as.character(sim.parameters[i, 3]),
++             as.character(sim.parameters[i, 4]), , ] = as.matrix(simulationReplicator(Replications, sim.parameters[i, ], MC = TRUE))
++   end = Sys.time()
++   time = end - start
++   print(paste("For loop", i,"of", meta.sim.num, "it took", time))
++   save(simOutput, file = "SpecificationSims/SimulationOutput.RData")
++ }
+[1] "For loop 1 of 16 it took 3.65379016399384"
+[1] "For loop 2 of 16 it took 14.2703294634819"
+[1] "For loop 3 of 16 it took 1.0409299611383"
+[1] "For loop 4 of 16 it took 8.79962344725927"
+[1] "For loop 5 of 16 it took 3.72750308513641"
+[1] "For loop 6 of 16 it took 14.3451794147491"
+[1] "For loop 7 of 16 it took 1.21877069585853"
+[1] "For loop 8 of 16 it took 8.25884077555603"
+[1] "For loop 9 of 16 it took 4.72172188361486"
+[1] "For loop 10 of 16 it took 16.2503306508064"
+[1] "For loop 11 of 16 it took 1.11708342221048"
+[1] "For loop 12 of 16 it took 9.30314633309841"
+[1] "For loop 13 of 16 it took 4.18388936519623"
+[1] "For loop 14 of 16 it took 14.7119146347046"
+[1] "For loop 15 of 16 it took 1.1060310125351"
+[1] "For loop 16 of 16 it took 9.11789064864318"
+> 
+> proc.time()
+      user     system    elapsed 
+848137.185    150.301 148416.879 
