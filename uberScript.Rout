@@ -163,3 +163,21 @@ Time difference of 9 mins
 Time difference of 8.81 mins
 [1] "For loop 47 of 54"
 Time difference of 9.01 mins
+[1] "For loop 48 of 54"
+Time difference of 8.97 mins
+[1] "For loop 49 of 54"
+Time difference of 8.66 mins
+[1] "For loop 50 of 54"
+Time difference of 9.05 mins
+[1] "For loop 51 of 54"
+Time difference of 8.63 mins
+[1] "For loop 52 of 54"
+Time difference of 8.98 mins
+[1] "For loop 53 of 54"
+Time difference of 9.32 mins
+[1] "For loop 54 of 54"
+Time difference of 9.02 mins
+> 
+> proc.time()
+     user    system   elapsed 
+48745.346    15.908 12818.492 
