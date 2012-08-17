@@ -125,9 +125,9 @@ Reorganizer = function(lapplyoutput) {
        yhats = yhats, leverages = leverages, yhats.without = yhats.without, bandwidths = lapplyoutput[[1]]$bandwidths)
 }
 
-beta.Residual.Calc = function(betahats, truebetas) {
-  
-  colSums((betahats - truebetas)^2)
+RMSE.beta.Calc = function(betahats, truebetas) {
+  sample.size = dim(truebetas)[1]
+  colSums((betahats - truebetas)^2)/(sample.size - 1)
 }
 
 # We need to get a better name for this function. It is doing more than just performing a t-test..
@@ -153,13 +153,18 @@ GCV = function(leverages, yhats, dep.var) {
   gcv
 }
 
-# Standardized CV from Paez et all
+# Row standardized CV from Paez et all
 # Need to make sure that we are supposed to square denominator
-standardized.CV = function(dep.var, yhats.without) {
+row.standardized.CV = function(dep.var, yhats.without) {
   numer = ((dep.var - yhats.without)^2)
   denom = rowSums(numer) 
   stan.CV.values = colSums(numer/denom)
 }
+# Regular CV
+regular.CV = function(dep.var, yhats.without) {
+  reg.CV.values = colSums((dep.var - yhats.without)^2)
+}
+
 
 LWRMetrics = function(LWRinput, Data) {
   bandwidths = LWRinput$bandwidths
@@ -175,14 +180,13 @@ LWRMetrics = function(LWRinput, Data) {
     beta2.cor.results = rep(NA, length(bandwidths))
   } else beta2.cor.results = t(cor(LWRinput$beta2hats, Data$trueB2))#B2
   
-  dep.var.cor.results = t(cor(LWRinput$yhats, Data$dep.var)) #dependent variable
   
   
-  # Residuals: For beta0/1/2
+  # Residuals: For betas
   # beta.Residual.calc is a function defined in SimFunctions and can be sourced
-  beta0.residuals = beta.Residual.Calc(LWRinput[["beta0hats"]], Data$trueB0)
-  beta1.residuals = beta.Residual.Calc(LWRinput[["beta1hats"]], Data$trueB1)
-  beta2.residuals = beta.Residual.Calc(LWRinput[["beta2hats"]], Data$trueB2)
+  beta0.RMSE = RMSE.beta.Calc(LWRinput[["beta0hats"]], Data$trueB0)
+  beta1.RMSE = RMSE.beta.Calc(LWRinput[["beta1hats"]], Data$trueB1)
+  beta2.RMSE = RMSE.beta.Calc(LWRinput[["beta2hats"]], Data$trueB2)
   
   # Now calculate for each beta the % of t-tests with values > critical t, for each k.
   beta0.ttest.percent = beta.ttest(LWRinput[["beta0hats"]], LWRinput[["ses0"]], Data$trueB0, LWRinput$bandwidths)
@@ -190,28 +194,30 @@ LWRMetrics = function(LWRinput, Data) {
   beta2.ttest.percent = beta.ttest(LWRinput[["beta2hats"]], LWRinput[["ses2"]], Data$trueB2, LWRinput$bandwidths)
   
   # Generalized Cross-validation score
-  
   gcv.values = GCV(LWRinput[["leverages"]], LWRinput[["yhats"]], Data$dep.var)
-  ##Define GCV score
+  
+  # Regular CV score
+  reg.cv.values = regular.CV(Data$dep.var, LWRinput[["yhats.without"]]) 
   
   # Standardized CV a la Paez 2007
-  stan.gcv.values = standardized.CV(Data$dep.var, LWRinput[["yhats.without"]]) 
+  row.stan.gcv.values = row.standardized.CV(Data$dep.var, LWRinput[["yhats.without"]]) 
   
-  list(beta0.cor.results = beta0.cor.results, beta1.cor.results = beta1.cor.results, beta2.cor.results = beta2.cor.results, 
-       dep.var.cor.results = dep.var.cor.results, beta0.residuals = beta0.residuals, 
-       beta1.residuals = beta1.residuals, beta2.residuals = beta2.residuals, 
+  data.frame(beta0.cor.results = beta0.cor.results, beta1.cor.results = beta1.cor.results, beta2.cor.results = beta2.cor.results, 
+       beta0.RMSE = beta0.RMSE, beta1.RMSE = beta1.RMSE, 
+       beta2.RMSE = beta2.RMSE, 
        beta0.ttest.percent = beta0.ttest.percent, beta1.ttest.percent = beta1.ttest.percent,
        beta2.ttest.percent = beta2.ttest.percent, gcv.values = gcv.values, 
-       stan.gcv.values = stan.gcv.values, bandwidths = bandwidths)
+       row.stan.gcv.values = row.stan.gcv.values, reg.cv.values = reg.cv.values, bandwidths = bandwidths)
 } 
 
 bandwidth.Selector = function(LWRMetrics.output) {
   bwidth.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$gcv.values)]
-  bwidth.stan.cv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$stan.gcv.values)]
+  bwidth.row.stan.cv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$stan.gcv.values)]
+  bwidth.reg.cv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$reg.cv.values)]
   
-  bwidth.B0.resid = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta0.residuals)]
-  bwidth.B1.resid = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta1.residuals)]
-  bwidth.B2.resid = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta2.residuals)]
+  bwidth.B0.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta0.RMSE)]
+  bwidth.B1.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta1.RMSE)]
+  bwidth.B2.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta2.RMSE)]
   
   bwidth.B0.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta0.ttest.percent)]
   bwidth.B1.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta1.ttest.percent)]
@@ -229,16 +235,16 @@ bandwidth.Selector = function(LWRMetrics.output) {
     bwidth.B2.cor.results = NA
   } else bwidth.B2.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta2.cor.results)]
     
-  bwidth.dep.var.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$dep.var.cor.results)]
   
-  c(GCV = bwidth.gcv, SCV = bwidth.stan.cv,
-    SSRB0 = bwidth.B0.resid, SSRB1 = bwidth.B1.resid, SSRB2 = bwidth.B2.resid, 
+  
+  c(GCV = bwidth.gcv, SCV = bwidth.row.stan.cv, CV = bwidth.reg.cv
+    RMSE.B0 = bwidth.B0.RMSE, RMSE.B1 = bwidth.B1.RMSE, RMSE.B2 = bwidth.B2.RMSE, 
     "ttest%B0" = bwidth.B0.ttest.percent, 
     "ttest%B1" = bwidth.B1.ttest.percent, 
     "ttest%B2" = bwidth.B2.ttest.percent,
     corB0 = bwidth.B0.cor.results,
     corB1 = bwidth.B1.cor.results, corB2 = bwidth.B2.cor.results,
-    corDepVar = bwidth.dep.var.cor.results)
+    )
 }
 
 RsquaredComparer = function(Data) {
