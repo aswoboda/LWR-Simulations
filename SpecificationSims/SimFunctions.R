@@ -267,7 +267,7 @@ simulation = function(iteration, DGPparameters) {
 simulationReplicator = function(N = 2, DGPparameters, MC = FALSE){
   require(multicore, quietly = TRUE)
   if(MC == TRUE) {
-    temp = mclapply(1:N, simulation, DGPparameters = DGPparameters)
+    temp = mclapply(1:N, simulation, DGPparameters = DGPparameters, mc.cores = 4)
   }
   else temp = lapply(1:N, simulation, DGPparameters = DGPparameters)
    #temp = lapply(1:N, simulation, DGPparameters = DGPparameters)

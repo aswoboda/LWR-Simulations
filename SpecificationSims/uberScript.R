@@ -3,7 +3,7 @@
 source("SpecificationSims/SimFunctions.R")
 
 # set our simulation parameters
-Replications = 150
+Replications = 50
 sample.size = c(50, 100, 200)
 error.sd = c(1, 3, 5)
 B1.spatial.var = c(0, .25, .75)
@@ -44,6 +44,6 @@ for( i in 1:meta.sim.num) {
   end = Sys.time()
 
   print(paste("For loop", i,"of", meta.sim.num))
-  print(difftime(end, start, units = "h"))
-  #save(simOutput, file = "SpecificationSims/uberScriptOutput.RData")
+  print(round(difftime(end, start, units = "m"), 2))
+  save(simOutput, file = "SpecificationSims/uberScriptOutput.RData")
 }
