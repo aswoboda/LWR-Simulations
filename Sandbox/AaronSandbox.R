@@ -82,18 +82,6 @@ LWRMetrics = function(LWRinput, Data) {
 
 # instead of outputting a vector of bandwidths, will we want a matrix/array?
 
-names(simMetrics)
-
-metric.names = expand.grid(names(optimal.bandwidths), names(optimal.bandwidths))
-
-paste(metric.names[, 1], metric.names[, 2], sep = ".")
-
-metric.output = array(NA, c(length(optimal.bandwidths) + 1, length(optimal.bandwidths)),
-                      dimnames = list(value = c("bandwidth", names(optimal.bandwidths)),
-                                      optimized = names(optimal.bandwidths)))
-
-
-temp = data.frame(bandwidth = c(10, 20), gcv = c(200, 190), corB1 = c(.9, .8))
-
-temp2 = data.frame(bandwidth = c(), corB1 = c(), gcv = c())
+temp = data.frame(bandwidths = optimal.bandwidths, optimizing = names(optimal.bandwidths))
+merge(temp, simMetrics, sort = F)
 
