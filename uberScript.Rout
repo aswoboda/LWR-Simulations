@@ -69,3 +69,115 @@ Type 'q()' to quit R.
 +   print(mytime)
 +   #save(simOutput, file = "SpecificationSims/uberScriptOutput.RData")
 + }
+[1] "For loop 1 of 54"
+Time difference of 59.69112 secs
+[1] "For loop 2 of 54"
+Time difference of 1.030467 mins
+[1] "For loop 3 of 54"
+Time difference of 58.97276 secs
+[1] "For loop 4 of 54"
+Time difference of 1.006132 mins
+[1] "For loop 5 of 54"
+Time difference of 58.2432 secs
+[1] "For loop 6 of 54"
+Time difference of 1.133106 mins
+[1] "For loop 7 of 54"
+Time difference of 2.032115 mins
+[1] "For loop 8 of 54"
+Time difference of 1.486058 mins
+[1] "For loop 9 of 54"
+Time difference of 1.757965 mins
+[1] "For loop 10 of 54"
+Time difference of 1.285483 mins
+[1] "For loop 11 of 54"
+Time difference of 1.007539 mins
+[1] "For loop 12 of 54"
+Time difference of 1.0009 mins
+[1] "For loop 13 of 54"
+Time difference of 1.017357 mins
+[1] "For loop 14 of 54"
+Time difference of 1.019357 mins
+[1] "For loop 15 of 54"
+Time difference of 57.50954 secs
+[1] "For loop 16 of 54"
+Time difference of 1.015914 mins
+[1] "For loop 17 of 54"
+Time difference of 1.039519 mins
+[1] "For loop 18 of 54"
+Time difference of 58.54817 secs
+[1] "For loop 19 of 54"
+Time difference of 4.514371 mins
+[1] "For loop 20 of 54"
+Time difference of 4.831767 mins
+[1] "For loop 21 of 54"
+Time difference of 4.406473 mins
+[1] "For loop 22 of 54"
+Time difference of 4.427628 mins
+[1] "For loop 23 of 54"
+Time difference of 4.492893 mins
+[1] "For loop 24 of 54"
+Time difference of 4.025578 mins
+[1] "For loop 25 of 54"
+Time difference of 4.520611 mins
+[1] "For loop 26 of 54"
+Time difference of 6.53475 mins
+[1] "For loop 27 of 54"
+Time difference of 5.686203 mins
+[1] "For loop 28 of 54"
+Time difference of 7.332302 mins
+[1] "For loop 29 of 54"
+Time difference of 5.317351 mins
+[1] "For loop 30 of 54"
+Time difference of 6.884388 mins
+[1] "For loop 31 of 54"
+Time difference of 6.493064 mins
+[1] "For loop 32 of 54"
+Time difference of 4.997162 mins
+[1] "For loop 33 of 54"
+Time difference of 5.302095 mins
+[1] "For loop 34 of 54"
+Time difference of 5.814356 mins
+[1] "For loop 35 of 54"
+Time difference of 4.413334 mins
+[1] "For loop 36 of 54"
+Time difference of 5.965463 mins
+[1] "For loop 37 of 54"
+Time difference of 21.5342 mins
+[1] "For loop 38 of 54"
+Time difference of 21.69068 mins
+[1] "For loop 39 of 54"
+Time difference of 21.60763 mins
+[1] "For loop 40 of 54"
+Time difference of 21.23081 mins
+[1] "For loop 41 of 54"
+Time difference of 20.99527 mins
+[1] "For loop 42 of 54"
+Time difference of 21.31464 mins
+[1] "For loop 43 of 54"
+Time difference of 22.60947 mins
+[1] "For loop 44 of 54"
+Time difference of 18.64622 mins
+[1] "For loop 45 of 54"
+Time difference of 18.41014 mins
+[1] "For loop 46 of 54"
+Time difference of 18.10202 mins
+[1] "For loop 47 of 54"
+Time difference of 18.60661 mins
+[1] "For loop 48 of 54"
+Time difference of 18.76165 mins
+[1] "For loop 49 of 54"
+Time difference of 18.84938 mins
+[1] "For loop 50 of 54"
+Time difference of 17.84658 mins
+[1] "For loop 51 of 54"
+Time difference of 18.7977 mins
+[1] "For loop 52 of 54"
+Time difference of 17.72335 mins
+[1] "For loop 53 of 54"
+Time difference of 17.91885 mins
+[1] "For loop 54 of 54"
+Time difference of 18.08726 mins
+> 
+> proc.time()
+      user     system    elapsed 
+166842.570     46.398  28164.661 

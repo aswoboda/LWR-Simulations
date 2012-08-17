@@ -42,8 +42,8 @@ for( i in 1:meta.sim.num) {
             as.character(sim.parameters[i, "B1.spatial.var"]),
             as.character(sim.parameters[i, "B2.spatial.var"]), , ] = as.matrix(simulationReplicator(Replications, sim.parameters[i, ], MC = TRUE))
   end = Sys.time()
-  mytime = end - start
+
   print(paste("For loop", i,"of", meta.sim.num))
-  print(mytime)
+  print(difftime(end, start, units = "h"))
   #save(simOutput, file = "SpecificationSims/uberScriptOutput.RData")
 }
