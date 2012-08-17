@@ -126,7 +126,7 @@ Reorganizer = function(lapplyoutput) {
 }
 
 RMSE.beta.Calc = function(betahats, truebetas) {
-  sample.size = dim(truebetas)[1]
+  sample.size = length(truebetas)[1]
   colSums((betahats - truebetas)^2)/(sample.size - 1)
 }
 
@@ -170,17 +170,15 @@ LWRMetrics = function(LWRinput, Data) {
   bandwidths = LWRinput$bandwidths
   if(sd(Data$trueB0) == 0) {
     beta0.cor.results = rep(NA, length(bandwidths))
-  } else beta0.cor.results = t(cor(LWRinput$beta0hats, Data$trueB0)) # B0
+  } else beta0.cor.results = cor(LWRinput$beta0hats, Data$trueB0) # B0
   
   if(sd(Data$trueB1) == 0) {
     beta1.cor.results = rep(NA, length(bandwidths))
-  } else beta1.cor.results = t(cor(LWRinput$beta1hats, Data$trueB1)) #B1
+  } else beta1.cor.results = cor(LWRinput$beta1hats, Data$trueB1) #B1
   
   if(sd(Data$trueB2) == 0) {
     beta2.cor.results = rep(NA, length(bandwidths))
-  } else beta2.cor.results = t(cor(LWRinput$beta2hats, Data$trueB2))#B2
-  
-  
+  } else beta2.cor.results = cor(LWRinput$beta2hats, Data$trueB2)#B2
   
   # Residuals: For betas
   # beta.Residual.calc is a function defined in SimFunctions and can be sourced
@@ -202,48 +200,44 @@ LWRMetrics = function(LWRinput, Data) {
   # Standardized CV a la Paez 2007
   row.stan.gcv.values = row.standardized.CV(Data$dep.var, LWRinput[["yhats.without"]]) 
   
-  data.frame(beta0.cor.results = beta0.cor.results, beta1.cor.results = beta1.cor.results, beta2.cor.results = beta2.cor.results, 
-       beta0.RMSE = beta0.RMSE, beta1.RMSE = beta1.RMSE, 
-       beta2.RMSE = beta2.RMSE, 
-       beta0.ttest.percent = beta0.ttest.percent, beta1.ttest.percent = beta1.ttest.percent,
-       beta2.ttest.percent = beta2.ttest.percent, gcv.values = gcv.values, 
-       row.stan.gcv.values = row.stan.gcv.values, reg.cv.values = reg.cv.values, bandwidths = bandwidths)
+  data.frame(B0.cor = beta0.cor.results, B1.cor = beta1.cor.results, B2.cor = beta2.cor.results, 
+             B0.RMSE = beta0.RMSE, B1.RMSE = beta1.RMSE, B2.RMSE = beta2.RMSE, 
+             B0.t.perc = beta0.ttest.percent, B1.t.perc = beta1.ttest.percent, B2.t.perc = beta2.ttest.percent, 
+             GCV = gcv.values, SCV = row.stan.gcv.values, CV = reg.cv.values, bandwidths = bandwidths)
 } 
 
 bandwidth.Selector = function(LWRMetrics.output) {
-  bwidth.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$gcv.values)]
-  bwidth.row.stan.cv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$stan.gcv.values)]
-  bwidth.reg.cv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$reg.cv.values)]
+  bwidth.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$GCV)]
+  bwidth.row.stan.cv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$SCV)]
+  bwidth.reg.cv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$CV)]
   
-  bwidth.B0.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta0.RMSE)]
-  bwidth.B1.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta1.RMSE)]
-  bwidth.B2.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$beta2.RMSE)]
+  bwidth.B0.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$B0.RMSE)]
+  bwidth.B1.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$B1.RMSE)]
+  bwidth.B2.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$B2.RMSE)]
   
-  bwidth.B0.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta0.ttest.percent)]
-  bwidth.B1.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta1.ttest.percent)]
-  bwidth.B2.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta2.ttest.percent)]
+  bwidth.B0.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$B0.t.perc)]
+  bwidth.B1.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$B1.t.perc)]
+  bwidth.B2.ttest.percent = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$B2.t.perc)]
   
-  if(is.na(max(LWRMetrics.output$beta0.cor.results)) == T) {
-    bwidth.B0.cor.results = NA
-   } else bwidth.B0.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta0.cor.results)]
+  if(is.na(max(LWRMetrics.output$B0.cor)) == T) {
+    bwidth.B0.cor = NA
+   } else bwidth.B0.cor = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$B0.cor)]
+ 
+  if(is.na(max(LWRMetrics.output$B1.cor)) == T) {
+    bwidth.B1.cor = NA
+  } else bwidth.B1.cor = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$B1.cor)]
   
-  if(is.na(max(LWRMetrics.output$beta1.cor.results)) == T) {
-    bwidth.B1.cor.results = NA
-  } else bwidth.B1.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta1.cor.results)]
-  
-  if(is.na(max(LWRMetrics.output$beta2.cor.results)) == T) {
-    bwidth.B2.cor.results = NA
-  } else bwidth.B2.cor.results = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$beta2.cor.results)]
-    
+  if(is.na(max(LWRMetrics.output$B2.cor)) == T) {
+    bwidth.B2.cor = NA
+  } else bwidth.B2.cor = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$B2.cor)]
   
   
-  c(GCV = bwidth.gcv, SCV = bwidth.row.stan.cv, CV = bwidth.reg.cv
+  c(GCV = bwidth.gcv, SCV = bwidth.row.stan.cv, CV = bwidth.reg.cv,
     RMSE.B0 = bwidth.B0.RMSE, RMSE.B1 = bwidth.B1.RMSE, RMSE.B2 = bwidth.B2.RMSE, 
     "ttest%B0" = bwidth.B0.ttest.percent, 
     "ttest%B1" = bwidth.B1.ttest.percent, 
     "ttest%B2" = bwidth.B2.ttest.percent,
-    corB0 = bwidth.B0.cor.results,
-    corB1 = bwidth.B1.cor.results, corB2 = bwidth.B2.cor.results,
+    corB0 = bwidth.B0.cor, corB1 = bwidth.B1.cor, corB2 = bwidth.B2.cor
     )
 }
 
@@ -253,7 +247,7 @@ RsquaredComparer = function(Data) {
   
   ols = lm(dep.var ~ indep.var1 + indep.var2, data = Data)
   ols.sum = summary(ols)
-  list(R2OLS = ols.sum$r.squared, R2LWR = (1- var.error/var.y))
+  c(R2OLS = ols.sum$r.squared, R2LWR = (1- var.error/var.y))
 }
 
 simulation = function(iteration, DGPparameters) {
@@ -266,20 +260,41 @@ simulation = function(iteration, DGPparameters) {
   new.output = Reorganizer(output)
   simMetrics = LWRMetrics(new.output, Data)
   optimal.bandwidths = bandwidth.Selector(simMetrics)
+  temp = data.frame(bandwidths = optimal.bandwidths, optimizing = names(optimal.bandwidths))
+  temp2 = merge(temp, simMetrics, all.x = T)
+  
+  metrics = temp2[order(temp2$optimizing), ]
   Rsquareds = RsquaredComparer(Data)
-  list(c(optimal.bandwidths, Rsquareds))
+  list(Rsquareds, metrics)
 }
 
 simulationReplicator = function(N = 2, DGPparameters, MC = FALSE){
   require(multicore, quietly = TRUE)
   if(MC == TRUE) {
-    temp = mclapply(1:N, simulation, DGPparameters = DGPparameters, mc.cores = 4)
+    temp = mclapply(1:N, simulation, DGPparameters = DGPparameters)
   }
   else temp = lapply(1:N, simulation, DGPparameters = DGPparameters)
-   #temp = lapply(1:N, simulation, DGPparameters = DGPparameters)
-  temp2 = unlist(temp)
-  numMetrics = length(temp[[1]][[1]])
-  data.temp = data.frame(matrix(unlist(temp2), N, numMetrics, byrow = T))
-  names(data.temp) = names(temp2)[1:numMetrics]
-  data.temp
+  temp
 }
+
+simRepReorganizer = function(simRepOut){
+  reps = length(simRepOut)
+  # grab all the rsquared values and put them into a matrix
+  test = sapply(simRepOut, "[", 1)
+  rsquared.matrix = matrix(unlist(test), reps, 2)
+  
+  # grab all the metric matrices and put them into an array
+  test2 = sapply(simRepOut, "[", 2)
+  metric.array = array(NA, c(reps, dim(test2[[1]])[1], dim(test2[[1]])[2]-1),
+                       dimnames = list(replication = 1:reps,
+                                       optimized = test2[[1]]$optimizing,
+                                       metric.values = names(test2[[1]][-2])))
+  
+  for (i in 1:reps) {
+    metric.array[i, , ] = as.matrix(test2[[i]][, -2])
+  }
+  
+  # put the two together into a list as the final output
+  list(rsquared.matrix, metric.array)
+}
+
