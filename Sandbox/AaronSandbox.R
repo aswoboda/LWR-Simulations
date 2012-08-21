@@ -19,7 +19,7 @@ DGPparameters = sim.parameters[1, ]
 
 
 
-simulation(1, DGPparameters)
+#simulation(1, DGPparameters)
 
 
 
