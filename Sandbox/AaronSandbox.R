@@ -1,67 +1,74 @@
 # empty sandbox
 
+# here's a function I might use that came from https://github.com/hadley/ggplot2/wiki/Case-Study%3a-Raman-Spectroscopic-Grading-of-Gliomas
 
-source("SpecificationSims/SimFunctions.R")
+# peeling contours: 2d quantiles
+peel <- function (x, y, weights = 1, probs = NA, threshold = 1 - 1e-3){
+  if (missing (y) && ncol (x) == 2){
+    y <- x [, 2]
+    x <- x [, 1]
+  }
+  
+  if  (length (x) != length (y))
+    stop ("x and y need to have the same length.")
+  
+  weights <- rep (weights, length.out = length (x))
+  
+  ## start with all points
+  pts.in <- seq_along (x)
+  step <- 1
+  hulls <- list ()
+  
+  ## too small weights can confuse the peeling as the hull polygon treats all points equally
+  
+  exclude <- weights < threshold
+  if (any (exclude)) {
+    ##   warning (sum (exclude), " points put into first hull due to too small weights")
+    
+    hulls [[1]] <- pts.in [exclude]
+    pts.in <- pts.in [! exclude]
+    step <- step + 1
+  }
+  
+  ## peel off the hull polygons until nothing is left
+  while (length (pts.in) > 1){
+    hull <- chull (x [pts.in], y [pts.in])
+    hulls [[step]] <- pts.in [hull]
+    pts.in <- pts.in [-hull]
+    step <- step + 1
+  }
+  
+  # now count the number of point-equivalents in each hull
+  n <- sapply (hulls, function (i) sum (weights [i]))
+  
+  ## and convert to percentiles
+  n <- cumsum (n)
+  qtl <- c(1, 1 - head (n, -1) / tail (n, 1))
+  
+  names (hulls) <- qtl
+  
+  if (! all (is.na (probs))){
+    i <- round (approx (qtl[-1], seq_along (hulls[-1]), probs, rule = 2)$y) + 1
+    hulls <- hulls [i]
+  }
+  
+  hulls
+}
 
-# set our simulation parameters
-Replications = 10
-sample.size = c(50, 100, 200, 500, 1000, 2000)
-error.sd = c(3)
-B1.spatial.var = 0.25
-B2.spatial.var = 0
-
-sim.parameters = expand.grid(sample.size, error.sd, B1.spatial.var, B2.spatial.var)
-names(sim.parameters) = c("sample.size", "error.sd", "B1.spatial.var", "B2.spatial.var")
-
-meta.sim.num = dim(sim.parameters)[1]
-
-DGPparameters = sim.parameters[1, ]
-
-
-
-#simulation(1, DGPparameters)
-
-
-
-simRepOut = simulationReplicator(N = 3, DGPparameters)
-
-
-
-simOut = simRepReorganizer(simRepOut)
-
-new.array = array(NA, c(2, 3, 12, 13),
-                  dimnames = list(temp = 1:2,
-                                  replication = dimnames(simOut[[2]])[[1]],
-                                  optimized = dimnames(simOut[[2]])[[2]], 
-                                  metric.values = dimnames(simOut[[2]])[[3]]) )
-dimnames(new.array)
-
-new.array[1, , , ] = simOut[[2]]
-### Problem - right now we are just grabbing the bandwidths that optimize different metrics, 
-### we also want to grab the metric values at each of these "optimal" bandwidths to see how they compare
-
-# instead of outputting a vector of bandwidths, will we want a matrix/array?
-
-
-[1] "For loop 1 of 4"
-Time difference of 0.08 mins
-[1] "For loop 2 of 4"
-Time difference of 0.3 mins
-[1] "For loop 3 of 4"
-Time difference of 1.37 mins
-[1] "For loop 4 of 4"
-Time difference of 11.62 mins
-> 
-  > proc.time()
-user   system  elapsed 
-1329.587    0.852  802.615 
-
-
-
-
-
+n = 100
+x = runif(n)
+y = runif(n)
 
 
+
+
+
+peel.out = peel(x, y, probs= c(0.1,.5))
+
+
+plot(x, y)
+polygon(x=x[peel.out[[1]]], y=y[peel.out[[1]]], col = rgb(1, 0, 0, alpha= .25), border = "red")
+polygon(x=x[peel.out[[2]]], y=y[peel.out[[2]]], col = rgb(0, 0, 1, alpha= .25), border = "blue")
 
 
 
