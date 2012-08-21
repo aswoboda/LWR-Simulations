@@ -12,7 +12,7 @@ DataGen = function(sample.size, error.sd, B1.spatial.var, B2.spatial.var) {
   
   trueB0 = 0
   trueB1 = B1.spatial.var*north/4 + 1 - .5*B1.spatial.var
-  trueB2 = B2.spatial.var*5 + 1 - B2.spatial.var*east
+  trueB2 = B2.spatial.var*east/4 + 1 - .5*B2.spatial.var
   
   
   error=rnorm(sample.size, 0, error.sd)
