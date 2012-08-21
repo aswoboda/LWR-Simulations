@@ -26,20 +26,20 @@ for (i in 1: dim(sim.parameters)[1]) {
                        as.character(sim.parameters[i, "error.sd"]),
                        as.character(sim.parameters[i, "B1.spatial.var"]),
                        as.character(sim.parameters[i, "B2.spatial.var"]), , "GCV", "bandwidths"])
-  sim.parameters[i,"GCV.mean"] = mean(temp)
-  sim.parameters[i,"GCV.sd"] = sd(temp)
+  sim.parameters[i,"GCV.mean"] = mean(temp1)
+  sim.parameters[i,"GCV.sd"] = round(sd(temp), 2)
   temp2 = (MetricOutput[as.character(sim.parameters[i, "sample.size"]),
                        as.character(sim.parameters[i, "error.sd"]),
                        as.character(sim.parameters[i, "B1.spatial.var"]),
                        as.character(sim.parameters[i, "B2.spatial.var"]), , "SCV", "bandwidths"])
-  sim.parameters[i,"SCV.mean"] = mean(temp)
-  sim.parameters[i,"SCV.sd"] = sd(temp)
+  sim.parameters[i,"SCV.mean"] = mean(temp2)
+  sim.parameters[i,"SCV.sd"] = round(sd(temp2), 2)
   temp3 = (MetricOutput[as.character(sim.parameters[i, "sample.size"]),
                        as.character(sim.parameters[i, "error.sd"]),
                        as.character(sim.parameters[i, "B1.spatial.var"]),
                        as.character(sim.parameters[i, "B2.spatial.var"]), , "CV", "bandwidths"])
-  sim.parameters[i,"CV.mean"] = mean(temp)
-  sim.parameters[i,"CV.sd"] = sd(temp)
+  sim.parameters[i,"CV.mean"] = mean(temp3)
+  sim.parameters[i,"CV.sd"] = round(sd(temp3), 2)
  
   t.result = t.test(temp1, temp2, paired = TRUE)
   sim.parameters[i, "ttest.GCV.SCV"] = round(t.result$p.value, 2)
