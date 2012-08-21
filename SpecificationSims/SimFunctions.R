@@ -281,7 +281,7 @@ simRepReorganizer = function(simRepOut){
   reps = length(simRepOut)
   # grab all the rsquared values and put them into a matrix
   test = sapply(simRepOut, "[", 1)
-  rsquared.matrix = matrix(unlist(test), reps, 2)
+  rsquared.matrix = matrix(unlist(test), reps, 2, byrow = T)
   
   # grab all the metric matrices and put them into an array
   test2 = sapply(simRepOut, "[", 2)

@@ -1,6 +1,6 @@
 
 
-load("~/LWR-Simulations/SpecificationSims/uberScriptOutput.RData")
+load("~/LWR-Simulations/SpecificationSims/uberScriptOutput20120819.RData")
 
 # playing around with making plots to display optimal bandwidths under GCV vs SCV
 
@@ -50,6 +50,9 @@ for (my.ss in 1:4){
     mtext(paste("Optimal Bandwidths \n (ss =", dimnames(MetricOutput)$ss[my.ss], 
                 "error sd =", dimnames(MetricOutput)$error.sd[my.error], ")"), 
           outer = TRUE, line = 1, side = 3, font = 2, cex = 1)
+    mtext(c("GCV", "SCV", "CV"),
+          outer = TRUE, line = c(2.5, 1.5, .5), side = 3, cex = .75, at = .8, adj = 0,
+          col = c("black", "blue", "green") )
 
   }
 }  
