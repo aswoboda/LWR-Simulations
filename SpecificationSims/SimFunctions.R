@@ -166,9 +166,9 @@ regular.CV = function(dep.var, yhats.without) {
 }
 
 AICc.calc = function(Reorg.output, Data) {
-  sample.size = dim(new.output$leverages)[1]
-  v1 = colSums(new.output$leverages)
-  est.error.sd = apply(Data$dep.var - new.output$yhats, 2, sd)
+  sample.size = dim(Reorg.output$leverages)[1]
+  v1 = colSums(Reorg.output$leverages)
+  est.error.sd = apply(Data$dep.var - Reorg.output$yhats, 2, sd)
   
   AICc.values = 2*sample.size*log(est.error.sd) + sample.size*log(2*pi) + 
     sample.size*((sample.size + v1)/(sample.size - 2 - v1))
@@ -244,7 +244,7 @@ bandwidth.Selector = function(LWRMetrics.output) {
   } else bwidth.B2.cor = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$B2.cor)]
   
   
-  c(GCV = bwidth.gcv, SCV = bwidth.row.stan.cv, CV = bwidth.reg.cv, AICc = bwidth.AICc
+  c(GCV = bwidth.gcv, SCV = bwidth.row.stan.cv, CV = bwidth.reg.cv, AICc = bwidth.AICc,
     RMSE.B0 = bwidth.B0.RMSE, RMSE.B1 = bwidth.B1.RMSE, RMSE.B2 = bwidth.B2.RMSE, 
     "ttest%B0" = bwidth.B0.ttest.percent, 
     "ttest%B1" = bwidth.B1.ttest.percent, 
