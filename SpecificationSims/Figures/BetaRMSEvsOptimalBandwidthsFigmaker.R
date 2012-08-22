@@ -27,7 +27,7 @@ for (my.ss in 1:4){
         
         # beta 
         # set plot area - ylim has to include zero and the maximum RMSE score for the three bandwidth selectors
-        max.RMSE = quantile(MetricOutput[my.ss, my.error, my.B1, my.B2, , c("GCV", "SCV", "CV"), "B2.RMSE"], .98)
+        max.RMSE = quantile(MetricOutput[my.ss, , my.B1, my.B2, , c("GCV", "SCV", "CV"), "B2.RMSE"], .98)
 
         prob = .8 # the proportion of data I want included in the contour plot below
         # GCV
