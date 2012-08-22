@@ -48,5 +48,18 @@ for (i in 1: dim(sim.parameters)[1]) {
   t.result = t.test(temp2, temp3, paired = TRUE)
   sim.parameters[i, "ttest.SCV.CV"] = round(t.result$p.value, 2)
 }
+library(reshape2)
+sim.parameters$combo = factor(c(1:108))
 
+templong = melt(sim.parameters, id.vars = c("combo", "sample.size", "error.sd", "B1.spatial.var", "B2.spatial.var"), 
+                measure.vars = c("GCV.mean", "SCV.mean", "CV.mean"), value.name = "mean")
 
+levels(templong$variable) = c("GCV", "SCV", "CV")
+
+templong2 = melt(sim.parameters, id.vars = c("combo", "sample.size", "error.sd", "B1.spatial.var", "B2.spatial.var"), 
+                 measure.vars = c("GCV.sd", "SCV.sd", "CV.sd"), value.name = "sd")
+
+levels(templong2$variable) = c("GCV", "SCV", "CV")
+
+bandwidth.sum.statsL = merge(templong, templong2)
+save(bandwidth.sum.statsL, file = "SpecificationSims/Figures/BandwidthSumStatsLong.RData")
