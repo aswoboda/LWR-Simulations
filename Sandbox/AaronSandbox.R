@@ -1,26 +1,75 @@
 # empty sandbox
 
-require(RColorBrewer)
-mypal = brewer.pal(4, "Set2")
-# > mypal
-# [1] "#66C2A5" "#FC8D62" "#8DA0CB" "#E78AC3"
-# > col2rgb(mypal)
-# [,1] [,2] [,3] [,4]
-# red    102  252  141  231
-# green  194  141  160  138
-# blue   165   98  203  195
+# here's a function I might use that came from https://github.com/hadley/ggplot2/wiki/Case-Study%3a-Raman-Spectroscopic-Grading-of-Gliomas
 
-# col2rgb(mypal) -> rgbpal
-
-
-myalpha = seq(.4, .8, l = 3)  
-
-plot(c(1, 4), c(1, 3), type = "n", axes = F, xlab = "", ylab = "")
-
-for (i in 1:3) {
-
-  cols = paste(mypal, sprintf("%X", round(myalpha[i]*255)), sep = "")
-  points(1:4, rep(i, 4), pch = 16, cex = 5, 
-         col = cols)
+# peeling contours: 2d quantiles
+peel <- function (x, y, weights = 1, probs = NA, threshold = 1 - 1e-3){
+  if (missing (y) && ncol (x) == 2){
+    y <- x [, 2]
+    x <- x [, 1]
+  }
+  
+  if  (length (x) != length (y))
+    stop ("x and y need to have the same length.")
+  
+  weights <- rep (weights, length.out = length (x))
+  
+  ## start with all points
+  pts.in <- seq_along (x)
+  step <- 1
+  hulls <- list ()
+  
+  ## too small weights can confuse the peeling as the hull polygon treats all points equally
+  
+  exclude <- weights < threshold
+  if (any (exclude)) {
+    ##   warning (sum (exclude), " points put into first hull due to too small weights")
+    
+    hulls [[1]] <- pts.in [exclude]
+    pts.in <- pts.in [! exclude]
+    step <- step + 1
+  }
+  
+  ## peel off the hull polygons until nothing is left
+  while (length (pts.in) > 1){
+    hull <- chull (x [pts.in], y [pts.in])
+    hulls [[step]] <- pts.in [hull]
+    pts.in <- pts.in [-hull]
+    step <- step + 1
+  }
+  
+  # now count the number of point-equivalents in each hull
+  n <- sapply (hulls, function (i) sum (weights [i]))
+  
+  ## and convert to percentiles
+  n <- cumsum (n)
+  qtl <- c(1, 1 - head (n, -1) / tail (n, 1))
+  
+  names (hulls) <- qtl
+  
+  if (! all (is.na (probs))){
+    i <- round (approx (qtl[-1], seq_along (hulls[-1]), probs, rule = 2)$y) + 1
+    hulls <- hulls [i]
+  }
+  
+  hulls
 }
+
+n = 100
+x = runif(n)
+y = runif(n)
+
+
+
+
+
+peel.out = peel(x, y, probs= c(0.1,.5))
+
+
+plot(x, y)
+polygon(x=x[peel.out[[1]]], y=y[peel.out[[1]]], col = rgb(1, 0, 0, alpha= .25), border = "red")
+polygon(x=x[peel.out[[2]]], y=y[peel.out[[2]]], col = rgb(0, 0, 1, alpha= .25), border = "blue")
+
+
+
 

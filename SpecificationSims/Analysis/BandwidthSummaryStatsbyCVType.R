@@ -90,6 +90,8 @@ lin1.meani.esd.B1 = lm(formula = bandwidth.sum.statsL$mean ~ bandwidth.sum.stats
   + bandwidth.sum.statsL$error.sd + bandwidth.sum.statsL$B1.spatial.var + 
   bandwidth.sum.statsL$B2.spatial.var + bandwidth.sum.statsL$error.sd:bandwidth.sum.statsL$B1.spatial.var)
 
+
+
 # linear regressions for sd
 lin1.sd = lm( bandwidth.sum.statsL$sd ~ bandwidth.sum.statsL$sample.size + bandwidth.sum.statsL$error.sd + 
   bandwidth.sum.statsL$B1.spatial.var + bandwidth.sum.statsL$B2.spatial.var)
