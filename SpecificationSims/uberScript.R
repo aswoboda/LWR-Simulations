@@ -3,8 +3,8 @@
 source("SpecificationSims/SimFunctions.R")
 
 # set our simulation parameters
-Replications = 3
-sample.size = 20 #c(50, 100, 200, 500)
+Replications = 10
+sample.size = 100 #c(50, 100, 200, 500)
 error.sd = 3 #c(1, 3, 5)
 B1.spatial.var = .25 #c(0, .25, .75)
 B2.spatial.var = .25 #c(0, .25, .75)
@@ -33,18 +33,22 @@ MetricOutput = array(NA, c(length(sample.size),
                         length(B1.spatial.var),
                         length(B2.spatial.var),
                         Replications,
-                        13, 14),
+                        # Be careful about the dimension, must be ((number -1) of metrics 
+                           #in LWRMetrics function output in SimFunctions (1 per line), metrics)
+                           14, 15),
                   dimnames = list(ss = sample.size,
                                   error.sd = error.sd,
                                   B1sv = B1.spatial.var,
                                   B2sv = B2.spatial.var,
                                   simNum = 1:Replications,
-                                  optimized = c("AICc", "corB0", "corB1", "corB2", "CV", "GCV",
+                                  # IMPORTANT: Before running uberscript, test it once to make sure the labels are in
+                                  # the proper order!
+                                  optimized = c( "AICc", "corB0", "corB1", "corB2", "CV", "GCV", "R2",
                                                 "RMSE.B0", "RMSE.B1", "RMSE.B2", "SCV",
                                                 "ttest%B0", "ttest%B1", "ttest%B2"),
                                   metric = c("bandwidths", "B0.cor", "B1.cor", "B2.cor",
                                              "B0.RMSE", "B1.RMSE", "B2.RMSE",
-                                             "B0.t.perc", "B1.t.perc", "B2.t.perc", "GCV", "SCV", "CV", "AICc")
+                                             "B0.t.perc", "B1.t.perc", "B2.t.perc", "GCV", "SCV", "CV", "AICc", "R2")
                   )
 )
 

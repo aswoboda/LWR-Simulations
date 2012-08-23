@@ -165,6 +165,7 @@ regular.CV = function(dep.var, yhats.without) {
   reg.CV.values = colSums((dep.var - yhats.without)^2)
 }
 
+# AICc, as suggested by Paez and Fotheringham as an alternative to CVs
 AICc.calc = function(Reorg.output, Data) {
   sample.size = dim(Reorg.output$leverages)[1]
   v1 = colSums(Reorg.output$leverages)
@@ -174,6 +175,12 @@ AICc.calc = function(Reorg.output, Data) {
     sample.size*((sample.size + v1)/(sample.size - 2 - v1))
 }
 
+# R2 for optimal model 
+R2.calc = function(LWRoutput, Data) {
+  
+  R2 = 1 - (var(Data$dep.var - LWRoutput$yhats)/var(Data$dep.var))
+  R2.output = diag(R2)
+}
 
 LWRMetrics = function(LWRinput, Data) {
   bandwidths = LWRinput$bandwidths
@@ -209,12 +216,27 @@ LWRMetrics = function(LWRinput, Data) {
   # Standardized CV a la Paez 2007
   row.stan.gcv.values = row.standardized.CV(Data$dep.var, LWRinput[["yhats.without"]]) 
   
+  # AICc
   AICc.values = AICc.calc(LWRinput, Data)
   
-  data.frame(B0.cor = beta0.cor.results, B1.cor = beta1.cor.results, B2.cor = beta2.cor.results, 
-             B0.RMSE = beta0.RMSE, B1.RMSE = beta1.RMSE, B2.RMSE = beta2.RMSE, 
-             B0.t.perc = beta0.ttest.percent, B1.t.perc = beta1.ttest.percent, B2.t.perc = beta2.ttest.percent, 
-             GCV = gcv.values, SCV = row.stan.gcv.values, CV = reg.cv.values, AICc = AICc.values, bandwidths = bandwidths)
+  # R^2 
+  R2.values = R2.calc(LWRinput, Data)
+  
+  data.frame(B0.cor = beta0.cor.results, 
+             B1.cor = beta1.cor.results, 
+             B2.cor = beta2.cor.results, 
+             B0.RMSE = beta0.RMSE, 
+             B1.RMSE = beta1.RMSE, 
+             B2.RMSE = beta2.RMSE, 
+             B0.t.perc = beta0.ttest.percent, 
+             B1.t.perc = beta1.ttest.percent, 
+             B2.t.perc = beta2.ttest.percent, 
+             GCV = gcv.values, 
+             SCV = row.stan.gcv.values, 
+             CV = reg.cv.values, 
+             AICc = AICc.values, 
+             R2 = R2.values, 
+             bandwidths = bandwidths)
 } 
 
 bandwidth.Selector = function(LWRMetrics.output) {
@@ -222,6 +244,9 @@ bandwidth.Selector = function(LWRMetrics.output) {
   bwidth.row.stan.cv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$SCV)]
   bwidth.reg.cv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$CV)]
   bwidth.AICc = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$AICc)]
+  # We think that if it ends up that we do not optimize over R2 and perhaps other metrics, 
+  # the numbers will be passed along. 
+  bwidth.R2 = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$R2)]
   
   bwidth.B0.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$B0.RMSE)]
   bwidth.B1.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$B1.RMSE)]
@@ -245,7 +270,7 @@ bandwidth.Selector = function(LWRMetrics.output) {
   
   
   c(GCV = bwidth.gcv, SCV = bwidth.row.stan.cv, CV = bwidth.reg.cv, AICc = bwidth.AICc,
-    RMSE.B0 = bwidth.B0.RMSE, RMSE.B1 = bwidth.B1.RMSE, RMSE.B2 = bwidth.B2.RMSE, 
+    R2 = bwidth.R2, RMSE.B0 = bwidth.B0.RMSE, RMSE.B1 = bwidth.B1.RMSE, RMSE.B2 = bwidth.B2.RMSE, 
     "ttest%B0" = bwidth.B0.ttest.percent, 
     "ttest%B1" = bwidth.B1.ttest.percent, 
     "ttest%B2" = bwidth.B2.ttest.percent,
