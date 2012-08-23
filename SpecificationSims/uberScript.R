@@ -5,7 +5,7 @@ source("SpecificationSims/SimFunctions.R")
 # set our simulation parameters
 Replications = 100
 sample.size = c(50, 100, 200, 500, 1000)
-error.sd = c(1, 3, 5)
+error.sd = c(2, 4, 6)
 B1.spatial.var = c(0, .1, .2, .3)
 B2.spatial.var = c(0, .1, .2, .3)
 
