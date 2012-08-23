@@ -1,9 +1,9 @@
 source("SpecificationSims/SimFunctions.R")
 
-DGPparameters = data.frame(sample.size = 30, 
-                            error.sd = 5,
-                            B1.spatial.var = 1,
-                            B2.spatial.var = .5)
+DGPparameters = data.frame(sample.size = 100, 
+                            error.sd = 6,
+                            B1.spatial.var = 0,
+                            B2.spatial.var = 0)
 
 Data = DataGen(DGPparameters$sample.size, 
                DGPparameters$error.sd, 
