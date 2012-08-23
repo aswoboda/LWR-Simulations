@@ -165,6 +165,15 @@ regular.CV = function(dep.var, yhats.without) {
   reg.CV.values = colSums((dep.var - yhats.without)^2)
 }
 
+AICc.calc = function(Reorg.output, Data) {
+  sample.size = dim(Reorg.output$leverages)[1]
+  v1 = colSums(Reorg.output$leverages)
+  est.error.sd = apply(Data$dep.var - Reorg.output$yhats, 2, sd)
+  
+  AICc.values = 2*sample.size*log(est.error.sd) + sample.size*log(2*pi) + 
+    sample.size*((sample.size + v1)/(sample.size - 2 - v1))
+}
+
 
 LWRMetrics = function(LWRinput, Data) {
   bandwidths = LWRinput$bandwidths
@@ -200,16 +209,19 @@ LWRMetrics = function(LWRinput, Data) {
   # Standardized CV a la Paez 2007
   row.stan.gcv.values = row.standardized.CV(Data$dep.var, LWRinput[["yhats.without"]]) 
   
+  AICc.values = AICc.calc(LWRinput, Data)
+  
   data.frame(B0.cor = beta0.cor.results, B1.cor = beta1.cor.results, B2.cor = beta2.cor.results, 
              B0.RMSE = beta0.RMSE, B1.RMSE = beta1.RMSE, B2.RMSE = beta2.RMSE, 
              B0.t.perc = beta0.ttest.percent, B1.t.perc = beta1.ttest.percent, B2.t.perc = beta2.ttest.percent, 
-             GCV = gcv.values, SCV = row.stan.gcv.values, CV = reg.cv.values, bandwidths = bandwidths)
+             GCV = gcv.values, SCV = row.stan.gcv.values, CV = reg.cv.values, AICc = AICc.values, bandwidths = bandwidths)
 } 
 
 bandwidth.Selector = function(LWRMetrics.output) {
   bwidth.gcv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$GCV)]
   bwidth.row.stan.cv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$SCV)]
   bwidth.reg.cv = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$CV)]
+  bwidth.AICc = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$AICc)]
   
   bwidth.B0.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$B0.RMSE)]
   bwidth.B1.RMSE = LWRMetrics.output$bandwidths[which.min(LWRMetrics.output$B1.RMSE)]
@@ -232,7 +244,7 @@ bandwidth.Selector = function(LWRMetrics.output) {
   } else bwidth.B2.cor = LWRMetrics.output$bandwidths[which.max(LWRMetrics.output$B2.cor)]
   
   
-  c(GCV = bwidth.gcv, SCV = bwidth.row.stan.cv, CV = bwidth.reg.cv,
+  c(GCV = bwidth.gcv, SCV = bwidth.row.stan.cv, CV = bwidth.reg.cv, AICc = bwidth.AICc,
     RMSE.B0 = bwidth.B0.RMSE, RMSE.B1 = bwidth.B1.RMSE, RMSE.B2 = bwidth.B2.RMSE, 
     "ttest%B0" = bwidth.B0.ttest.percent, 
     "ttest%B1" = bwidth.B1.ttest.percent, 
