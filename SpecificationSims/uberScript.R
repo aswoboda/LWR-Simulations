@@ -3,11 +3,11 @@
 source("SpecificationSims/SimFunctions.R")
 
 # set our simulation parameters
-Replications = 10
-sample.size = 100 #c(50, 100, 200, 500)
-error.sd = 3 #c(1, 3, 5)
-B1.spatial.var = .25 #c(0, .25, .75)
-B2.spatial.var = .25 #c(0, .25, .75)
+Replications = 100
+sample.size = c(50, 100, 200, 500, 1000)
+error.sd = c(1, 3, 5)
+B1.spatial.var = c(0, .1, .2, .3)
+B2.spatial.var = c(0, .1, .2, .3)
 
 # expand the parameter vectors and create a container for our simulation output
 sim.parameters = expand.grid(error.sd, B1.spatial.var, B2.spatial.var, sample.size)
@@ -56,7 +56,7 @@ MetricOutput = array(NA, c(length(sample.size),
 
 for( i in 1:meta.sim.num) { 
   start = Sys.time()
-  simRepOut = simulationReplicator(Replications, sim.parameters[i, ], MC = FALSE)
+  simRepOut = simulationReplicator(Replications, sim.parameters[i, ], MC = TRUE)
   simOut = simRepReorganizer(simRepOut)
   
   R2Output[as.character(sim.parameters[i, "sample.size"]),
@@ -72,5 +72,5 @@ for( i in 1:meta.sim.num) {
 
   print(paste("For loop", i,"of", meta.sim.num))
   print(round(difftime(end, start, units = "m"), 2))
-  #save(R2Output, MetricOutput, file = "SpecificationSims/uberScriptOutput.RData")
+  save(R2Output, MetricOutput, file = "SpecificationSims/uberScriptOutput.RData")
 }
