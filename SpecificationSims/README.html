@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<title>From my FDE Proposal</title>
+
+<base target="_blank"/>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+
+
+
+
+</head>
+
+<body>
+<h1>From my FDE Proposal</h1>
+
+<p>The previous project described some of the potential advantages of applying a spatially explicit methodology such as locally weighted regression to a hedonic analysis. Namely, the semi-parametric technique allows the data to reveal local variations in the relationships between variables that might go unnoticed if relying on methods requiring the researcher to parameterize all potential relationships. For instance, rather than require the researcher to group houses by census tracts (or other geographical zones) and then allow the impact of a variable to differ across space by interacting the variable with the geographical areas, locally weighted regression allows the data to naturally reveal where variables have different effects. Additionally, whereas interaction-term approaches implicitly assume that the effect of the independent variable in the regression is the same within a given zone/tract/area, locally weighted regression allows coefficients to continuously vary over the study area.</p>
+
+<p>Recent work has suggested that local models of housing do indeed fit the data better.\footnote{See, for instance, Redfearn (2009) and Sunding and Swoboda (2010).} However, might these local relationships be spurious rather than the result of true local variations in the data? Can researchers count on local regression methods to generate accurate and precise coefficient estimates if no local relationships exist (i.e. only one &ldquo;global&#39;&#39; relationship or perhaps no relationship at all!)? How accurate are the spatially varying estimates of model coefficients?</p>
+
+<p>This project seeks to design a series of simulation experiments to investigate the aforementioned questions and others. Specifically, we generate thousands of artificial datasets under a series of different conditions and then use locally weighted regression to make inferences about the relationships within the data. Because we generated the data, we know the true relationships between the variables and can measure the accuracy of the results generated under locally weighted regressions.</p>
+
+<h2>Contribution of the work to the field</h2>
+
+<p>Relatively little work has investigated the performance of locally weighted regression under known data generation processes. Outstanding research questions in the literature concern the conditions under which locally weighted regression can be expected to return better outcomes than other methodologies, as well as the impacts of changing the data generation process on the results of locally weighted regression. For instance, small samples can create problems for non-parametric techniques like locally weighted regression (because the analysis is typically performed on a subset of the data), but what is a good minimum sample size at which to consider adopting locally weighted regression? The work of Paez et al.\ (2011) begins to address the question, but concludes with, A key direction for further research would be to conduct controlled experiments that introduce a more systematic approach to changing the size of the sample.&#39;&#39; A Faculty Development Endowment Grant would allow us to do just that, implement simulations that explore the question of a minimum viable sample size for locally weighted regression.</p>
+
+<p>This work also seeks to address concerns over the role of the error term in the locally weighted regression estimation process.\footnote{I use error&#39;&#39; to refer to the variation in the dependent variable unexplainable by the model.} Previous work like Farber and Paez (2007), McMillen and Redfearn (2010), and Paez et al.\ (2011) show that locally weighted regression can accurately estimate dependent variables and coefficients. However, the work is surprisingly silent on how much error is present in their model. Our work will show how locally weighted regression estimates change, all other things equal, as we introduce increasing amounts of error into the model. Our hypothesis is that locally weighted regression techniques will suggest increasingly global methods of analysis as we introduce greater error into the model and preliminary results are consistent with this hypothesis.</p>
+
+<p>Another area thus far unexplored in the literature concerns the impact of model misspecification in analyzing data with spatial varying relationships. Most of the extant work examines a model with one independent variable, while the work that does consider two independent variables only examines the cases of both and neither of the coefficients varying over space.\footnote{See Paez et al.\ (2011).} Our work seeks to explore the results of locally weighted regression in a multiple independent variable context, when 1) one variable coefficient varies over space but the other does not, and, 2) the model omits one of these variables from the analysis. </p>
+
+<p>Lastly, if the locally weighted regression model suggests a local analysis when there is a spatially varying relationship and a global analysis when there is a globally stationary relationship, what happens when the true model has both globally stationary and non-stationary variables? Does locally weighted regression suggest a level of local&#39;&#39; analysis (the number of observations to include in a given regression) that is a compromise between the other two analyses, or does one of the original global/local results dominate?</p>
+
+<h2>Feasibility</h2>
+
+<p>The results of this project will help researchers in many areas of spatial analysis understand the pros and cons of locally weighted regression and shed light on when the technique is an appropriate modeling choice. We have worked this past summer to create pilot simulations to address some of the questions posed by this project and feel we are on the right track. As a simulation project already underway, we have a head start towards publication. We already have a research question. We generate our own data and so are free from potential data acquisition problems. We have already written and run some code to begin generating the data needed. We are also able to generate the data in such a way as to require simple post-simulation analysis, rather than complicated methodologies to correct for underlying data concerns. </p>
+
+<p>However, as a large simulation project we also face some challenges. As of early September 2012, a prototypical intermediate simulation has been running on a server at Carleton for over two weeks and appears to need another week or two to finish. The results of this simulation (containing 100 replications of 240 separate treatment combinations spread across four different data generation parameters) will most likely be used to suggest future data generation parameter values for future simulations rather than being conclusive. Even if these simulation results end up being conclusive, this can only answer a subset of our research questions (comparing the optimal measures of local-ness&#39;&#39; in the data and measuring model fit, but none of the model misspecification questions).  Both of these challenges suggest that significant future computation time will be necessary for the completion of the project. This project will be easier to complete if we are able to obtain help increasing the speed of our code or get access to a high performance computing cluster.</p>
+
+<p>The most realistic outcome is that this work will take months of computation and adjustments to generate the data for the ultimate analysis and article write-up. Regardless of whether our code is rewritten to run faster or we find a faster computer server, I believe some of this work can be done prior to a term of leave under the Faculty Development Endowment Grant such that we are ready to write-up our results and submit the article for publication during a term off from teaching.</p>
+
+</body>
+
+</html>
+

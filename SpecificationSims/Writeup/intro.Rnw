@@ -1,16 +1,66 @@
 \documentclass{article}
+\usepackage[height = 9in, top = 1in, width = 6.3 in]{geometry}
 
+\title{A Monte Carlo Investigation of Locally Weighted Regression}
+\author{Aaron Swoboda and Sam Carruthers}
 \begin{document}
 
-Here is a test. With a bit more info.
+\maketitle
 
-\newpage second page! now new and improved!
+This document writes up the results of the recent run of \texttt{uberScript.R}. It contains the following code:
 
-<<>>=
-x = rnorm(100)
-y = 1 + 2*x + rnorm(100)
-summary(lm(y~x))
+<<eval=FALSE, tidy=FALSE>>=
+# set our simulation parameters
+Replications = 100
+sample.size = c(50, 100, 200, 500, 1000)
+error.sd = c(2, 4, 6)
+B1.spatial.var = c(0, .1, .2, .3)
+B2.spatial.var = c(0, .1, .2, .3)
+
+# now march through the different parameter combinations running the simulations
+
+for( i in 1:meta.sim.num) { 
+  start = Sys.time()
+  simRepOut = simulationReplicator(Replications, sim.parameters[i, ], MC = TRUE)
+  simOut = simRepReorganizer(simRepOut)
+  
+  R2Output[as.character(sim.parameters[i, "sample.size"]),
+           as.character(sim.parameters[i, "error.sd"]),
+           as.character(sim.parameters[i, "B1.spatial.var"]),
+           as.character(sim.parameters[i, "B2.spatial.var"]), , ] = simOut[[1]]
+  
+  MetricOutput[as.character(sim.parameters[i, "sample.size"]),
+               as.character(sim.parameters[i, "error.sd"]),
+               as.character(sim.parameters[i, "B1.spatial.var"]),
+               as.character(sim.parameters[i, "B2.spatial.var"]), , , ] = simOut[[2]]
+  end = Sys.time()
+
+  print(paste("For loop", i,"of", meta.sim.num))
+  print(round(difftime(end, start, units = "m"), 2))
+  save(R2Output, MetricOutput, file = "SpecificationSims/uberScriptOutput.RData")
+}
 @
 
-the end. or is it? I don't think so.
+I'm not going to run that code here (it took almost a month to run on the R Server), but let's load up the results and start to look at them. Or at least come up with some questions to ask of the data and a plan for the future.
+\newpage
+<<>>=
+load("../Data/uberScriptOutput20120919.RData")
+dimnames(MetricOutput)
+dimnames(R2Output)
+@
+
+So, we ran some simulations, varying the sample size of the data set, the standard deviation of the error term in the model and the degree of spatial variation in the model coefficients. 
+
+Each simulation was conducted as follows:
+\begin{enumerate}
+\item Grab the simulation parameters.
+\item Generate the data according to the model and parameters. 
+\item Choose a number of observations to include in the Locally Weighted Regression.
+\item Run Locally Weighted Regression on the data using the chosen bandwidth for each observation within the dataset.
+\item Calculate a number of model metrics for each bandwidth
+\item Repeat previous two steps for a number of bandwidths, ranging from only 5 data points to a model approaching a global Ordinary Least Squares model (in our case, we still had declining weights based on distance, but all observations received positive weight in the regresssion).
+\item Collect data on each metric when each metric is optimized. For instance, when we choose the bandwidth associated with the lowest GCV score, what are the other metric values ($\beta$ RMSEs, etc.)
+\end{enumerate}
+
+We kept track of the following model performance metrics, the pseudo $R^2$ of the model results
 \end{document}
