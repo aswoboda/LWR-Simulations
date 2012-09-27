@@ -9,25 +9,27 @@
   # GCV, SCV, CV, and bandwidths that minimize RMSE for this beta
   # use color and shape to help differentiate the categories
 
-source("SpecificationSims/Figures/FigFunctions.R")
-# load("~/LWR-Simulations/SpecificationSims/uberScriptOutput20120819.RData")
-# 
-# # playing around with making plots to display optimal bandwidths under GCV vs SCV
-# 
+# assuming the working directory is "LWR-Simulations/SpecificationSims"
+source("Analysis/FigFunctions.R")
 
+# load up the data file
+load("Data/uberScriptOutput20120919.RData")
+
+# grab some colors
 require(RColorBrewer)
 mypal = brewer.pal(4, "Set1")
 myalpha = seq(.5, .1, l = 3) # length equal to the number of error.sds (cause we're going to use transparency to denote the sd)  
 
-pdf("SpecificationSims/Figures/BetaRMSEvsOptimalBandwidths3.pdf")
-par(mfcol = c(4, 3))
+# start the pdf file
+pdf("Figures/BetaRMSEvsOptimalBandwidths4.pdf")
+par(mfcol = c(5, 3)) # 5 x 3 because five sample sizes and three betas
 par(oma = c(0, 1, 4.5, 0.5))
 par(mar = c(3, 3, 1, 1))
 
-for (my.B2 in 1:3){
-  for (my.B1 in 1:3) {
+for (my.B2 in 1:4){ # four because there are four different B2sv parameter files
+  for (my.B1 in 1:4) { # four because there are four different B1sv parameter files
     for (my.beta in c("B0", "B1", "B2")) {
-      for (my.ss in 1:4) {
+      for (my.ss in 1:5) { # because we have five sample sizes
         # set plot area - ylim has to include zero and the maximum RMSE score for the three bandwidth selectors for all sample sizes
         max.RMSE = quantile(MetricOutput[ , , my.B1, my.B2, , c("GCV", "SCV", "CV"), paste(my.beta, "RMSE", sep = ".")], .98)
         plot( 1, 1, type = "n",
