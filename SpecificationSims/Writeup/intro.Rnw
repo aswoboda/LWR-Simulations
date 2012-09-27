@@ -43,7 +43,7 @@ for( i in 1:meta.sim.num) {
 
 I'm not going to run that code here (it took almost a month to run on the R Server), but let's load up the results and start to look at them. Or at least come up with some questions to ask of the data and a plan for the future.
 \newpage
-<<>>=
+<<cache=TRUE>>=
 load("../Data/uberScriptOutput20120919.RData")
 dimnames(MetricOutput)
 dimnames(R2Output)
