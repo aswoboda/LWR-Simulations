@@ -1,3 +1,4 @@
+% setwd("SpecificationSims/Writeup/")
 \documentclass{article}
 \usepackage{graphicx, color}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -528,5 +529,72 @@ Each simulation was conducted as follows:
 \item Collect data on each metric when each metric is optimized. For instance, when we choose the bandwidth associated with the lowest GCV score, what are the other metric values ($\beta$ RMSEs, etc.)
 \end{enumerate}
 
-We kept track of the following model performance metrics, the pseudo $R^2$ of the model results
+We kept track of the following model performance metrics, the pseudo $R^2$ of the model results, the correlation between the $\hat{\beta}$ and the true $\beta$, the percent of the observations for which we can reject the null hypothesis that $\hat{\beta}=\beta$, cross validation scores (leave one out, generalized, and standardized according to Paez), lastly the AIC score.
+
+\subsection{Data Generation Process}
+
+The Data Generation Process is achieved using the \texttt{DataGen} function, the code for which is given below. 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{flushleft}
+\ttfamily\noindent
+\hlfunctioncall{source}\hlkeyword{(}\hlstring{"{}../SimFunctions.R"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{DataGen}\mbox{}
+\normalfont
+\end{flushleft}
+\begin{verbatim}
+## function (sample.size, error.sd, B1.spatial.var, B2.spatial.var) 
+## {
+##     n = sample.size
+##     east = runif(sample.size) * 10
+##     north = runif(sample.size) * 10
+##     indep.var1 = runif(sample.size) * 10
+##     indep.var2 = runif(sample.size) * 10
+##     trueB0 = 0
+##     trueB1 = B1.spatial.var * north + 1 - 5 * B1.spatial.var
+##     trueB2 = B2.spatial.var * east + 1 - 5 * B2.spatial.var
+##     error = rnorm(sample.size, 0, error.sd)
+##     dep.var = trueB0 + indep.var1 * trueB1 + indep.var2 * trueB2 + 
+##         error
+##     output = data.frame(dep.var, north, east, indep.var1, indep.var2, 
+##         trueB0, trueB1, trueB2, error)
+##     output
+## }
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+The dependent variable is produced as follows:
+\begin{equation}
+Y = \beta _0 + \beta _1 X_1 + \beta _2 X_2 + error
+\end{equation}
+where $\beta _i = f(location)$ for $i$ in $\{1, 2\}$ and $error \sim n(0, \sigma ^2)$. The function for $\beta _i$ is:
+\begin{equation}
+\beta _2 = 1 + Bsv * east - 5*Bsv
+\end{equation}
+Because our data are located on a cartesian plane $(east, north)$ where $0 < east, north < 10$, and $Bsv = \{0, 0.1, 0.2, 0.3\}$, the $\beta$s can be visualized as:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{flushleft}
+\ttfamily\noindent
+\hlsymbol{east}{\ }\hlassignement{=}{\ }\hlsymbol{north}{\ }\hlassignement{=}{\ }\hlnumber{0}\hlkeyword{:}\hlnumber{10}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{BetaFunc}{\ }\hlassignement{=}{\ }\hlkeyword{function}\hlkeyword{(}\hlformalargs{x}\hlkeyword{,}{\ }\hlformalargs{Bsv}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlnumber{1}{\ }\hlkeyword{+}{\ }\hlsymbol{Bsv}{\ }\hlkeyword{*}{\ }\hlsymbol{x}{\ }\hlkeyword{-}{\ }\hlnumber{5}{\ }\hlkeyword{*}{\ }\hlsymbol{Bsv}\hspace*{\fill}\\
+\hlstd{}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{plot}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlnumber{0.3}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{type}{\ }\hlargument{=}{\ }\hlstring{"{}l"{}}\hlkeyword{,}{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"{}east"{}}\hlkeyword{,}{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{"{}True{\ }Beta"{}}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"{}True{\ }Betas{\ }over{\ }Space"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{lines}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlnumber{0.2}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}red"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{lines}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}blue"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{lines}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}orange"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{text}\hlkeyword{(}\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0.925}\hlkeyword{,}{\ }\hlkeyword{-}\hlnumber{0.5}\hlkeyword{,}{\ }\hlargument{length}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{paste}\hlkeyword{(}\hlstring{"{}Bsv="{}}\hlkeyword{,}{\ }\hlkeyword{(}\hlnumber{0}\hlkeyword{:}\hlnumber{3}\hlkeyword{)}\hlkeyword{/}\hlnumber{10}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}orange"{}}\hlkeyword{,}{\ }\hlstring{"{}blue"{}}\hlkeyword{,}{\ }\hlstring{"{}red"{}}\hlkeyword{,}{\ }\hlstring{"{}black"{}}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\end{flushleft}
+\end{kframe}\includegraphics{figure/unnamed-chunk-4} 
+\end{knitrout}
+
+
 \end{document}

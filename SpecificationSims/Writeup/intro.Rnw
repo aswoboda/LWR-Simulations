@@ -1,3 +1,4 @@
+% setwd("SpecificationSims/Writeup/")
 \documentclass{article}
 \usepackage[height = 9in, top = 1in, width = 6.3 in]{geometry}
 
@@ -62,5 +63,41 @@ Each simulation was conducted as follows:
 \item Collect data on each metric when each metric is optimized. For instance, when we choose the bandwidth associated with the lowest GCV score, what are the other metric values ($\beta$ RMSEs, etc.)
 \end{enumerate}
 
-We kept track of the following model performance metrics, the pseudo $R^2$ of the model results
+We kept track of the following model performance metrics, the pseudo $R^2$ of the model results, the correlation between the $\hat{\beta}$ and the true $\beta$, the percent of the observations for which we can reject the null hypothesis that $\hat{\beta}=\beta$, cross validation scores (leave one out, generalized, and standardized according to Paez), lastly the AIC score.
+
+\subsection{Data Generation Process}
+
+The Data Generation Process is achieved using the \texttt{DataGen} function, the code for which is given below. 
+<<>>=
+source("../SimFunctions.R")
+DataGen
+@
+
+The dependent variable is produced as follows:
+\begin{equation}
+Y = \beta _0 + \beta _1 X_1 + \beta _2 X_2 + error
+\end{equation}
+where $\beta _i = f(location)$ for $i$ in $\{1, 2\}$ and $error \sim n(0, \sigma ^2)$. The function for $\beta _i$ is:
+\begin{equation}
+\beta _2 = 1 + Bsv * east - 5*Bsv
+\end{equation}
+Because our data are located on a cartesian plane $(east, north)$ where $0 < east, north < 10$, and $Bsv = \{0, 0.1, 0.2, 0.3\}$, the $\beta$s can be visualized as:
+
+<<fig = T>>=
+east = north = 0:10
+BetaFunc = function(x, Bsv) {
+ 1 + Bsv * x - 5*Bsv
+}
+
+plot(east, BetaFunc(east, .3), type = "l",
+     xlab = "east",
+     ylab = "True Beta",
+     main = "True Betas over Space")
+lines(east, BetaFunc(east, .2), col = "red")
+lines(east, BetaFunc(east, .1), col = "blue")
+lines(east, BetaFunc(east, 0), col = "orange")
+text(rep(0, 4), seq(.925, -.5, length = 4), paste("Bsv=",(0:3)/10), pos = 4,
+     col = c("orange", "blue", "red", "black"))
+@
+
 \end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  26 SEP 2012 21:59
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  28 SEP 2012 13:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -158,7 +158,7 @@ Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 326.
 \hlnormalsizeboxhat=\box37
 \hlnormalsizeboxsinglequote=\box38
 \hlnormalsizeboxbacktick=\box39
-LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 49.
+LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 50.
 
 
 (/usr/local/texlive/2011/texmf-dist/tex/latex/base/ts1cmtt.fd
@@ -328,25 +328,25 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 (./intro.aux)
 \openout1 = `intro.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 389.
-LaTeX Font Info:    ... okay on input line 389.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 389.
-LaTeX Font Info:    ... okay on input line 389.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 389.
-LaTeX Font Info:    ... okay on input line 389.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 389.
-LaTeX Font Info:    ... okay on input line 389.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 389.
-LaTeX Font Info:    ... okay on input line 389.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 389.
-LaTeX Font Info:    ... okay on input line 389.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 389.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 389.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 390.
+LaTeX Font Info:    ... okay on input line 390.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 390.
+LaTeX Font Info:    ... okay on input line 390.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 390.
+LaTeX Font Info:    ... okay on input line 390.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 390.
+LaTeX Font Info:    ... okay on input line 390.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 390.
+LaTeX Font Info:    ... okay on input line 390.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 390.
+LaTeX Font Info:    ... okay on input line 390.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 390.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 390.
 
  (/usr/local/texlive/2011/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 389.
+LaTeX Font Info:    ... okay on input line 390.
 
 (/usr/local/texlive/2011/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -439,44 +439,61 @@ e
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 391.
+(Font)              <12> on input line 392.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 391.
+(Font)              <8> on input line 392.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 391.
-Package color Info: Redefining color shadecolor on input line 396.
+(Font)              <6> on input line 392.
+Package color Info: Redefining color shadecolor on input line 397.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 400.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 401.
 [1
 
 {/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Package color Info: Redefining color shadecolor on input line 437.
+Package color Info: Redefining color shadecolor on input line 438.
 
 [2]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 528.
+(Font)              <7> on input line 529.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 528.
- [3] (./intro.aux) ) 
+(Font)              <5> on input line 529.
+Package color Info: Redefining color shadecolor on input line 538.
+ [3]
+Package color Info: Redefining color shadecolor on input line 579.
+ <figure/unnamed-chunk-4.pdf, id=19, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-4.pdf Graphic file (type pdf)
+
+<use figure/unnamed-chunk-4.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-4.pdf used on input line 596.
+(pdftex.def)             Requested size: 505.88875pt x 505.88875pt.
+
+Overfull \hbox (65.58754pt too wide) in paragraph at lines 596--598
+[][]
+ []
+
+[4] [5 <./figure/unnamed-chunk-4.pdf>] (./intro.aux) ) 
 Here is how much of TeX's memory you used:
- 2695 strings out of 493633
- 40321 string characters out of 3143378
+ 2705 strings out of 493633
+ 40501 string characters out of 3143378
  105131 words of memory out of 3000000
- 5960 multiletter control sequences out of 15000+200000
- 12526 words of font info for 48 fonts, out of 3000000 for 9000
+ 5966 multiletter control sequences out of 15000+200000
+ 12833 words of font info for 49 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 38i,6n,23p,438b,220s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmmi10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmr10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr12.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr17.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr7.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-tt10.pfb>
-Output written on intro.pdf (3 pages, 81249 bytes).
+ 38i,6n,23p,573b,220s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2011/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2011/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2011/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2011/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2011/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2011/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2011/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2011/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2011/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on intro.pdf (5 pages, 119605 bytes).
 PDF statistics:
- 38 PDF objects out of 1000 (max. 8388607)
- 26 compressed objects within 1 object stream
+ 63 PDF objects out of 1000 (max. 8388607)
+ 44 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
