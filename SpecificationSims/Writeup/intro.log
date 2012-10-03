@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  28 SEP 2012 13:54
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  2 OCT 2012 19:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -473,11 +473,11 @@ Overfull \hbox (65.58754pt too wide) in paragraph at lines 596--598
 
 [4] [5 <./figure/unnamed-chunk-4.pdf>] (./intro.aux) ) 
 Here is how much of TeX's memory you used:
- 2705 strings out of 493633
- 40501 string characters out of 3143378
+ 2706 strings out of 493633
+ 40518 string characters out of 3143378
  105131 words of memory out of 3000000
- 5966 multiletter control sequences out of 15000+200000
- 12833 words of font info for 49 fonts, out of 3000000 for 9000
+ 5967 multiletter control sequences out of 15000+200000
+ 13140 words of font info for 50 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
  38i,6n,23p,573b,220s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texlive/2011/
@@ -490,7 +490,7 @@ st/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2011/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2011/texmf-dist/fo
 nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2011/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on intro.pdf (5 pages, 119605 bytes).
+Output written on intro.pdf (5 pages, 121702 bytes).
 PDF statistics:
  63 PDF objects out of 1000 (max. 8388607)
  44 compressed objects within 1 object stream

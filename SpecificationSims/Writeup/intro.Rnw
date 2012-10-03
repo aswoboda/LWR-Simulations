@@ -100,4 +100,14 @@ text(rep(0, 4), seq(.925, -.5, length = 4), paste("Bsv=",(0:3)/10), pos = 4,
      col = c("orange", "blue", "red", "black"))
 @
 
+\section{Research Questions}
+
+What do we want to know about LWR?
+
+\begin{enumerate}
+  \item Are there systematic differences in the bandwidth size selected by different techniques? How do LOOCV, Standardaized CV, Generalize CV, and the AICc compare?
+  \item What sort of spatial variation in the coefficients is necessary relative to the error to need LWR?
+  \item If there is no spatial relationship, will LWR default back to global OLS?
+\end{enumerate}
+
 \end{document}
