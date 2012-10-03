@@ -3,8 +3,8 @@
 source("SpecificationSims/SimFunctions.R")
 
 # set our simulation parameters
-Replications = 100
-sample.size = c(50, 100, 200, 500, 1000)
+Replications = 10
+sample.size = c(50, 100, 200)
 error.sd = c(2, 4, 6)
 B1.spatial.var = c(0, .1, .2, .3)
 B2.spatial.var = c(0, .1, .2, .3)
@@ -54,9 +54,9 @@ MetricOutput = array(NA, c(length(sample.size),
 
 # now march through the different parameter combinations running the simulations
 
-for( i in 1:meta.sim.num) { 
+for( i in 1:10) { #meta.sim.num
   start = Sys.time()
-  simRepOut = simulationReplicator(Replications, sim.parameters[i, ], MC = TRUE)
+  simRepOut = simulationReplicator(Replications, sim.parameters[i, ], MC = FALSE)
   simOut = simRepReorganizer(simRepOut)
   
   R2Output[as.character(sim.parameters[i, "sample.size"]),
