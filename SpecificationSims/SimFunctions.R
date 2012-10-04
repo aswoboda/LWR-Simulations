@@ -40,7 +40,10 @@ LWR = function( my.observation, Data.Frame, my.model = "dep.var ~ indep.var1 + i
   kvector <- seq(minimumk, sample.size - 1, up.by)
   if (sample.size %% up.by != 1)  kvector = c(kvector, sample.size - 1)  #!= does not equal
   numK <- length(kvector)
-  numBetas = 3
+  
+  temp = strsplit(my.model, "~")
+  temp2 = strsplit(temp[[1]][2], "\\+")
+  numBetas = length(temp2[[1]]) + 1
   
   
   # Creates containers for our parameters/metrics. 

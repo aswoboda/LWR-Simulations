@@ -56,7 +56,7 @@ MetricOutput = array(NA, c(length(sample.size),
 
 for( i in 1:10) { #meta.sim.num
   start = Sys.time()
-  simRepOut = simulationReplicator(Replications, sim.parameters[i, ], MC = FALSE)
+  simRepOut = simulationReplicator(Replications, sim.parameters[i, ], MC = TRUE)
   simOut = simRepReorganizer(simRepOut)
   
   R2Output[as.character(sim.parameters[i, "sample.size"]),
@@ -72,5 +72,5 @@ for( i in 1:10) { #meta.sim.num
 
   print(paste("For loop", i,"of", meta.sim.num))
   print(round(difftime(end, start, units = "m"), 2))
-  save(R2Output, MetricOutput, file = "SpecificationSims/uberScriptOutput.RData")
+  save(R2Output, MetricOutput, file = "SpecificationSims/Data/uberScriptOutput.RData")
 }

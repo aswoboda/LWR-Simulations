@@ -1,0 +1,394 @@
+
+R version 2.15.1 (2012-06-22) -- "Roasted Marshmallows"
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> 
+> 
+> source("SpecificationSims/SimFunctionsMisspecified.R")
+> 
+> # set our simulation parameters
+> Replications = 10
+> sample.size = c(50, 100, 200)
+> error.sd = c(2, 4, 6)
+> B1.spatial.var = c(0, .1, .2, .3)
+> B2.spatial.var = c(0, .1, .2, .3)
+> 
+> # expand the parameter vectors and create a container for our simulation output
+> sim.parameters = expand.grid(error.sd, B1.spatial.var, B2.spatial.var, sample.size)
+> names(sim.parameters) = c("error.sd", "B1.spatial.var", "B2.spatial.var", "sample.size")
+> 
+> meta.sim.num = dim(sim.parameters)[1]
+> 
+> R2Output = array(NA, c(length(sample.size),
++                        length(error.sd),
++                        length(B1.spatial.var),
++                        length(B2.spatial.var),
++                        Replications,
++                        2),
++                      dimnames = list(ss = sample.size,
++                                      error.sd = error.sd,
++                                      B1sv = B1.spatial.var,
++                                      B2sv = B2.spatial.var,
++                                      simNum = 1:Replications,
++                                      R2 = c("OLS", "LWR")       ))
+> 
+> MetricOutput = array(NA, c(length(sample.size),
++                         length(error.sd),
++                         length(B1.spatial.var),
++                         length(B2.spatial.var),
++                         Replications,
++                         # Be careful about the dimension, must be ((number -1) of metrics 
++                            #in LWRMetrics function output in SimFunctions (1 per line), metrics)
++                            11, 12),
++                   dimnames = list(ss = sample.size,
++                                   error.sd = error.sd,
++                                   B1sv = B1.spatial.var,
++                                   B2sv = B2.spatial.var,
++                                   simNum = 1:Replications,
++                                   # IMPORTANT: Before running uberscript, test it once to make sure the labels are in
++                                   # the proper order!
++                                   optimized = c( "AICc", "corB0", "corB1", #"corB2", 
++                                                  "CV", "GCV", "R2",
++                                                 "RMSE.B0", "RMSE.B1", #"RMSE.B2", 
++                                                  "SCV",
++                                                 "ttest%B0", "ttest%B1" #"ttest%B2"
++                                                  ),
++                                   metric = c("bandwidths", "B0.cor", "B1.cor", #"B2.cor",
++                                              "B0.RMSE", "B1.RMSE", #"B2.RMSE",
++                                              "B0.t.perc", "B1.t.perc", #"B2.t.perc", 
++                                              "GCV", "SCV", "CV", "AICc", "R2")
++                   )
++ )
+> 
+> # now march through the different parameter combinations running the simulations
+> 
+> for( i in 1:meta.sim.num) { #
++   start = Sys.time()
++   simRepOut = simulationReplicator(Replications, sim.parameters[i, ], MC = TRUE)
++   simOut = simRepReorganizer(simRepOut)
++   
++   R2Output[as.character(sim.parameters[i, "sample.size"]),
++            as.character(sim.parameters[i, "error.sd"]),
++            as.character(sim.parameters[i, "B1.spatial.var"]),
++            as.character(sim.parameters[i, "B2.spatial.var"]), , ] = simOut[[1]]
++   
++   MetricOutput[as.character(sim.parameters[i, "sample.size"]),
++                as.character(sim.parameters[i, "error.sd"]),
++                as.character(sim.parameters[i, "B1.spatial.var"]),
++                as.character(sim.parameters[i, "B2.spatial.var"]), , , ] = simOut[[2]]
++   end = Sys.time()
++ 
++   print(paste("For loop", i,"of", meta.sim.num))
++   print(round(difftime(end, start, units = "m"), 2))
++   save(R2Output, MetricOutput, file = "SpecificationSims/Data/uberScriptOutput.RData")
++ }
+[1] "For loop 1 of 144"
+Time difference of 0.11 mins
+[1] "For loop 2 of 144"
+Time difference of 0.06 mins
+[1] "For loop 3 of 144"
+Time difference of 0.06 mins
+[1] "For loop 4 of 144"
+Time difference of 0.06 mins
+[1] "For loop 5 of 144"
+Time difference of 0.07 mins
+[1] "For loop 6 of 144"
+Time difference of 0.06 mins
+[1] "For loop 7 of 144"
+Time difference of 0.1 mins
+[1] "For loop 8 of 144"
+Time difference of 0.11 mins
+[1] "For loop 9 of 144"
+Time difference of 0.1 mins
+[1] "For loop 10 of 144"
+Time difference of 0.1 mins
+[1] "For loop 11 of 144"
+Time difference of 0.09 mins
+[1] "For loop 12 of 144"
+Time difference of 0.09 mins
+[1] "For loop 13 of 144"
+Time difference of 0.08 mins
+[1] "For loop 14 of 144"
+Time difference of 0.11 mins
+[1] "For loop 15 of 144"
+Time difference of 0.11 mins
+[1] "For loop 16 of 144"
+Time difference of 0.06 mins
+[1] "For loop 17 of 144"
+Time difference of 0.11 mins
+[1] "For loop 18 of 144"
+Time difference of 0.1 mins
+[1] "For loop 19 of 144"
+Time difference of 0.11 mins
+[1] "For loop 20 of 144"
+Time difference of 0.12 mins
+[1] "For loop 21 of 144"
+Time difference of 0.12 mins
+[1] "For loop 22 of 144"
+Time difference of 0.09 mins
+[1] "For loop 23 of 144"
+Time difference of 0.07 mins
+[1] "For loop 24 of 144"
+Time difference of 0.1 mins
+[1] "For loop 25 of 144"
+Time difference of 0.09 mins
+[1] "For loop 26 of 144"
+Time difference of 0.08 mins
+[1] "For loop 27 of 144"
+Time difference of 0.07 mins
+[1] "For loop 28 of 144"
+Time difference of 0.07 mins
+[1] "For loop 29 of 144"
+Time difference of 0.07 mins
+[1] "For loop 30 of 144"
+Time difference of 0.07 mins
+[1] "For loop 31 of 144"
+Time difference of 0.07 mins
+[1] "For loop 32 of 144"
+Time difference of 0.08 mins
+[1] "For loop 33 of 144"
+Time difference of 0.07 mins
+[1] "For loop 34 of 144"
+Time difference of 0.09 mins
+[1] "For loop 35 of 144"
+Time difference of 0.11 mins
+[1] "For loop 36 of 144"
+Time difference of 0.12 mins
+[1] "For loop 37 of 144"
+Time difference of 0.09 mins
+[1] "For loop 38 of 144"
+Time difference of 0.08 mins
+[1] "For loop 39 of 144"
+Time difference of 0.09 mins
+[1] "For loop 40 of 144"
+Time difference of 0.08 mins
+[1] "For loop 41 of 144"
+Time difference of 0.07 mins
+[1] "For loop 42 of 144"
+Time difference of 0.07 mins
+[1] "For loop 43 of 144"
+Time difference of 0.06 mins
+[1] "For loop 44 of 144"
+Time difference of 0.07 mins
+[1] "For loop 45 of 144"
+Time difference of 0.07 mins
+[1] "For loop 46 of 144"
+Time difference of 0.08 mins
+[1] "For loop 47 of 144"
+Time difference of 0.1 mins
+[1] "For loop 48 of 144"
+Time difference of 0.07 mins
+[1] "For loop 49 of 144"
+Time difference of 0.33 mins
+[1] "For loop 50 of 144"
+Time difference of 0.3 mins
+[1] "For loop 51 of 144"
+Time difference of 0.27 mins
+[1] "For loop 52 of 144"
+Time difference of 0.27 mins
+[1] "For loop 53 of 144"
+Time difference of 0.24 mins
+[1] "For loop 54 of 144"
+Time difference of 0.25 mins
+[1] "For loop 55 of 144"
+Time difference of 0.3 mins
+[1] "For loop 56 of 144"
+Time difference of 0.32 mins
+[1] "For loop 57 of 144"
+Time difference of 0.26 mins
+[1] "For loop 58 of 144"
+Time difference of 0.3 mins
+[1] "For loop 59 of 144"
+Time difference of 0.28 mins
+[1] "For loop 60 of 144"
+Time difference of 0.35 mins
+[1] "For loop 61 of 144"
+Time difference of 0.29 mins
+[1] "For loop 62 of 144"
+Time difference of 0.29 mins
+[1] "For loop 63 of 144"
+Time difference of 0.3 mins
+[1] "For loop 64 of 144"
+Time difference of 0.26 mins
+[1] "For loop 65 of 144"
+Time difference of 0.27 mins
+[1] "For loop 66 of 144"
+Time difference of 0.28 mins
+[1] "For loop 67 of 144"
+Time difference of 0.31 mins
+[1] "For loop 68 of 144"
+Time difference of 0.29 mins
+[1] "For loop 69 of 144"
+Time difference of 0.27 mins
+[1] "For loop 70 of 144"
+Time difference of 0.28 mins
+[1] "For loop 71 of 144"
+Time difference of 0.48 mins
+[1] "For loop 72 of 144"
+Time difference of 0.3 mins
+[1] "For loop 73 of 144"
+Time difference of 0.46 mins
+[1] "For loop 74 of 144"
+Time difference of 0.37 mins
+[1] "For loop 75 of 144"
+Time difference of 0.23 mins
+[1] "For loop 76 of 144"
+Time difference of 0.3 mins
+[1] "For loop 77 of 144"
+Time difference of 0.4 mins
+[1] "For loop 78 of 144"
+Time difference of 0.28 mins
+[1] "For loop 79 of 144"
+Time difference of 0.32 mins
+[1] "For loop 80 of 144"
+Time difference of 0.26 mins
+[1] "For loop 81 of 144"
+Time difference of 0.41 mins
+[1] "For loop 82 of 144"
+Time difference of 0.35 mins
+[1] "For loop 83 of 144"
+Time difference of 0.29 mins
+[1] "For loop 84 of 144"
+Time difference of 0.29 mins
+[1] "For loop 85 of 144"
+Time difference of 0.24 mins
+[1] "For loop 86 of 144"
+Time difference of 0.25 mins
+[1] "For loop 87 of 144"
+Time difference of 0.29 mins
+[1] "For loop 88 of 144"
+Time difference of 0.21 mins
+[1] "For loop 89 of 144"
+Time difference of 0.27 mins
+[1] "For loop 90 of 144"
+Time difference of 0.22 mins
+[1] "For loop 91 of 144"
+Time difference of 0.31 mins
+[1] "For loop 92 of 144"
+Time difference of 0.25 mins
+[1] "For loop 93 of 144"
+Time difference of 0.26 mins
+[1] "For loop 94 of 144"
+Time difference of 0.32 mins
+[1] "For loop 95 of 144"
+Time difference of 0.22 mins
+[1] "For loop 96 of 144"
+Time difference of 0.24 mins
+[1] "For loop 97 of 144"
+Time difference of 0.98 mins
+[1] "For loop 98 of 144"
+Time difference of 0.89 mins
+[1] "For loop 99 of 144"
+Time difference of 1.47 mins
+[1] "For loop 100 of 144"
+Time difference of 1.1 mins
+[1] "For loop 101 of 144"
+Time difference of 1.35 mins
+[1] "For loop 102 of 144"
+Time difference of 1.28 mins
+[1] "For loop 103 of 144"
+Time difference of 1.43 mins
+[1] "For loop 104 of 144"
+Time difference of 1.02 mins
+[1] "For loop 105 of 144"
+Time difference of 1.22 mins
+[1] "For loop 106 of 144"
+Time difference of 0.99 mins
+[1] "For loop 107 of 144"
+Time difference of 1.11 mins
+[1] "For loop 108 of 144"
+Time difference of 1.39 mins
+[1] "For loop 109 of 144"
+Time difference of 1.28 mins
+[1] "For loop 110 of 144"
+Time difference of 1.37 mins
+[1] "For loop 111 of 144"
+Time difference of 1.15 mins
+[1] "For loop 112 of 144"
+Time difference of 1.34 mins
+[1] "For loop 113 of 144"
+Time difference of 1.16 mins
+[1] "For loop 114 of 144"
+Time difference of 1.12 mins
+[1] "For loop 115 of 144"
+Time difference of 1.2 mins
+[1] "For loop 116 of 144"
+Time difference of 1.09 mins
+[1] "For loop 117 of 144"
+Time difference of 1.12 mins
+[1] "For loop 118 of 144"
+Time difference of 1.13 mins
+[1] "For loop 119 of 144"
+Time difference of 1.42 mins
+[1] "For loop 120 of 144"
+Time difference of 1.17 mins
+[1] "For loop 121 of 144"
+Time difference of 1.38 mins
+[1] "For loop 122 of 144"
+Time difference of 1.41 mins
+[1] "For loop 123 of 144"
+Time difference of 1.16 mins
+[1] "For loop 124 of 144"
+Time difference of 1.16 mins
+[1] "For loop 125 of 144"
+Time difference of 1.11 mins
+[1] "For loop 126 of 144"
+Time difference of 1.13 mins
+[1] "For loop 127 of 144"
+Time difference of 1.1 mins
+[1] "For loop 128 of 144"
+Time difference of 1.14 mins
+[1] "For loop 129 of 144"
+Time difference of 1.11 mins
+[1] "For loop 130 of 144"
+Time difference of 1.13 mins
+[1] "For loop 131 of 144"
+Time difference of 1.64 mins
+[1] "For loop 132 of 144"
+Time difference of 1.18 mins
+[1] "For loop 133 of 144"
+Time difference of 1.5 mins
+[1] "For loop 134 of 144"
+Time difference of 1.48 mins
+[1] "For loop 135 of 144"
+Time difference of 1.47 mins
+[1] "For loop 136 of 144"
+Time difference of 1.46 mins
+[1] "For loop 137 of 144"
+Time difference of 1.1 mins
+[1] "For loop 138 of 144"
+Time difference of 1.1 mins
+[1] "For loop 139 of 144"
+Time difference of 1.17 mins
+[1] "For loop 140 of 144"
+Time difference of 1.15 mins
+[1] "For loop 141 of 144"
+Time difference of 1.08 mins
+[1] "For loop 142 of 144"
+Time difference of 1.1 mins
+[1] "For loop 143 of 144"
+Time difference of 1.09 mins
+[1] "For loop 144 of 144"
+Time difference of 1.11 mins
+> 
+> proc.time()
+     user    system   elapsed 
+44361.627   193.943  4604.044 
