@@ -25,8 +25,8 @@ Type 'q()' to quit R.
 > source("SpecificationSims/SimFunctionsMisspecified.R")
 > 
 > # set our simulation parameters
-> Replications = 10
-> sample.size = c(50, 100, 200)
+> Replications = 100
+> sample.size = c(50, 100, 200, 500, 1000)
 > error.sd = c(2, 4, 6)
 > B1.spatial.var = c(0, .1, .2, .3)
 > B2.spatial.var = c(0, .1, .2, .3)
@@ -100,295 +100,487 @@ Type 'q()' to quit R.
 +   print(round(difftime(end, start, units = "m"), 2))
 +   save(R2Output, MetricOutput, file = "SpecificationSims/Data/uberScriptOutput.RData")
 + }
-[1] "For loop 1 of 144"
-Time difference of 0.11 mins
-[1] "For loop 2 of 144"
-Time difference of 0.06 mins
-[1] "For loop 3 of 144"
-Time difference of 0.06 mins
-[1] "For loop 4 of 144"
-Time difference of 0.06 mins
-[1] "For loop 5 of 144"
-Time difference of 0.07 mins
-[1] "For loop 6 of 144"
-Time difference of 0.06 mins
-[1] "For loop 7 of 144"
-Time difference of 0.1 mins
-[1] "For loop 8 of 144"
-Time difference of 0.11 mins
-[1] "For loop 9 of 144"
-Time difference of 0.1 mins
-[1] "For loop 10 of 144"
-Time difference of 0.1 mins
-[1] "For loop 11 of 144"
-Time difference of 0.09 mins
-[1] "For loop 12 of 144"
-Time difference of 0.09 mins
-[1] "For loop 13 of 144"
-Time difference of 0.08 mins
-[1] "For loop 14 of 144"
-Time difference of 0.11 mins
-[1] "For loop 15 of 144"
-Time difference of 0.11 mins
-[1] "For loop 16 of 144"
-Time difference of 0.06 mins
-[1] "For loop 17 of 144"
-Time difference of 0.11 mins
-[1] "For loop 18 of 144"
-Time difference of 0.1 mins
-[1] "For loop 19 of 144"
-Time difference of 0.11 mins
-[1] "For loop 20 of 144"
-Time difference of 0.12 mins
-[1] "For loop 21 of 144"
-Time difference of 0.12 mins
-[1] "For loop 22 of 144"
-Time difference of 0.09 mins
-[1] "For loop 23 of 144"
-Time difference of 0.07 mins
-[1] "For loop 24 of 144"
-Time difference of 0.1 mins
-[1] "For loop 25 of 144"
-Time difference of 0.09 mins
-[1] "For loop 26 of 144"
-Time difference of 0.08 mins
-[1] "For loop 27 of 144"
-Time difference of 0.07 mins
-[1] "For loop 28 of 144"
-Time difference of 0.07 mins
-[1] "For loop 29 of 144"
-Time difference of 0.07 mins
-[1] "For loop 30 of 144"
-Time difference of 0.07 mins
-[1] "For loop 31 of 144"
-Time difference of 0.07 mins
-[1] "For loop 32 of 144"
-Time difference of 0.08 mins
-[1] "For loop 33 of 144"
-Time difference of 0.07 mins
-[1] "For loop 34 of 144"
-Time difference of 0.09 mins
-[1] "For loop 35 of 144"
-Time difference of 0.11 mins
-[1] "For loop 36 of 144"
-Time difference of 0.12 mins
-[1] "For loop 37 of 144"
-Time difference of 0.09 mins
-[1] "For loop 38 of 144"
-Time difference of 0.08 mins
-[1] "For loop 39 of 144"
-Time difference of 0.09 mins
-[1] "For loop 40 of 144"
-Time difference of 0.08 mins
-[1] "For loop 41 of 144"
-Time difference of 0.07 mins
-[1] "For loop 42 of 144"
-Time difference of 0.07 mins
-[1] "For loop 43 of 144"
-Time difference of 0.06 mins
-[1] "For loop 44 of 144"
-Time difference of 0.07 mins
-[1] "For loop 45 of 144"
-Time difference of 0.07 mins
-[1] "For loop 46 of 144"
-Time difference of 0.08 mins
-[1] "For loop 47 of 144"
-Time difference of 0.1 mins
-[1] "For loop 48 of 144"
-Time difference of 0.07 mins
-[1] "For loop 49 of 144"
-Time difference of 0.33 mins
-[1] "For loop 50 of 144"
-Time difference of 0.3 mins
-[1] "For loop 51 of 144"
-Time difference of 0.27 mins
-[1] "For loop 52 of 144"
-Time difference of 0.27 mins
-[1] "For loop 53 of 144"
-Time difference of 0.24 mins
-[1] "For loop 54 of 144"
-Time difference of 0.25 mins
-[1] "For loop 55 of 144"
-Time difference of 0.3 mins
-[1] "For loop 56 of 144"
-Time difference of 0.32 mins
-[1] "For loop 57 of 144"
-Time difference of 0.26 mins
-[1] "For loop 58 of 144"
-Time difference of 0.3 mins
-[1] "For loop 59 of 144"
-Time difference of 0.28 mins
-[1] "For loop 60 of 144"
-Time difference of 0.35 mins
-[1] "For loop 61 of 144"
-Time difference of 0.29 mins
-[1] "For loop 62 of 144"
-Time difference of 0.29 mins
-[1] "For loop 63 of 144"
-Time difference of 0.3 mins
-[1] "For loop 64 of 144"
-Time difference of 0.26 mins
-[1] "For loop 65 of 144"
-Time difference of 0.27 mins
-[1] "For loop 66 of 144"
-Time difference of 0.28 mins
-[1] "For loop 67 of 144"
-Time difference of 0.31 mins
-[1] "For loop 68 of 144"
-Time difference of 0.29 mins
-[1] "For loop 69 of 144"
-Time difference of 0.27 mins
-[1] "For loop 70 of 144"
-Time difference of 0.28 mins
-[1] "For loop 71 of 144"
-Time difference of 0.48 mins
-[1] "For loop 72 of 144"
-Time difference of 0.3 mins
-[1] "For loop 73 of 144"
-Time difference of 0.46 mins
-[1] "For loop 74 of 144"
-Time difference of 0.37 mins
-[1] "For loop 75 of 144"
-Time difference of 0.23 mins
-[1] "For loop 76 of 144"
-Time difference of 0.3 mins
-[1] "For loop 77 of 144"
-Time difference of 0.4 mins
-[1] "For loop 78 of 144"
-Time difference of 0.28 mins
-[1] "For loop 79 of 144"
-Time difference of 0.32 mins
-[1] "For loop 80 of 144"
-Time difference of 0.26 mins
-[1] "For loop 81 of 144"
-Time difference of 0.41 mins
-[1] "For loop 82 of 144"
-Time difference of 0.35 mins
-[1] "For loop 83 of 144"
-Time difference of 0.29 mins
-[1] "For loop 84 of 144"
-Time difference of 0.29 mins
-[1] "For loop 85 of 144"
-Time difference of 0.24 mins
-[1] "For loop 86 of 144"
-Time difference of 0.25 mins
-[1] "For loop 87 of 144"
-Time difference of 0.29 mins
-[1] "For loop 88 of 144"
-Time difference of 0.21 mins
-[1] "For loop 89 of 144"
-Time difference of 0.27 mins
-[1] "For loop 90 of 144"
-Time difference of 0.22 mins
-[1] "For loop 91 of 144"
-Time difference of 0.31 mins
-[1] "For loop 92 of 144"
-Time difference of 0.25 mins
-[1] "For loop 93 of 144"
-Time difference of 0.26 mins
-[1] "For loop 94 of 144"
-Time difference of 0.32 mins
-[1] "For loop 95 of 144"
-Time difference of 0.22 mins
-[1] "For loop 96 of 144"
-Time difference of 0.24 mins
-[1] "For loop 97 of 144"
-Time difference of 0.98 mins
-[1] "For loop 98 of 144"
-Time difference of 0.89 mins
-[1] "For loop 99 of 144"
-Time difference of 1.47 mins
-[1] "For loop 100 of 144"
-Time difference of 1.1 mins
-[1] "For loop 101 of 144"
-Time difference of 1.35 mins
-[1] "For loop 102 of 144"
-Time difference of 1.28 mins
-[1] "For loop 103 of 144"
-Time difference of 1.43 mins
-[1] "For loop 104 of 144"
-Time difference of 1.02 mins
-[1] "For loop 105 of 144"
-Time difference of 1.22 mins
-[1] "For loop 106 of 144"
-Time difference of 0.99 mins
-[1] "For loop 107 of 144"
-Time difference of 1.11 mins
-[1] "For loop 108 of 144"
-Time difference of 1.39 mins
-[1] "For loop 109 of 144"
-Time difference of 1.28 mins
-[1] "For loop 110 of 144"
-Time difference of 1.37 mins
-[1] "For loop 111 of 144"
-Time difference of 1.15 mins
-[1] "For loop 112 of 144"
-Time difference of 1.34 mins
-[1] "For loop 113 of 144"
-Time difference of 1.16 mins
-[1] "For loop 114 of 144"
-Time difference of 1.12 mins
-[1] "For loop 115 of 144"
-Time difference of 1.2 mins
-[1] "For loop 116 of 144"
-Time difference of 1.09 mins
-[1] "For loop 117 of 144"
-Time difference of 1.12 mins
-[1] "For loop 118 of 144"
-Time difference of 1.13 mins
-[1] "For loop 119 of 144"
-Time difference of 1.42 mins
-[1] "For loop 120 of 144"
-Time difference of 1.17 mins
-[1] "For loop 121 of 144"
-Time difference of 1.38 mins
-[1] "For loop 122 of 144"
-Time difference of 1.41 mins
-[1] "For loop 123 of 144"
-Time difference of 1.16 mins
-[1] "For loop 124 of 144"
-Time difference of 1.16 mins
-[1] "For loop 125 of 144"
-Time difference of 1.11 mins
-[1] "For loop 126 of 144"
-Time difference of 1.13 mins
-[1] "For loop 127 of 144"
-Time difference of 1.1 mins
-[1] "For loop 128 of 144"
-Time difference of 1.14 mins
-[1] "For loop 129 of 144"
-Time difference of 1.11 mins
-[1] "For loop 130 of 144"
-Time difference of 1.13 mins
-[1] "For loop 131 of 144"
-Time difference of 1.64 mins
-[1] "For loop 132 of 144"
-Time difference of 1.18 mins
-[1] "For loop 133 of 144"
-Time difference of 1.5 mins
-[1] "For loop 134 of 144"
-Time difference of 1.48 mins
-[1] "For loop 135 of 144"
-Time difference of 1.47 mins
-[1] "For loop 136 of 144"
-Time difference of 1.46 mins
-[1] "For loop 137 of 144"
-Time difference of 1.1 mins
-[1] "For loop 138 of 144"
-Time difference of 1.1 mins
-[1] "For loop 139 of 144"
-Time difference of 1.17 mins
-[1] "For loop 140 of 144"
-Time difference of 1.15 mins
-[1] "For loop 141 of 144"
-Time difference of 1.08 mins
-[1] "For loop 142 of 144"
-Time difference of 1.1 mins
-[1] "For loop 143 of 144"
-Time difference of 1.09 mins
-[1] "For loop 144 of 144"
-Time difference of 1.11 mins
+[1] "For loop 1 of 240"
+Time difference of 0.61 mins
+[1] "For loop 2 of 240"
+Time difference of 0.73 mins
+[1] "For loop 3 of 240"
+Time difference of 0.82 mins
+[1] "For loop 4 of 240"
+Time difference of 0.69 mins
+[1] "For loop 5 of 240"
+Time difference of 0.67 mins
+[1] "For loop 6 of 240"
+Time difference of 0.69 mins
+[1] "For loop 7 of 240"
+Time difference of 0.69 mins
+[1] "For loop 8 of 240"
+Time difference of 0.68 mins
+[1] "For loop 9 of 240"
+Time difference of 0.65 mins
+[1] "For loop 10 of 240"
+Time difference of 0.62 mins
+[1] "For loop 11 of 240"
+Time difference of 0.66 mins
+[1] "For loop 12 of 240"
+Time difference of 0.66 mins
+[1] "For loop 13 of 240"
+Time difference of 0.65 mins
+[1] "For loop 14 of 240"
+Time difference of 0.7 mins
+[1] "For loop 15 of 240"
+Time difference of 0.65 mins
+[1] "For loop 16 of 240"
+Time difference of 0.68 mins
+[1] "For loop 17 of 240"
+Time difference of 0.65 mins
+[1] "For loop 18 of 240"
+Time difference of 0.67 mins
+[1] "For loop 19 of 240"
+Time difference of 0.78 mins
+[1] "For loop 20 of 240"
+Time difference of 0.66 mins
+[1] "For loop 21 of 240"
+Time difference of 0.66 mins
+[1] "For loop 22 of 240"
+Time difference of 0.66 mins
+[1] "For loop 23 of 240"
+Time difference of 0.64 mins
+[1] "For loop 24 of 240"
+Time difference of 0.68 mins
+[1] "For loop 25 of 240"
+Time difference of 0.67 mins
+[1] "For loop 26 of 240"
+Time difference of 0.69 mins
+[1] "For loop 27 of 240"
+Time difference of 0.7 mins
+[1] "For loop 28 of 240"
+Time difference of 0.69 mins
+[1] "For loop 29 of 240"
+Time difference of 0.65 mins
+[1] "For loop 30 of 240"
+Time difference of 0.68 mins
+[1] "For loop 31 of 240"
+Time difference of 0.69 mins
+[1] "For loop 32 of 240"
+Time difference of 0.67 mins
+[1] "For loop 33 of 240"
+Time difference of 0.68 mins
+[1] "For loop 34 of 240"
+Time difference of 0.7 mins
+[1] "For loop 35 of 240"
+Time difference of 0.65 mins
+[1] "For loop 36 of 240"
+Time difference of 0.67 mins
+[1] "For loop 37 of 240"
+Time difference of 0.7 mins
+[1] "For loop 38 of 240"
+Time difference of 0.72 mins
+[1] "For loop 39 of 240"
+Time difference of 0.69 mins
+[1] "For loop 40 of 240"
+Time difference of 0.67 mins
+[1] "For loop 41 of 240"
+Time difference of 0.66 mins
+[1] "For loop 42 of 240"
+Time difference of 0.6 mins
+[1] "For loop 43 of 240"
+Time difference of 0.73 mins
+[1] "For loop 44 of 240"
+Time difference of 0.73 mins
+[1] "For loop 45 of 240"
+Time difference of 0.81 mins
+[1] "For loop 46 of 240"
+Time difference of 0.59 mins
+[1] "For loop 47 of 240"
+Time difference of 0.54 mins
+[1] "For loop 48 of 240"
+Time difference of 0.62 mins
+[1] "For loop 49 of 240"
+Time difference of 2.51 mins
+[1] "For loop 50 of 240"
+Time difference of 2.34 mins
+[1] "For loop 51 of 240"
+Time difference of 2.36 mins
+[1] "For loop 52 of 240"
+Time difference of 2.29 mins
+[1] "For loop 53 of 240"
+Time difference of 2.54 mins
+[1] "For loop 54 of 240"
+Time difference of 2.87 mins
+[1] "For loop 55 of 240"
+Time difference of 2.42 mins
+[1] "For loop 56 of 240"
+Time difference of 2.52 mins
+[1] "For loop 57 of 240"
+Time difference of 2.43 mins
+[1] "For loop 58 of 240"
+Time difference of 2.13 mins
+[1] "For loop 59 of 240"
+Time difference of 2.26 mins
+[1] "For loop 60 of 240"
+Time difference of 2.64 mins
+[1] "For loop 61 of 240"
+Time difference of 2.67 mins
+[1] "For loop 62 of 240"
+Time difference of 2.81 mins
+[1] "For loop 63 of 240"
+Time difference of 2.79 mins
+[1] "For loop 64 of 240"
+Time difference of 2.72 mins
+[1] "For loop 65 of 240"
+Time difference of 2.32 mins
+[1] "For loop 66 of 240"
+Time difference of 2.45 mins
+[1] "For loop 67 of 240"
+Time difference of 2.62 mins
+[1] "For loop 68 of 240"
+Time difference of 2.79 mins
+[1] "For loop 69 of 240"
+Time difference of 2.7 mins
+[1] "For loop 70 of 240"
+Time difference of 2.54 mins
+[1] "For loop 71 of 240"
+Time difference of 2.69 mins
+[1] "For loop 72 of 240"
+Time difference of 2.6 mins
+[1] "For loop 73 of 240"
+Time difference of 2.65 mins
+[1] "For loop 74 of 240"
+Time difference of 3.05 mins
+[1] "For loop 75 of 240"
+Time difference of 2.87 mins
+[1] "For loop 76 of 240"
+Time difference of 2.58 mins
+[1] "For loop 77 of 240"
+Time difference of 2.55 mins
+[1] "For loop 78 of 240"
+Time difference of 2.52 mins
+[1] "For loop 79 of 240"
+Time difference of 2.61 mins
+[1] "For loop 80 of 240"
+Time difference of 2.65 mins
+[1] "For loop 81 of 240"
+Time difference of 2.66 mins
+[1] "For loop 82 of 240"
+Time difference of 2.58 mins
+[1] "For loop 83 of 240"
+Time difference of 2.7 mins
+[1] "For loop 84 of 240"
+Time difference of 2.75 mins
+[1] "For loop 85 of 240"
+Time difference of 2.62 mins
+[1] "For loop 86 of 240"
+Time difference of 2.73 mins
+[1] "For loop 87 of 240"
+Time difference of 2.64 mins
+[1] "For loop 88 of 240"
+Time difference of 2.67 mins
+[1] "For loop 89 of 240"
+Time difference of 2.54 mins
+[1] "For loop 90 of 240"
+Time difference of 2.62 mins
+[1] "For loop 91 of 240"
+Time difference of 2.22 mins
+[1] "For loop 92 of 240"
+Time difference of 2.2 mins
+[1] "For loop 93 of 240"
+Time difference of 2.49 mins
+[1] "For loop 94 of 240"
+Time difference of 2.74 mins
+[1] "For loop 95 of 240"
+Time difference of 2.68 mins
+[1] "For loop 96 of 240"
+Time difference of 2.53 mins
+[1] "For loop 97 of 240"
+Time difference of 12.7 mins
+[1] "For loop 98 of 240"
+Time difference of 9.78 mins
+[1] "For loop 99 of 240"
+Time difference of 10.87 mins
+[1] "For loop 100 of 240"
+Time difference of 10.78 mins
+[1] "For loop 101 of 240"
+Time difference of 11.43 mins
+[1] "For loop 102 of 240"
+Time difference of 10.27 mins
+[1] "For loop 103 of 240"
+Time difference of 9.67 mins
+[1] "For loop 104 of 240"
+Time difference of 12.65 mins
+[1] "For loop 105 of 240"
+Time difference of 13.44 mins
+[1] "For loop 106 of 240"
+Time difference of 10.98 mins
+[1] "For loop 107 of 240"
+Time difference of 11.08 mins
+[1] "For loop 108 of 240"
+Time difference of 10.88 mins
+[1] "For loop 109 of 240"
+Time difference of 12.71 mins
+[1] "For loop 110 of 240"
+Time difference of 14.82 mins
+[1] "For loop 111 of 240"
+Time difference of 12.95 mins
+[1] "For loop 112 of 240"
+Time difference of 10.14 mins
+[1] "For loop 113 of 240"
+Time difference of 12.73 mins
+[1] "For loop 114 of 240"
+Time difference of 10.85 mins
+[1] "For loop 115 of 240"
+Time difference of 9.84 mins
+[1] "For loop 116 of 240"
+Time difference of 9.11 mins
+[1] "For loop 117 of 240"
+Time difference of 11.98 mins
+[1] "For loop 118 of 240"
+Time difference of 10.66 mins
+[1] "For loop 119 of 240"
+Time difference of 11.05 mins
+[1] "For loop 120 of 240"
+Time difference of 10.99 mins
+[1] "For loop 121 of 240"
+Time difference of 12.1 mins
+[1] "For loop 122 of 240"
+Time difference of 11.4 mins
+[1] "For loop 123 of 240"
+Time difference of 9.76 mins
+[1] "For loop 124 of 240"
+Time difference of 9.76 mins
+[1] "For loop 125 of 240"
+Time difference of 8.93 mins
+[1] "For loop 126 of 240"
+Time difference of 11.32 mins
+[1] "For loop 127 of 240"
+Time difference of 11.75 mins
+[1] "For loop 128 of 240"
+Time difference of 10.18 mins
+[1] "For loop 129 of 240"
+Time difference of 10.79 mins
+[1] "For loop 130 of 240"
+Time difference of 10.93 mins
+[1] "For loop 131 of 240"
+Time difference of 10.89 mins
+[1] "For loop 132 of 240"
+Time difference of 10.7 mins
+[1] "For loop 133 of 240"
+Time difference of 11.6 mins
+[1] "For loop 134 of 240"
+Time difference of 10.56 mins
+[1] "For loop 135 of 240"
+Time difference of 10.14 mins
+[1] "For loop 136 of 240"
+Time difference of 10.45 mins
+[1] "For loop 137 of 240"
+Time difference of 10.34 mins
+[1] "For loop 138 of 240"
+Time difference of 10.85 mins
+[1] "For loop 139 of 240"
+Time difference of 10.6 mins
+[1] "For loop 140 of 240"
+Time difference of 10.89 mins
+[1] "For loop 141 of 240"
+Time difference of 11.17 mins
+[1] "For loop 142 of 240"
+Time difference of 11.41 mins
+[1] "For loop 143 of 240"
+Time difference of 11.35 mins
+[1] "For loop 144 of 240"
+Time difference of 11.3 mins
+[1] "For loop 145 of 240"
+Time difference of 84.91 mins
+[1] "For loop 146 of 240"
+Time difference of 91.06 mins
+[1] "For loop 147 of 240"
+Time difference of 87.81 mins
+[1] "For loop 148 of 240"
+Time difference of 89.28 mins
+[1] "For loop 149 of 240"
+Time difference of 84.51 mins
+[1] "For loop 150 of 240"
+Time difference of 86.63 mins
+[1] "For loop 151 of 240"
+Time difference of 85.08 mins
+[1] "For loop 152 of 240"
+Time difference of 82.28 mins
+[1] "For loop 153 of 240"
+Time difference of 83.92 mins
+[1] "For loop 154 of 240"
+Time difference of 76.71 mins
+[1] "For loop 155 of 240"
+Time difference of 75.29 mins
+[1] "For loop 156 of 240"
+Time difference of 86.1 mins
+[1] "For loop 157 of 240"
+Time difference of 73.87 mins
+[1] "For loop 158 of 240"
+Time difference of 76.46 mins
+[1] "For loop 159 of 240"
+Time difference of 78.2 mins
+[1] "For loop 160 of 240"
+Time difference of 82.54 mins
+[1] "For loop 161 of 240"
+Time difference of 80.83 mins
+[1] "For loop 162 of 240"
+Time difference of 75.47 mins
+[1] "For loop 163 of 240"
+Time difference of 79.02 mins
+[1] "For loop 164 of 240"
+Time difference of 79.5 mins
+[1] "For loop 165 of 240"
+Time difference of 83.78 mins
+[1] "For loop 166 of 240"
+Time difference of 86.35 mins
+[1] "For loop 167 of 240"
+Time difference of 84.89 mins
+[1] "For loop 168 of 240"
+Time difference of 83.88 mins
+[1] "For loop 169 of 240"
+Time difference of 83.51 mins
+[1] "For loop 170 of 240"
+Time difference of 84.99 mins
+[1] "For loop 171 of 240"
+Time difference of 83.94 mins
+[1] "For loop 172 of 240"
+Time difference of 81.74 mins
+[1] "For loop 173 of 240"
+Time difference of 80.69 mins
+[1] "For loop 174 of 240"
+Time difference of 76.56 mins
+[1] "For loop 175 of 240"
+Time difference of 72.67 mins
+[1] "For loop 176 of 240"
+Time difference of 79.33 mins
+[1] "For loop 177 of 240"
+Time difference of 71.73 mins
+[1] "For loop 178 of 240"
+Time difference of 79.96 mins
+[1] "For loop 179 of 240"
+Time difference of 84.21 mins
+[1] "For loop 180 of 240"
+Time difference of 84.45 mins
+[1] "For loop 181 of 240"
+Time difference of 88.67 mins
+[1] "For loop 182 of 240"
+Time difference of 85.46 mins
+[1] "For loop 183 of 240"
+Time difference of 84.26 mins
+[1] "For loop 184 of 240"
+Time difference of 88.68 mins
+[1] "For loop 185 of 240"
+Time difference of 88.41 mins
+[1] "For loop 186 of 240"
+Time difference of 88.73 mins
+[1] "For loop 187 of 240"
+Time difference of 90.26 mins
+[1] "For loop 188 of 240"
+Time difference of 89.2 mins
+[1] "For loop 189 of 240"
+Time difference of 88.27 mins
+[1] "For loop 190 of 240"
+Time difference of 82.94 mins
+[1] "For loop 191 of 240"
+Time difference of 74.92 mins
+[1] "For loop 192 of 240"
+Time difference of 82.97 mins
+[1] "For loop 193 of 240"
+Time difference of 456.22 mins
+[1] "For loop 194 of 240"
+Time difference of 501.88 mins
+[1] "For loop 195 of 240"
+Time difference of 462.14 mins
+[1] "For loop 196 of 240"
+Time difference of 471.82 mins
+[1] "For loop 197 of 240"
+Time difference of 505.72 mins
+[1] "For loop 198 of 240"
+Time difference of 454.25 mins
+[1] "For loop 199 of 240"
+Time difference of 482.66 mins
+[1] "For loop 200 of 240"
+Time difference of 511.29 mins
+[1] "For loop 201 of 240"
+Time difference of 472.35 mins
+[1] "For loop 202 of 240"
+Time difference of 446.21 mins
+[1] "For loop 203 of 240"
+Time difference of 486.97 mins
+[1] "For loop 204 of 240"
+Time difference of 462.51 mins
+[1] "For loop 205 of 240"
+Time difference of 437.45 mins
+[1] "For loop 206 of 240"
+Time difference of 467.87 mins
+[1] "For loop 207 of 240"
+Time difference of 417.32 mins
+[1] "For loop 208 of 240"
+Time difference of 457.94 mins
+[1] "For loop 209 of 240"
+Time difference of 441.69 mins
+[1] "For loop 210 of 240"
+Time difference of 445.8 mins
+[1] "For loop 211 of 240"
+Time difference of 417.76 mins
+[1] "For loop 212 of 240"
+Time difference of 434.7 mins
+[1] "For loop 213 of 240"
+Time difference of 460.65 mins
+[1] "For loop 214 of 240"
+Time difference of 462.8 mins
+[1] "For loop 215 of 240"
+Time difference of 461.93 mins
+[1] "For loop 216 of 240"
+Time difference of 489.35 mins
+[1] "For loop 217 of 240"
+Time difference of 457.69 mins
+[1] "For loop 218 of 240"
+Time difference of 449.74 mins
+[1] "For loop 219 of 240"
+Time difference of 476.19 mins
+[1] "For loop 220 of 240"
+Time difference of 493.81 mins
+[1] "For loop 221 of 240"
+Time difference of 470.26 mins
+[1] "For loop 222 of 240"
+Time difference of 500.27 mins
+[1] "For loop 223 of 240"
+Time difference of 479.55 mins
+[1] "For loop 224 of 240"
+Time difference of 452.44 mins
+[1] "For loop 225 of 240"
+Time difference of 491.2 mins
+[1] "For loop 226 of 240"
+Time difference of 469.09 mins
+[1] "For loop 227 of 240"
+Time difference of 457.73 mins
+[1] "For loop 228 of 240"
+Time difference of 477.06 mins
+[1] "For loop 229 of 240"
+Time difference of 448.53 mins
+[1] "For loop 230 of 240"
+Time difference of 425.59 mins
+[1] "For loop 231 of 240"
+Time difference of 468.59 mins
+[1] "For loop 232 of 240"
+Time difference of 453.97 mins
+[1] "For loop 233 of 240"
+Time difference of 444.13 mins
+[1] "For loop 234 of 240"
+Time difference of 469.96 mins
+[1] "For loop 235 of 240"
+Time difference of 494.08 mins
+[1] "For loop 236 of 240"
+Time difference of 493.27 mins
+[1] "For loop 237 of 240"
+Time difference of 507.34 mins
+[1] "For loop 238 of 240"
+Time difference of 494.01 mins
+[1] "For loop 239 of 240"
+Time difference of 465.11 mins
+[1] "For loop 240 of 240"
+Time difference of 513.14 mins
 > 
 > proc.time()
-     user    system   elapsed 
-44361.627   193.943  4604.044 
+        user       system      elapsed 
+15117322.353     3123.391  1627982.274 
