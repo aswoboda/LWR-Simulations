@@ -384,6 +384,7 @@
 \newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
 
 \usepackage[height = 9in, top = 1in, width = 6.3 in]{geometry}
+\usepackage{verbatim, amsmath, amsthm, amssymb}
 
 \title{A Monte Carlo Investigation of Locally Weighted Regression}
 \author{Aaron Swoboda and Sam Carruthers}
@@ -567,13 +568,14 @@ The Data Generation Process is achieved using the \texttt{DataGen} function, the
 
 The dependent variable is produced as follows:
 \begin{equation}
-Y = \beta _0 + \beta _1 X_1 + \beta _2 X_2 + error
+Y = \beta _0 + \beta _1(location) X_1 + \beta _2(location) X_2 + error
 \end{equation}
-where $\beta _i = f(location)$ for $i$ in $\{1, 2\}$ and $error \sim n(0, \sigma ^2)$. The function for $\beta _i$ is:
-\begin{equation}
-\beta _2 = 1 + Bsv * east - 5*Bsv
-\end{equation}
-Because our data are located on a cartesian plane $(east, north)$ where $0 < east, north < 10$, and $Bsv = \{0, 0.1, 0.2, 0.3\}$, the $\beta$s can be visualized as:
+where $error \sim n(0, \sigma ^2)$. Each observation is located within a geographic coordinate system $(east, north)$ where both $east$ and $north$ values are $\sim u(0, 10)$. The functions determining $\beta _1$ and $\beta _2$ are :
+\begin{eqnarray}
+\beta _1 (east, north) &=& 1 + Bsv1 * north - 5*Bsv1 \\
+\beta _2 (east, north) &=& 1 + Bsv2 * east - 5*Bsv2
+\end{eqnarray}
+In our simulations we let $Bsv_i$ vary $\{0, 0.1, 0.2, 0.3\}$, thus the relationship between $\beta$s and location can be visualized as:
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -583,22 +585,44 @@ Because our data are located on a cartesian plane $(east, north)$ where $0 < eas
 \hlstd{}\hlsymbol{BetaFunc}{\ }\hlassignement{=}{\ }\hlkeyword{function}\hlkeyword{(}\hlformalargs{x}\hlkeyword{,}{\ }\hlformalargs{Bsv}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
 \hlstd{}{\ }{\ }{\ }{\ }\hlnumber{1}{\ }\hlkeyword{+}{\ }\hlsymbol{Bsv}{\ }\hlkeyword{*}{\ }\hlsymbol{x}{\ }\hlkeyword{-}{\ }\hlnumber{5}{\ }\hlkeyword{*}{\ }\hlsymbol{Bsv}\hspace*{\fill}\\
 \hlstd{}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{par}\hlkeyword{(}\hlargument{mfrow}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{2}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{plot}\hlkeyword{(}\hlsymbol{north}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{north}\hlkeyword{,}{\ }\hlnumber{0.3}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{type}{\ }\hlargument{=}{\ }\hlstring{"{}l"{}}\hlkeyword{,}{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"{}north"{}}\hlkeyword{,}{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{"{}True{\ }Beta"{}}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlfunctioncall{expression}\hlkeyword{(}\hlfunctioncall{paste}\hlkeyword{(}\hlstring{"{}True{\ }"{}}\hlkeyword{,}{\ }\hlsymbol{beta}\hlkeyword{[}\hlnumber{1}\hlkeyword{]}\hlkeyword{,}{\ }\hlstring{"{}{\ }over{\ }Space"{}}\hlkeyword{)}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{lines}\hlkeyword{(}\hlsymbol{north}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{north}\hlkeyword{,}{\ }\hlnumber{0.2}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}red"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{lines}\hlkeyword{(}\hlsymbol{north}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{north}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}blue"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{lines}\hlkeyword{(}\hlsymbol{north}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{north}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}orange"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{text}\hlkeyword{(}\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0.925}\hlkeyword{,}{\ }\hlkeyword{-}\hlnumber{0.5}\hlkeyword{,}{\ }\hlargument{length}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{paste}\hlkeyword{(}\hlstring{"{}Bsv1="{}}\hlkeyword{,}{\ }\hlkeyword{(}\hlnumber{0}\hlkeyword{:}\hlnumber{3}\hlkeyword{)}\hlkeyword{/}\hlnumber{10}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}orange"{}}\hlkeyword{,}{\ }\hlstring{"{}blue"{}}\hlkeyword{,}{\ }\hlstring{"{}red"{}}\hlkeyword{,}{\ }\hlstring{"{}black"{}}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{0.7}\hlkeyword{,}{\ }\hlargument{offset}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hspace*{\fill}\\
 \hlstd{}\hlfunctioncall{plot}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlnumber{0.3}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{type}{\ }\hlargument{=}{\ }\hlstring{"{}l"{}}\hlkeyword{,}{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"{}east"{}}\hlkeyword{,}{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{"{}True{\ }Beta"{}}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}{\ }{\ }{\ }{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"{}True{\ }Betas{\ }over{\ }Space"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlfunctioncall{expression}\hlkeyword{(}\hlfunctioncall{paste}\hlkeyword{(}\hlstring{"{}True{\ }"{}}\hlkeyword{,}{\ }\hlsymbol{beta}\hlkeyword{[}\hlnumber{2}\hlkeyword{]}\hlkeyword{,}{\ }\hlstring{"{}{\ }over{\ }Space"{}}\hlkeyword{)}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlfunctioncall{lines}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlnumber{0.2}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}red"{}}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlfunctioncall{lines}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}blue"{}}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlfunctioncall{lines}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlfunctioncall{BetaFunc}\hlkeyword{(}\hlsymbol{east}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}orange"{}}\hlkeyword{)}\hspace*{\fill}\\
-\hlstd{}\hlfunctioncall{text}\hlkeyword{(}\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0.925}\hlkeyword{,}{\ }\hlkeyword{-}\hlnumber{0.5}\hlkeyword{,}{\ }\hlargument{length}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{paste}\hlkeyword{(}\hlstring{"{}Bsv="{}}\hlkeyword{,}{\ }\hlkeyword{(}\hlnumber{0}\hlkeyword{:}\hlnumber{3}\hlkeyword{)}\hlkeyword{/}\hlnumber{10}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}{\ }{\ }{\ }{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}orange"{}}\hlkeyword{,}{\ }\hlstring{"{}blue"{}}\hlkeyword{,}{\ }\hlstring{"{}red"{}}\hlkeyword{,}{\ }\hlstring{"{}black"{}}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\hlstd{}\hlfunctioncall{text}\hlkeyword{(}\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0.925}\hlkeyword{,}{\ }\hlkeyword{-}\hlnumber{0.5}\hlkeyword{,}{\ }\hlargument{length}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{paste}\hlkeyword{(}\hlstring{"{}Bsv2="{}}\hlkeyword{,}{\ }\hlkeyword{(}\hlnumber{0}\hlkeyword{:}\hlnumber{3}\hlkeyword{)}\hlkeyword{/}\hlnumber{10}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}orange"{}}\hlkeyword{,}{\ }\hlstring{"{}blue"{}}\hlkeyword{,}{\ }\hlstring{"{}red"{}}\hlkeyword{,}{\ }\hlstring{"{}black"{}}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{0.7}\hlkeyword{,}{\ }\hlargument{offset}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{)}\mbox{}
 \normalfont
 \end{flushleft}
 \end{kframe}\includegraphics{figure/unnamed-chunk-4} 
 \end{knitrout}
 
 
-\section{Research Questions}
+Our simulations include data generation processes in which:
+\begin{enumerate}
+\item neither coefficient varies over space ($Bsv_1 = 0$ \& $Bsv_2 = 0$)
+\item both coefficients vary over space ($Bsv_1 \neq 0$ \& $Bsv_2 \neq 0$)
+\item only one coefficient varies over space ($Bsv_1 = 0$ \& $Bsv_2 \neq 0$ OR $Bsv_1 \neq 0$ \& $Bsv_2 = 0$)
+\end{enumerate}
 
+Each simulation can be characterized by our selection of four data generation parameters,
+\begin{itemize}
+\item sample size $\{50, 200, 500, 1000\}$
+\item variance of the error term $\{2^2, 4^2, 6^2\}$
+\item degree of spatial variation in $\beta _1$  $\{0, .1, .2, .3\}$
+\item degree of spatial variation in $\beta _2$  $\{0, .1, .2, .3\}$
+\end{itemize}
+
+\section{Research Questions}
 What do we want to know about LWR?
 
 \begin{enumerate}
@@ -606,5 +630,74 @@ What do we want to know about LWR?
   \item What sort of spatial variation in the coefficients is necessary relative to the error to need LWR?
   \item If there is no spatial relationship, will LWR default back to global OLS?
 \end{enumerate}
+
+\section{Applying Locally Weighted Regression}
+
+After generating the data, we applied Locally Weighted Regression and calculated numerous diagnostics in order to measure the performance of the regression technique.
+
+Locally Weighted Regression (LWR) is an estimation strategy allowing non-stationary model parameters. A vector of regression parameters is estimated using Equation~\eqref{eq:LWR} for each location within the dataset, 
+\begin{equation}\label{eq:LWR}
+\hat{\beta}_{location_i} =(X^TW_{location_i}X)^{-1}X^TW_{location_i}Y,
+\end{equation}
+where $X$ is the standard $n$ x $m$ data matrix, $Y$ the $n$ x $1$ vector of dependent variable values, and $W_{location_i}$ is an $n$ x $n$ weights matrix. We construct the weights matrix for a given location to give positive weights to the $k$-nearest data points, with weights declining according to a bi-square function as distances increase.  Specifically, we create the weights matrix with zeros on the off-diagonal and calculate the $jj$th diagonal element as,
+\begin{equation}\label{eq:bisquare}
+w_{ij}= 
+\begin{cases} \left[1-\left(\frac{d_{ij}}{d_{ik}}\right)^2\right]^2 & \text{if $d_{ij}\leq d_{ik}$} \\
+0 &\text{if $d_{ij} > d_{ik}$}
+\end{cases}
+\end{equation}
+where $d_{ij}$ is the distance between observations $i$ and $j$, and $d_{ik}$ is the distance to the $k$th nearest observation to observation $i$.
+
+\subsection{Cross-Validation}
+Theory does not provide guidance as to how many observations should receive positive weights in the local regression and must be determined by the researcher for the problem at hand. Typically, the $k$ parameter is determined by minimizing a cross-validation metric. This research aims to systematically compare the performance of four different cross-validation metrics used in LWR research.
+\begin{enumerate}
+\item Leave-One-Out Cross-Validation
+\item Generalized Cross-Validation 
+\item Standardized Cross-Validation
+\item Akaike Information Criterion
+\end{enumerate}
+
+Does choosing the optimal number of observations to include in the LWR through these four strategies yield similar results? If there are differences, are there patterns in how they are different?
+
+\subsection{Leave-One Out Cross-Validation}
+
+\begin{equation}
+\sum (y - \hat{y}_{-i})^2
+\end{equation}
+
+\subsection{Generalized Cross-Validation Score}
+\begin{equation}\label{eq:GCV}
+  n*\sum_{i=1}^{n}\frac{(y_i-\hat{y}_i)^2}{(n-v_1)^2}, 
+  \end{equation}
+where $y_i$ is the dependent variable value, $\hat{y}_i$ is the predicted dependent variable value for observation $i$, and $v_1$ is the ``effective number of model parameters.''\footnote{
+  $v_1=$tr(\textbf{S}), where the matrix \textbf{S} is the ``hat matrix'' which maps $y$ onto $\hat{y}$,
+\begin{equation*}
+  \hat{y}=\textbf{S}y,
+  \end{equation*}
+  and each row of \textbf{S}, $r_i$ is given by:
+  \begin{equation*}
+    r_i=X_i(X^TW(location_i)X)^{-1}X^TW(location_i).
+    \end{equation*}
+}
+In an LWR model, the number of parameters to be estimated is no longer equal to the number of variables included because we allow the regression coefficients to vary over space. The GCV score calculates the ``effective'' number of model parameters, $v_1$, and penalizes the model for increasing the number of parameters without sufficient reduction in model accuracy. Taking the square root of Equation~\eqref{eq:GCV} and rearranging yields,
+\begin{equation}
+  \sqrt{GCV}=\sqrt{\frac{n}{n-v_1}} \sqrt{\frac{\textrm{Sum of Squared Residuals}}{n-v_1}},
+\end{equation}
+which approaches $\hat{\sigma}$ as $v_1$ approaches $m$ for large $n$. Henceforth, throughout the paper we report the square root of \eqref{eq:GCV} because of its similarity to $\hat{\sigma}$.  
+
+\subsection{Row Standardized Cross-Validation}
+
+Something about Paez, who wanted a CV score that was more robust to outliers.
+
+\begin{equation}\label{eq:SCV}
+\frac{\sum (y - y_{-i})^2} {\sum y}
+\end{equation}
+
+\subsection{Akaike Information Criterion}
+
+\begin{equation}\label{eq:AIC}
+  2*n*ln(\hat{\sigma}) + n*ln(2*\pi) + 
+    n*\frac{n + v_1}{n - 2 - v_1}
+    \end{equation}
 
 \end{document}
