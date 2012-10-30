@@ -385,6 +385,13 @@
 
 \usepackage[height = 9in, top = 1in, width = 6.3 in]{geometry}
 \usepackage{verbatim, amsmath, amsthm, amssymb}
+% Palatino for rm and math | Helvetica for ss | Courier for tt
+\usepackage{mathpazo} % math & rm
+\linespread{1.05}        % Palatino needs more leading (space between lines)
+\usepackage[scaled]{helvet} % ss
+\usepackage{courier} % tt
+\normalfont
+\usepackage[T1]{fontenc}
 
 \title{A Monte Carlo Investigation of Locally Weighted Regression}
 \author{Aaron Swoboda and Sam Carruthers}
@@ -603,7 +610,7 @@ In our simulations we let $Bsv_i$ vary $\{0, 0.1, 0.2, 0.3\}$, thus the relation
 \hlstd{}{\ }{\ }{\ }{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}orange"{}}\hlkeyword{,}{\ }\hlstring{"{}blue"{}}\hlkeyword{,}{\ }\hlstring{"{}red"{}}\hlkeyword{,}{\ }\hlstring{"{}black"{}}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{0.7}\hlkeyword{,}{\ }\hlargument{offset}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{)}\mbox{}
 \normalfont
 \end{flushleft}
-\end{kframe}\includegraphics{figure/unnamed-chunk-4} 
+\end{kframe}\includegraphics{figure/SpatVarBeta} 
 \end{knitrout}
 
 
@@ -699,5 +706,281 @@ Something about Paez, who wanted a CV score that was more robust to outliers.
   2*n*ln(\hat{\sigma}) + n*ln(2*\pi) + 
     n*\frac{n + v_1}{n - 2 - v_1}
     \end{equation}
+    
+\section{Which Bandwidths Do Selection Metrics Suggest?}
+
+In this section we compare the bandwidth selected by the different metrics.
+
+\subsection{Overall}
+
+\begin{itemize}
+\item What are some summary stats about the bandwidths selected by each metric? (table: row for each metric, column for min, median, mean, max, sd)
+\item What is the visual distribution of bandwidths selected by each metric? (small multiples of a histogram for each metric)
+\end{itemize}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{flushleft}
+\ttfamily\noindent
+\hlsymbol{mymetrics}{\ }\hlassignement{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}CV"{}}\hlkeyword{,}{\ }\hlstring{"{}GCV"{}}\hlkeyword{,}{\ }\hlstring{"{}SCV"{}}\hlkeyword{,}{\ }\hlstring{"{}AICc"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{summary.table}{\ }\hlassignement{=}{\ }\hlfunctioncall{matrix}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlfunctioncall{length}\hlkeyword{(}\hlsymbol{mymetrics}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{7}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlkeyword{for}{\ }\hlkeyword{(}\hlsymbol{mymetric}{\ }\hlkeyword{in}{\ }\hlsymbol{mymetrics}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlsymbol{summary.table}\hlkeyword{[}\hlfunctioncall{which}\hlkeyword{(}\hlsymbol{mymetrics}{\ }=={\ }\hlsymbol{mymetric}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{6}\hlkeyword{]}{\ }\hlassignement{=}{\ }\hlfunctioncall{summary}\hlkeyword{(}\hlsymbol{MetricOutput}\hlkeyword{[}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{mymetric}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlsymbol{summary.table}\hlkeyword{[}\hlfunctioncall{which}\hlkeyword{(}\hlsymbol{mymetrics}{\ }=={\ }\hlsymbol{mymetric}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{7}\hlkeyword{]}{\ }\hlassignement{=}{\ }\hlfunctioncall{sd}\hlkeyword{(}\hlsymbol{MetricOutput}\hlkeyword{[}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlkeyword{,}{\ }\hlsymbol{mymetric}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{rownames}\hlkeyword{(}\hlsymbol{summary.table}\hlkeyword{)}{\ }\hlassignement{=}{\ }\hlsymbol{mymetrics}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{colnames}\hlkeyword{(}\hlsymbol{summary.table}\hlkeyword{)}{\ }\hlassignement{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}min"{}}\hlkeyword{,}{\ }\hlstring{"{}Q1"{}}\hlkeyword{,}{\ }\hlstring{"{}median"{}}\hlkeyword{,}{\ }\hlstring{"{}mean"{}}\hlkeyword{,}{\ }\hlstring{"{}Q3"{}}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlstring{"{}max"{}}\hlkeyword{,}{\ }\hlstring{"{}sd"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{print}\hlkeyword{(}\hlfunctioncall{round}\hlkeyword{(}\hlsymbol{summary.table}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\end{flushleft}
+\begin{verbatim}
+##      min Q1 median mean  Q3 max  sd
+## CV    10 40     70  112 135 999 134
+## GCV    5 40     70  111 135 999 134
+## SCV   10 45     90  162 235 955 149
+## AICc  15 45     80  121 145 999 134
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+
+
+Comparing the bandwidths at this level of aggregation is of limited use because we do not expect the same bandwidth to always be suggested. First, the bandwidth suggestion is constrained to be smaller than the sample size of the data, and so we should break out the simulation. Second, we expect the bandwidth selected to be a function of the degree of spatial variation in the underlying data generation process.
+
+\subsection{Sample Size}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{flushleft}
+\ttfamily\noindent
+\hlsymbol{myss}{\ }\hlassignement{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}50"{}}\hlkeyword{,}{\ }\hlstring{"{}100"{}}\hlkeyword{,}{\ }\hlstring{"{}200"{}}\hlkeyword{,}{\ }\hlstring{"{}500"{}}\hlkeyword{,}{\ }\hlstring{"{}1000"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{mymetrics}{\ }\hlassignement{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}CV"{}}\hlkeyword{,}{\ }\hlstring{"{}GCV"{}}\hlkeyword{,}{\ }\hlstring{"{}SCV"{}}\hlkeyword{,}{\ }\hlstring{"{}AICc"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlkeyword{for}{\ }\hlkeyword{(}\hlsymbol{ssi}{\ }\hlkeyword{in}{\ }\hlsymbol{myss}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlsymbol{summary.table}{\ }\hlassignement{=}{\ }\hlfunctioncall{matrix}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlfunctioncall{length}\hlkeyword{(}\hlsymbol{mymetrics}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{7}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlkeyword{for}{\ }\hlkeyword{(}\hlsymbol{mymetric}{\ }\hlkeyword{in}{\ }\hlsymbol{mymetrics}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{summary.table}\hlkeyword{[}\hlfunctioncall{which}\hlkeyword{(}\hlsymbol{mymetrics}{\ }=={\ }\hlsymbol{mymetric}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{6}\hlkeyword{]}{\ }\hlassignement{=}{\ }\hlfunctioncall{summary}\hlkeyword{(}\hlsymbol{MetricOutput}\hlkeyword{[}\hlsymbol{ssi}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{mymetric}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{summary.table}\hlkeyword{[}\hlfunctioncall{which}\hlkeyword{(}\hlsymbol{mymetrics}{\ }=={\ }\hlsymbol{mymetric}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{7}\hlkeyword{]}{\ }\hlassignement{=}{\ }\hlfunctioncall{sd}\hlkeyword{(}\hlsymbol{MetricOutput}\hlkeyword{[}\hlsymbol{ssi}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{mymetric}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlfunctioncall{rownames}\hlkeyword{(}\hlsymbol{summary.table}\hlkeyword{)}{\ }\hlassignement{=}{\ }\hlsymbol{mymetrics}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlfunctioncall{colnames}\hlkeyword{(}\hlsymbol{summary.table}\hlkeyword{)}{\ }\hlassignement{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}min"{}}\hlkeyword{,}{\ }\hlstring{"{}Q1"{}}\hlkeyword{,}{\ }\hlstring{"{}median"{}}\hlkeyword{,}{\ }\hlstring{"{}mean"{}}\hlkeyword{,}{\ }\hlstring{"{}Q3"{}}\hlkeyword{,}{\ }\hlstring{"{}max"{}}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlstring{"{}sd"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlfunctioncall{print}\hlkeyword{(}\hlfunctioncall{paste}\hlkeyword{(}\hlstring{"{}Sample{\ }Size{\ }="{}}\hlkeyword{,}{\ }\hlsymbol{ssi}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlfunctioncall{print}\hlkeyword{(}\hlfunctioncall{round}\hlkeyword{(}\hlsymbol{summary.table}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\mbox{}
+\normalfont
+\end{flushleft}
+\begin{verbatim}
+## [1] "Sample Size = 50"
+##      min Q1 median mean Q3 max sd
+## CV    10 20     30   31 40  49 12
+## GCV    5 20     30   30 40  49 12
+## SCV   10 25     30   29 35  49  8
+## AICc  15 30     35   37 45  49  9
+## [1] "Sample Size = 100"
+##      min Q1 median mean Q3 max sd
+## CV    10 30     45   50 65  99 24
+## GCV    5 30     45   49 65  99 24
+## SCV   15 45     50   51 60  99 13
+## AICc  20 40     55   58 71  99 22
+## [1] "Sample Size = 200"
+##      min Q1 median mean  Q3 max sd
+## CV    20 50     70   81 100 199 46
+## GCV   15 45     70   80 100 199 46
+## SCV   40 80     90   93 105 199 21
+## AICc  30 55     80   90 110 199 44
+## [1] "Sample Size = 500"
+##      min  Q1 median mean  Q3 max  sd
+## CV    30  85    120  151 170 499 107
+## GCV   35  85    120  151 170 499 107
+## SCV  100 190    215  217 235 480  38
+## AICc  45  95    130  161 180 499 105
+## [1] "Sample Size = 1000"
+##      min  Q1 median mean  Q3 max  sd
+## CV    55 130    185  246 260 999 210
+## GCV   45 130    185  246 260 999 210
+## SCV  255 380    420  421 455 955  62
+## AICc  65 140    195  257 270 999 209
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{flushleft}
+\ttfamily\noindent
+\hlfunctioncall{require}\hlkeyword{(}\hlsymbol{beanplot}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{require}\hlkeyword{(}\hlsymbol{RColorBrewer}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{mypal}{\ }\hlassignement{=}{\ }\hlfunctioncall{brewer.pal}\hlkeyword{(}\hlnumber{4}\hlkeyword{,}{\ }\hlstring{"{}Set2"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{par}\hlkeyword{(}\hlargument{mfrow}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{3}\hlkeyword{,}{\ }\hlnumber{2}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{par}\hlkeyword{(}\hlargument{oma}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{2}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{par}\hlkeyword{(}\hlargument{mar}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{2}\hlkeyword{,}{\ }\hlnumber{4.5}\hlkeyword{,}{\ }\hlnumber{3}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{myss}{\ }\hlassignement{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}50"{}}\hlkeyword{,}{\ }\hlstring{"{}100"{}}\hlkeyword{,}{\ }\hlstring{"{}200"{}}\hlkeyword{,}{\ }\hlstring{"{}500"{}}\hlkeyword{,}{\ }\hlstring{"{}1000"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{bws}{\ }\hlassignement{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{2.5}\hlkeyword{,}{\ }\hlnumber{2.5}\hlkeyword{,}{\ }\hlnumber{5}\hlkeyword{,}{\ }\hlnumber{5}\hlkeyword{,}{\ }\hlnumber{10}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{myssi}{\ }\hlassignement{=}{\ }\hlstring{"{}1000"{}}\hspace*{\fill}\\
+\hlstd{}\hlkeyword{for}{\ }\hlkeyword{(}\hlsymbol{myssi}{\ }\hlkeyword{in}{\ }\hlsymbol{myss}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }\hlfunctioncall{beanplot}\hlkeyword{(}\hlsymbol{MetricOutput}\hlkeyword{[}{\ }\hlsymbol{myssi}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{mymetrics}\hlkeyword{[}\hlnumber{1}\hlkeyword{]}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{MetricOutput}\hlkeyword{[}{\ }\hlsymbol{myssi}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{mymetrics}\hlkeyword{[}\hlnumber{2}\hlkeyword{]}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{MetricOutput}\hlkeyword{[}{\ }\hlsymbol{myssi}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{mymetrics}\hlkeyword{[}\hlnumber{3}\hlkeyword{]}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{MetricOutput}\hlkeyword{[}{\ }\hlsymbol{myssi}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{mymetrics}\hlkeyword{[}\hlnumber{4}\hlkeyword{]}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{what}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}{\ }\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{log}{\ }\hlargument{=}{\ }\hlstring{"{}"{}}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{bw}{\ }\hlargument{=}{\ }\hlsymbol{bws}\hlkeyword{[}\hlfunctioncall{which}\hlkeyword{(}\hlsymbol{myss}{\ }=={\ }\hlsymbol{myssi}\hlkeyword{)}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{cutmin}{\ }\hlargument{=}{\ }\hlnumber{5}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{cutmax}{\ }\hlargument{=}{\ }\hlfunctioncall{as.numeric}\hlkeyword{(}\hlsymbol{myssi}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{ylim}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlfunctioncall{as.numeric}\hlkeyword{(}\hlsymbol{myssi}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{xlim}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0.5}\hlkeyword{,}{\ }\hlnumber{4.5}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{names}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlfunctioncall{paste}\hlkeyword{(}\hlstring{"{}Sample{\ }Size{\ }={\ }"{}}\hlkeyword{,}{\ }\hlsymbol{myssi}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{"{}"{}}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{list}\hlkeyword{(}\hlargument{col}{\ }\hlargument{=}{\ }\hlsymbol{mypal}\hlkeyword{[}\hlnumber{1}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlsymbol{mypal}\hlkeyword{[}\hlnumber{2}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlsymbol{mypal}\hlkeyword{[}\hlnumber{3}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlsymbol{mypal}\hlkeyword{[}\hlnumber{4}\hlkeyword{]}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{axes}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }\hlfunctioncall{mtext}\hlkeyword{(}\hlsymbol{mymetrics}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlargument{line}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{4}\hlkeyword{,}{\ }\hlargument{col}\hlargument{=}{\ }\hlsymbol{mypal}\hlkeyword{,}{\ }\hlargument{font}{\ }\hlargument{=}{\ }\hlnumber{2}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }\hlfunctioncall{mtext}\hlkeyword{(}\hlstring{"{}\usebox{\hlnormalsizeboxbackslash}\usebox{\hlnormalsizeboxbackslash}\usebox{\hlnormalsizeboxhash}{\ }of{\ }obs{\ }in{\ }LWR{\ }bandwidth"{}}\hlkeyword{,}{\ }\hlnumber{2}\hlkeyword{,}{\ }\hlargument{line}{\ }\hlargument{=}{\ }\hlnumber{3}\hlkeyword{,}{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{.8}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{2}\hlkeyword{,}{\ }\hlargument{las}{\ }\hlargument{=}{\ }\hlnumber{1}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }\hlfunctioncall{mtext}\hlkeyword{(}\hlstring{"{}Bandwidth{\ }Distributions{\ }by{\ }Metric{\ }and{\ }Sample{\ }Sizes"{}}\hlkeyword{,}{\ }\hlnumber{3}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{outer}{\ }\hlargument{=}{\ }\hlnumber{TRUE}\hlkeyword{,}{\ }\hlargument{line}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{1.5}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\mbox{}
+\normalfont
+\end{flushleft}
+\end{kframe}\begin{figure}[]
+\includegraphics{figure/beanplots} \caption[Hello World]{Hello World. This is a figure caption. I am going to keep writing for a bit to see what happens if I just keep writing and writing. What is the point of this graphic? You will find that out right here.\label{fig:beanplots}}
+\end{figure}
+
+\end{knitrout}
+
+
+Notice that the distributions of selected bandwidths are similar for the CV, GCV, and AICc metrics, while the SCV metric distribution stands out, especially at higher bandwidths. Additionally, note that most distributions have a cluster of selected bandwidths near the sample size. Given that one simulation parameterization included no spatial variation within the data generation coefficients, it makes sense to see a cluster of large bandwidths, a model specification that approaches Ordinary Least Squares. We now proceed to show the distributions by degree of spatial variation in the model coefficients. Figure \ref{fig:beanplots}.
+
+\subsection{By Degree of Coefficient Variation}
+
+Challenge: We used four different levels of spatial variation in each of our two model coefficients, giving us a total of 16 spatial variation cases.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{flushleft}
+\ttfamily\noindent
+\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }The{\ }goal{\ }of{\ }this{\ }code{\ }is{\ }to{\ }make{\ }a{\ }4{\ }x{\ }4{\ }gird{\ }of{\ }beanplots{\ }showing{\ }the{\ }distributions{\ }of{\ }optimal{\ }bandwidths{\ }across{\ }the{\ }four{\ }different{\ }LWR{\ }metrics{\ }and{\ }the{\ }combinations{\ }of{\ }Bsv{\ }parameters.{\ }}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{require}\hlkeyword{(}\hlsymbol{RColorBrewer}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{require}\hlkeyword{(}\hlsymbol{beanplot}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{mypal}{\ }\hlassignement{=}{\ }\hlfunctioncall{brewer.pal}\hlkeyword{(}\hlnumber{4}\hlkeyword{,}{\ }\hlstring{"{}Set2"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }set{\ }some{\ }figure{\ }margin{\ }parameters}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{my.B1}{\ }\hlassignement{=}{\ }\hlsymbol{my.B2}{\ }\hlassignement{=}{\ }\hlnumber{1}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{df}{\ }\hlassignement{=}{\ }\hlfunctioncall{layout}\hlkeyword{(}{\ }\hlfunctioncall{matrix}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{17}\hlkeyword{,}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{18}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{4}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{18}\hlkeyword{,}{\ }\hlnumber{5}\hlkeyword{:}\hlnumber{8}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{18}\hlkeyword{,}{\ }\hlnumber{9}\hlkeyword{:}\hlnumber{12}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{18}\hlkeyword{,}{\ }\hlnumber{13}\hlkeyword{:}\hlnumber{16}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{5}\hlkeyword{,}{\ }\hlnumber{5}\hlkeyword{,}{\ }\hlargument{byrow}{\ }\hlargument{=}{\ }\hlsymbol{T}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{widths}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{.6}\hlkeyword{,}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{heights}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{.6}\hlkeyword{,}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlcomment{\usebox{\hlnormalsizeboxhash}layout.show(df)}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{myssi}{\ }\hlassignement{=}{\ }\hlstring{"{}1000"{}}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{myss}{\ }\hlassignement{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}50"{}}\hlkeyword{,}{\ }\hlstring{"{}100"{}}\hlkeyword{,}{\ }\hlstring{"{}200"{}}\hlkeyword{,}{\ }\hlstring{"{}500"{}}\hlkeyword{,}{\ }\hlstring{"{}1000"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{mymetrics}{\ }\hlassignement{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}CV"{}}\hlkeyword{,}{\ }\hlstring{"{}GCV"{}}\hlkeyword{,}{\ }\hlstring{"{}SCV"{}}\hlkeyword{,}{\ }\hlstring{"{}AICc"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{bws}{\ }\hlassignement{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{2.5}\hlkeyword{,}{\ }\hlnumber{2.5}\hlkeyword{,}{\ }\hlnumber{5}\hlkeyword{,}{\ }\hlnumber{5}\hlkeyword{,}{\ }\hlnumber{10}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{par}\hlkeyword{(}\hlargument{oma}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{2.5}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{par}\hlkeyword{(}\hlargument{mar}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{.5}\hlkeyword{,}{\ }\hlnumber{.5}\hlkeyword{,}{\ }\hlnumber{.5}\hlkeyword{,}{\ }\hlnumber{.5}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlkeyword{for}{\ }\hlkeyword{(}\hlsymbol{my.B2}{\ }\hlkeyword{in}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{4}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }four{\ }because{\ }there{\ }are{\ }four{\ }different{\ }B2sv{\ }parameter{\ }files}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }\hlkeyword{for}{\ }\hlkeyword{(}\hlsymbol{my.B1}{\ }\hlkeyword{in}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{4}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }four{\ }because{\ }there{\ }are{\ }four{\ }different{\ }B1sv{\ }parameter{\ }files}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }now{\ }make{\ }a{\ }beanplot{\ }for{\ }the{\ }given{\ }Bsv1{\ }and{\ }Bsv2}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlfunctioncall{beanplot}\hlkeyword{(}\hlsymbol{MetricOutput}\hlkeyword{[}\hlsymbol{myssi}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{my.B1}\hlkeyword{,}{\ }\hlsymbol{my.B2}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{mymetrics}\hlkeyword{[}\hlnumber{1}\hlkeyword{]}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{MetricOutput}\hlkeyword{[}\hlsymbol{myssi}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{my.B1}\hlkeyword{,}{\ }\hlsymbol{my.B2}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{mymetrics}\hlkeyword{[}\hlnumber{2}\hlkeyword{]}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{MetricOutput}\hlkeyword{[}\hlsymbol{myssi}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{my.B1}\hlkeyword{,}{\ }\hlsymbol{my.B2}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{mymetrics}\hlkeyword{[}\hlnumber{3}\hlkeyword{]}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{MetricOutput}\hlkeyword{[}\hlsymbol{myssi}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{my.B1}\hlkeyword{,}{\ }\hlsymbol{my.B2}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlsymbol{mymetrics}\hlkeyword{[}\hlnumber{4}\hlkeyword{]}\hlkeyword{,}{\ }\hlstring{"{}bandwidths"{}}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{what}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}{\ }\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{log}{\ }\hlargument{=}{\ }\hlstring{"{}"{}}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{bw}{\ }\hlargument{=}{\ }\hlsymbol{bws}\hlkeyword{[}\hlfunctioncall{which}\hlkeyword{(}\hlsymbol{myss}{\ }=={\ }\hlsymbol{myssi}\hlkeyword{)}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{cutmin}{\ }\hlargument{=}{\ }\hlnumber{5}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{cutmax}{\ }\hlargument{=}{\ }\hlfunctioncall{as.numeric}\hlkeyword{(}\hlsymbol{myssi}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{ylim}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlfunctioncall{as.numeric}\hlkeyword{(}\hlsymbol{myssi}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}names{\ }={\ }mymetrics,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{axes}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"{}"{}}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{"{}"{}}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{list}\hlkeyword{(}\hlargument{col}{\ }\hlargument{=}{\ }\hlsymbol{mypal}\hlkeyword{[}\hlnumber{1}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlsymbol{mypal}\hlkeyword{[}\hlnumber{2}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlsymbol{mypal}\hlkeyword{[}\hlnumber{3}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlsymbol{mypal}\hlkeyword{[}\hlnumber{4}\hlkeyword{]}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlkeyword{if}\hlkeyword{(}\hlsymbol{my.B1}{\ }=={\ }\hlnumber{1}\hlkeyword{)}{\ }\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{2}\hlkeyword{,}{\ }\hlargument{las}{\ }\hlargument{=}{\ }\hlnumber{1}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }\hlkeyword{if}\hlkeyword{}\hlkeyword{(}\hlsymbol{my.B1}{\ }=={\ }\hlnumber{4}\hlkeyword{)}{\ }\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{4}\hlkeyword{,}{\ }\hlargument{las}{\ }\hlargument{=}{\ }\hlnumber{1}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\hspace*{\fill}\\
+\hlstd{}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\mbox{}
+\normalfont
+\end{flushleft}
+\end{kframe}
+
+\includegraphics[width=.9\textwidth]{figure/MegaFig1} \hfill{}
+
+\begin{kframe}\begin{flushleft}
+\ttfamily\noindent
+\hspace*{\fill}\\
+\hlstd{}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }Now{\ }work{\ }on{\ }the{\ }column{\ }labels}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{par}\hlkeyword{(}\hlargument{mar}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlsymbol{spots}{\ }\hlassignement{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{.125}\hlkeyword{,}{\ }\hlnumber{.875}\hlkeyword{,}{\ }\hlargument{l}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{plot}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{xaxs}\hlargument{=}\hlstring{"{}i"{}}\hlkeyword{,}{\ }\hlargument{xlim}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{yaxs}{\ }\hlargument{=}{\ }\hlstring{"{}i"{}}\hlkeyword{,}{\ }\hlargument{ylim}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{type}{\ }\hlargument{=}{\ }\hlstring{"{}n"{}}\hlkeyword{,}{\ }\hlargument{axes}{\ }\hlargument{=}{\ }\hlsymbol{F}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{line}{\ }\hlargument{=}{\ }\hlkeyword{-}\hlnumber{2}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlsymbol{spots}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlsymbol{F}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}red"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{text}\hlkeyword{(}\hlsymbol{spots}\hlkeyword{,}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}none"{}}\hlkeyword{,}{\ }\hlstring{"{}some"{}}\hlkeyword{,}{\ }\hlstring{"{}more"{}}\hlkeyword{,}{\ }\hlstring{"{}most"{}}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}red"{}}\hlkeyword{,}{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{3}\hlkeyword{,}{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{1.3}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{text}\hlkeyword{(}\hlnumber{.5}\hlkeyword{,}{\ }\hlnumber{.4}\hlkeyword{,}{\ }\hlfunctioncall{expression}\hlkeyword{(}\hlfunctioncall{paste}\hlkeyword{(}\hlstring{"{}Degree{\ }of{\ }Spatial{\ }Variation{\ }in{\ }"{}}\hlkeyword{,}{\ }\hlsymbol{beta}\hlkeyword{[}\hlnumber{1}\hlkeyword{]}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}red"{}}\hlkeyword{,}{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{1.5}\hlkeyword{,}{\ }\hlargument{font}{\ }\hlargument{=}{\ }\hlnumber{2}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlcomment{\usebox{\hlnormalsizeboxhash}points((0:100)/100,{\ }rep(0,{\ }101),{\ }col{\ }={\ }c("{}red"{},{\ }rep("{}black"{},{\ }9)))}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }Now{\ }work{\ }on{\ }the{\ }row{\ }labels}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{plot}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{xaxs}\hlargument{=}\hlstring{"{}i"{}}\hlkeyword{,}{\ }\hlargument{xlim}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{yaxs}{\ }\hlargument{=}{\ }\hlstring{"{}i"{}}\hlkeyword{,}{\ }\hlargument{ylim}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{type}{\ }\hlargument{=}{\ }\hlstring{"{}n"{}}\hlkeyword{,}{\ }\hlargument{axes}{\ }\hlargument{=}{\ }\hlsymbol{F}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{4}\hlkeyword{,}{\ }\hlargument{line}{\ }\hlargument{=}{\ }\hlkeyword{-}\hlnumber{5}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlsymbol{spots}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlsymbol{F}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}red"{}}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{text}\hlkeyword{(}\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{.5}\hlkeyword{,}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{,}{\ }\hlsymbol{spots}\hlkeyword{,}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}most"{}}\hlkeyword{,}{\ }\hlstring{"{}more"{}}\hlkeyword{,}{\ }\hlstring{"{}some"{}}\hlkeyword{,}{\ }\hlstring{"{}none"{}}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}red"{}}\hlkeyword{,}{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{1.3}\hlkeyword{,}{\ }\hlargument{srt}{\ }\hlargument{=}{\ }\hlnumber{90}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{text}\hlkeyword{(}\hlnumber{.2}\hlkeyword{,}{\ }\hlnumber{.5}\hlkeyword{,}{\ }\hlfunctioncall{expression}\hlkeyword{(}\hlfunctioncall{paste}\hlkeyword{(}\hlstring{"{}Degree{\ }of{\ }Spatial{\ }Variation{\ }in{\ }"{}}\hlkeyword{,}{\ }\hlsymbol{beta}\hlkeyword{[}\hlnumber{2}\hlkeyword{]}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"{}red"{}}\hlkeyword{,}{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{1.5}\hlkeyword{,}{\ }\hlargument{srt}{\ }\hlargument{=}{\ }\hlnumber{90}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hspace*{\fill}\\
+\hlstd{}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }Title{\ }and{\ }Legend}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{mtext}\hlkeyword{(}\hlfunctioncall{paste}\hlkeyword{(}\hlstring{"{}Bandwidth{\ }Distributions{\ }by{\ }Metric{\ }and{\ }Degree{\ }of{\ }Spatial{\ }Variation"{}}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{outer}{\ }\hlargument{=}{\ }\hlnumber{TRUE}\hlkeyword{,}{\ }\hlargument{line}{\ }\hlargument{=}{\ }\hlkeyword{-}\hlnumber{2.5}\hlkeyword{,}{\ }\hlargument{side}{\ }\hlargument{=}{\ }\hlnumber{3}\hlkeyword{,}{\ }\hlargument{font}{\ }\hlargument{=}{\ }\hlnumber{2}\hlkeyword{,}{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{1.5}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlnumber{.52}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlfunctioncall{mtext}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}Metric{\ }="{}}\hlkeyword{,}{\ }\hlstring{"{}CV"{}}\hlkeyword{,}{\ }\hlstring{"{}GCV"{}}\hlkeyword{,}{\ }\hlstring{"{}SCV"{}}\hlkeyword{,}{\ }\hlstring{"{}AICc"{}}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{outer}{\ }\hlargument{=}{\ }\hlnumber{TRUE}\hlkeyword{,}{\ }\hlargument{line}{\ }\hlargument{=}{\ }\hlkeyword{-}\hlnumber{21}\hlkeyword{,}{\ }\hlargument{side}{\ }\hlargument{=}{\ }\hlnumber{3}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{.8}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{.3}\hlkeyword{,}{\ }\hlnumber{.375}\hlkeyword{,}{\ }\hlnumber{.41}\hlkeyword{,}{\ }\hlnumber{.46}\hlkeyword{,}{\ }\hlnumber{.508}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{adj}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"{}black"{}}\hlkeyword{,}{\ }\hlsymbol{mypal}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{font}{\ }\hlargument{=}{\ }\hlnumber{2}\hlkeyword{)}\mbox{}
+\normalfont
+\end{flushleft}
+\end{kframe}
+
+\includegraphics[width=.9\textwidth]{figure/MegaFig2} \hfill{}
+
+
+\end{knitrout}
+
+
+
+
+\section{How Accurate Are the Coefficient Estimates?}
+
+Rather than just looking at the bandwidths selected, researchers are probably more interested in the accuracy of the model predictions, specifically with regard to the model coefficients. In particular, does LWR tend to overfit the data by choosing small bandwidths and spurious coefficients? In this section we compare the estimated model coefficients to the true model coefficients to better understand the reliability of the LWR procedure.
+
+
+\section{What Happens When the Model is Misspecified?}
+
+In previous sections we assumed that the model to be estimated using LWR was properly specified. That is, bothe variables ($X_1$ and $X_2$) are included and their coefficients are allowed to vary over space to reflect the true data generation process. This section relaxes the assumption of a perfectly specified model and omits one variable in the regression. Our new regression equation becomes:
+\begin{equation}
+y = \alpha (location) + \beta _1 (location) X_1 + error
+\end{equation}
+
+An important question to consider in these circumstances is, ``What happens when the omitted variable had a spatially varying coefficient, but the included variable coefficients are stationary?'' Does LWR choose a large bandwidth and reflect the stationarity of the included model parameters? Does LWR select a small bandwidth and estimate spatially varying intercept terms? If so, what are the impacts on our estimates of the stationary parameter?
+
+
 
 \end{document}
