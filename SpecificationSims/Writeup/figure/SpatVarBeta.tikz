@@ -1,4 +1,4 @@
-% Created by tikzDevice version 0.6.2 on 2012-10-25 16:57:45
+% Created by tikzDevice version 0.6.2 on 2012-10-31 11:41:54
 % !TEX encoding = UTF-8 Unicode
 
 \documentclass{article}
@@ -23,7 +23,7 @@
 \usepackage{mathpazo} % math & rm
 \linespread{1.05}        % Palatino needs more leading (space between lines)
 \usepackage[scaled]{helvet} % ss
-\usepackage{courier} % tt
+%\usepackage{courier} % tt
 \normalfont
 \usepackage[T1]{fontenc}
 
@@ -35,329 +35,287 @@
 \begin{tikzpicture}[x=1pt,y=1pt]
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
 \definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
-\fill[color=fillColor,fill opacity=0.00,] (0,0) rectangle (505.89,289.08);
+\fill[color=fillColor,fill opacity=0.00,] (0,0) rectangle (505.89,252.94);
 \begin{scope}
-\path[clip] ( 49.20, 61.20) rectangle (227.75,239.88);
+\path[clip] ( 36.00, 37.20) rectangle (252.94,228.94);
 \definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
 \definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 55.81, 67.82) --
-	( 72.34, 84.36) --
-	( 88.88,100.91) --
-	(105.41,117.45) --
-	(121.94,134.00) --
-	(138.47,150.54) --
-	(155.00,167.08) --
-	(171.54,183.63) --
-	(188.07,200.17) --
-	(204.60,216.72) --
-	(221.13,233.26);
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 44.03, 66.49) --
+	( 60.77, 79.81) --
+	( 77.51, 93.13) --
+	( 94.25,106.44) --
+	(110.99,119.76) --
+	(127.73,133.07) --
+	(144.47,146.39) --
+	(161.21,159.70) --
+	(177.95,173.02) --
+	(194.69,186.33) --
+	(211.43,199.65);
 \end{scope}
 \begin{scope}
-\path[clip] (  0.00,  0.00) rectangle (505.89,289.08);
+\path[clip] (  0.00,  0.00) rectangle (252.94,252.94);
+\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
+\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,252.94);
 \definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
 \definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 55.81, 61.20) -- (221.13, 61.20);
+\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (127.73,240.94) {Degree of Spatial Variation in $\beta _1$};
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 55.81, 61.20) -- ( 55.81, 55.20);
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 44.03, 37.20) -- (211.43, 37.20);
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 88.88, 61.20) -- ( 88.88, 55.20);
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 44.03, 37.20) -- ( 44.03, 31.20);
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (121.94, 61.20) -- (121.94, 55.20);
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (127.73, 37.20) -- (127.73, 31.20);
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (155.00, 61.20) -- (155.00, 55.20);
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (211.43, 37.20) -- (211.43, 31.20);
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (188.07, 61.20) -- (188.07, 55.20);
+\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 44.03, 13.20) {0};
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (221.13, 61.20) -- (221.13, 55.20);
+\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (127.73, 13.20) {5};
 
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 55.81, 37.20) {0};
+\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (211.43, 13.20) {10};
 
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 88.88, 37.20) {2};
+\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (127.73,  1.20) {north};
 
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (121.94, 37.20) {4};
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 36.00, 44.30) -- ( 36.00,221.84);
 
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (155.00, 37.20) {6};
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 36.00, 44.30) -- ( 30.00, 44.30);
 
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (188.07, 37.20) {8};
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 36.00, 88.69) -- ( 30.00, 88.69);
 
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (221.13, 37.20) {10};
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 36.00,133.07) -- ( 30.00,133.07);
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 49.20, 67.82) -- ( 49.20,233.26);
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 36.00,177.46) -- ( 30.00,177.46);
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 49.20, 67.82) -- ( 43.20, 67.82);
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 36.00,221.84) -- ( 30.00,221.84);
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 49.20, 95.39) -- ( 43.20, 95.39);
+\node[color=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 24.00, 40.17) {-1};
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 49.20,122.97) -- ( 43.20,122.97);
+\node[color=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 24.00, 84.55) {0};
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 49.20,150.54) -- ( 43.20,150.54);
+\node[color=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 24.00,128.94) {1};
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 49.20,178.11) -- ( 43.20,178.11);
+\node[color=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 24.00,173.33) {2};
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 49.20,205.69) -- ( 43.20,205.69);
+\node[color=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 24.00,217.71) {3};
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 49.20,233.26) -- ( 43.20,233.26);
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 37.20, 67.82) {-0.5};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 37.20, 95.39) {0.0};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 37.20,122.97) {0.5};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 37.20,150.54) {1.0};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 37.20,178.11) {1.5};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 37.20,205.69) {2.0};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 37.20,233.26) {2.5};
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 49.20, 61.20) --
-	(227.75, 61.20) --
-	(227.75,239.88) --
-	( 49.20,239.88) --
-	( 49.20, 61.20);
+\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 12.00,133.07) {True $\beta$};
 \end{scope}
 \begin{scope}
-\path[clip] (  0.00,  0.00) rectangle (252.94,289.08);
-\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
-\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
-\definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
-
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.44] at ( 83.93,260.92) {True };
-
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.44] at (113.16,260.92) {b};
-
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.01] at (121.16,258.75) {1};
-
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.44] at (126.20,260.92) { over Space};
-
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (138.47, 13.20) {north};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at ( 13.20,150.54) {True Beta};
-\end{scope}
-\begin{scope}
-\path[clip] ( 49.20, 61.20) rectangle (227.75,239.88);
+\path[clip] ( 36.00, 37.20) rectangle (252.94,228.94);
 \definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
 \definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
 \definecolor[named]{drawColor}{rgb}{1.00,0.00,0.00}
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 55.81, 95.39) --
-	( 72.34,106.42) --
-	( 88.88,117.45) --
-	(105.41,128.48) --
-	(121.94,139.51) --
-	(138.47,150.54) --
-	(155.00,161.57) --
-	(171.54,172.60) --
-	(188.07,183.63) --
-	(204.60,194.66) --
-	(221.13,205.69);
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 44.03, 88.69) --
+	( 60.77, 97.56) --
+	( 77.51,106.44) --
+	( 94.25,115.32) --
+	(110.99,124.20) --
+	(127.73,133.07) --
+	(144.47,141.95) --
+	(161.21,150.83) --
+	(177.95,159.70) --
+	(194.69,168.58) --
+	(211.43,177.46);
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,1.00}
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 55.81,122.97) --
-	( 72.34,128.48) --
-	( 88.88,134.00) --
-	(105.41,139.51) --
-	(121.94,145.03) --
-	(138.47,150.54) --
-	(155.00,156.05) --
-	(171.54,161.57) --
-	(188.07,167.08) --
-	(204.60,172.60) --
-	(221.13,178.11);
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 44.03,110.88) --
+	( 60.77,115.32) --
+	( 77.51,119.76) --
+	( 94.25,124.20) --
+	(110.99,128.63) --
+	(127.73,133.07) --
+	(144.47,137.51) --
+	(161.21,141.95) --
+	(177.95,146.39) --
+	(194.69,150.83) --
+	(211.43,155.27);
 \definecolor[named]{drawColor}{rgb}{1.00,0.65,0.00}
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 55.81,150.54) --
-	( 72.34,150.54) --
-	( 88.88,150.54) --
-	(105.41,150.54) --
-	(121.94,150.54) --
-	(138.47,150.54) --
-	(155.00,150.54) --
-	(171.54,150.54) --
-	(188.07,150.54) --
-	(204.60,150.54) --
-	(221.13,150.54);
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 44.03,133.07) --
+	( 60.77,133.07) --
+	( 77.51,133.07) --
+	( 94.25,133.07) --
+	(110.99,133.07) --
+	(127.73,133.07) --
+	(144.47,133.07) --
+	(161.21,133.07) --
+	(177.95,133.07) --
+	(194.69,133.07) --
+	(211.43,133.07);
 
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 55.81,146.40) {Bsv1= 0};
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 44.03,126.41) {Bsv1= 0};
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,1.00}
 
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 55.81,120.21) {Bsv1= 0.1};
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 44.03,104.22) {Bsv1= 0.1};
 \definecolor[named]{drawColor}{rgb}{1.00,0.00,0.00}
 
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 55.81, 94.01) {Bsv1= 0.2};
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 44.03, 82.03) {Bsv1= 0.2};
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
 
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 55.81, 67.82) {Bsv1= 0.3};
-\end{scope}
-\begin{scope}
-\path[clip] (302.14, 61.20) rectangle (480.69,239.88);
-\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
-\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
-\end{scope}
-\begin{scope}
-\path[clip] (302.14, 61.20) rectangle (480.69,239.88);
-\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
-\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
-\definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (308.76, 67.82) --
-	(325.29, 84.36) --
-	(341.82,100.91) --
-	(358.35,117.45) --
-	(374.89,134.00) --
-	(391.42,150.54) --
-	(407.95,167.08) --
-	(424.48,183.63) --
-	(441.01,200.17) --
-	(457.55,216.72) --
-	(474.08,233.26);
-\end{scope}
-\begin{scope}
-\path[clip] (  0.00,  0.00) rectangle (505.89,289.08);
-\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
-\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
-\definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (308.76, 61.20) -- (474.08, 61.20);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (308.76, 61.20) -- (308.76, 55.20);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (341.82, 61.20) -- (341.82, 55.20);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (374.89, 61.20) -- (374.89, 55.20);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (407.95, 61.20) -- (407.95, 55.20);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (441.01, 61.20) -- (441.01, 55.20);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (474.08, 61.20) -- (474.08, 55.20);
-
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (308.76, 37.20) {0};
-
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (341.82, 37.20) {2};
-
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (374.89, 37.20) {4};
-
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (407.95, 37.20) {6};
-
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (441.01, 37.20) {8};
-
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (474.08, 37.20) {10};
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (302.14, 67.82) -- (302.14,233.26);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (302.14, 67.82) -- (296.14, 67.82);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (302.14, 95.39) -- (296.14, 95.39);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (302.14,122.97) -- (296.14,122.97);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (302.14,150.54) -- (296.14,150.54);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (302.14,178.11) -- (296.14,178.11);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (302.14,205.69) -- (296.14,205.69);
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (302.14,233.26) -- (296.14,233.26);
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (290.14, 67.82) {-0.5};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (290.14, 95.39) {0.0};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (290.14,122.97) {0.5};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (290.14,150.54) {1.0};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (290.14,178.11) {1.5};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (290.14,205.69) {2.0};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (290.14,233.26) {2.5};
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (302.14, 61.20) --
-	(480.69, 61.20) --
-	(480.69,239.88) --
-	(302.14,239.88) --
-	(302.14, 61.20);
-\end{scope}
-\begin{scope}
-\path[clip] (252.94,  0.00) rectangle (505.89,289.08);
-\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
-\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
-\definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
-
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.44] at (336.87,260.92) {True };
-
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.44] at (366.10,260.92) {b};
-
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.01] at (374.10,258.75) {2};
-
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.44] at (379.14,260.92) { over Space};
-
-\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (391.42, 13.20) {east};
-
-\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (266.14,150.54) {True Beta};
-\end{scope}
-\begin{scope}
-\path[clip] (302.14, 61.20) rectangle (480.69,239.88);
-\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
-\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
-\definecolor[named]{drawColor}{rgb}{1.00,0.00,0.00}
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (308.76, 95.39) --
-	(325.29,106.42) --
-	(341.82,117.45) --
-	(358.35,128.48) --
-	(374.89,139.51) --
-	(391.42,150.54) --
-	(407.95,161.57) --
-	(424.48,172.60) --
-	(441.01,183.63) --
-	(457.55,194.66) --
-	(474.08,205.69);
-\definecolor[named]{drawColor}{rgb}{0.00,0.00,1.00}
-
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (308.76,122.97) --
-	(325.29,128.48) --
-	(341.82,134.00) --
-	(358.35,139.51) --
-	(374.89,145.03) --
-	(391.42,150.54) --
-	(407.95,156.05) --
-	(424.48,161.57) --
-	(441.01,167.08) --
-	(457.55,172.60) --
-	(474.08,178.11);
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 44.03, 59.84) {Bsv1= 0.3};
 \definecolor[named]{drawColor}{rgb}{1.00,0.65,0.00}
 
-\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (308.76,150.54) --
-	(325.29,150.54) --
-	(341.82,150.54) --
-	(358.35,150.54) --
-	(374.89,150.54) --
-	(391.42,150.54) --
-	(407.95,150.54) --
-	(424.48,150.54) --
-	(441.01,150.54) --
-	(457.55,150.54) --
-	(474.08,150.54);
-
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (308.76,146.40) {Bsv2= 0};
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (211.43,133.07) {none};
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,1.00}
 
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (308.76,120.21) {Bsv2= 0.1};
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (211.43,155.27) {some};
 \definecolor[named]{drawColor}{rgb}{1.00,0.00,0.00}
 
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (308.76, 94.01) {Bsv2= 0.2};
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (211.43,177.46) {more};
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
 
-\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (308.76, 67.82) {Bsv2= 0.3};
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (211.43,199.65) {most};
+\end{scope}
+\begin{scope}
+\path[clip] (288.94, 37.20) rectangle (505.89,228.94);
+\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
+\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
+\end{scope}
+\begin{scope}
+\path[clip] (288.94, 37.20) rectangle (505.89,228.94);
+\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
+\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
+\definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (296.98, 66.49) --
+	(313.72, 79.81) --
+	(330.46, 93.13) --
+	(347.20,106.44) --
+	(363.94,119.76) --
+	(380.68,133.07) --
+	(397.42,146.39) --
+	(414.16,159.70) --
+	(430.90,173.02) --
+	(447.64,186.33) --
+	(464.38,199.65);
+\end{scope}
+\begin{scope}
+\path[clip] (252.94,  0.00) rectangle (505.89,252.94);
+\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
+\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,252.94);
+\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
+\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
+\definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (296.98, 37.20) -- (464.38, 37.20);
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (296.98, 37.20) -- (296.98, 31.20);
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (380.68, 37.20) -- (380.68, 31.20);
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (464.38, 37.20) -- (464.38, 31.20);
+
+\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (296.98, 13.20) {0};
+
+\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (380.68, 13.20) {5};
+
+\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (464.38, 13.20) {10};
+
+\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (380.68,240.94) {Degree of Spatial Variation in $\beta _2$};
+
+\node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (380.68,  1.20) {east};
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (288.94, 44.30) -- (288.94,221.84);
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (288.94, 44.30) -- (282.94, 44.30);
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (288.94, 88.69) -- (282.94, 88.69);
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (288.94,133.07) -- (282.94,133.07);
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (288.94,177.46) -- (282.94,177.46);
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (288.94,221.84) -- (282.94,221.84);
+
+\node[color=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  1.20] at (276.94, 40.17) {-1};
+
+\node[color=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  1.20] at (276.94, 84.55) {0};
+
+\node[color=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  1.20] at (276.94,128.94) {1};
+
+\node[color=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  1.20] at (276.94,173.33) {2};
+
+\node[color=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  1.20] at (276.94,217.71) {3};
+
+\node[rotate= 90.00,color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (264.94,133.07) {True $\beta$};
+\end{scope}
+\begin{scope}
+\path[clip] (288.94, 37.20) rectangle (505.89,228.94);
+\definecolor[named]{drawColor}{rgb}{1.00,1.00,1.00}
+\definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
+\definecolor[named]{drawColor}{rgb}{1.00,0.00,0.00}
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (296.98, 88.69) --
+	(313.72, 97.56) --
+	(330.46,106.44) --
+	(347.20,115.32) --
+	(363.94,124.20) --
+	(380.68,133.07) --
+	(397.42,141.95) --
+	(414.16,150.83) --
+	(430.90,159.70) --
+	(447.64,168.58) --
+	(464.38,177.46);
+\definecolor[named]{drawColor}{rgb}{0.00,0.00,1.00}
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (296.98,110.88) --
+	(313.72,115.32) --
+	(330.46,119.76) --
+	(347.20,124.20) --
+	(363.94,128.63) --
+	(380.68,133.07) --
+	(397.42,137.51) --
+	(414.16,141.95) --
+	(430.90,146.39) --
+	(447.64,150.83) --
+	(464.38,155.27);
+\definecolor[named]{drawColor}{rgb}{1.00,0.65,0.00}
+
+\draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] (296.98,133.07) --
+	(313.72,133.07) --
+	(330.46,133.07) --
+	(347.20,133.07) --
+	(363.94,133.07) --
+	(380.68,133.07) --
+	(397.42,133.07) --
+	(414.16,133.07) --
+	(430.90,133.07) --
+	(447.64,133.07) --
+	(464.38,133.07);
+
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (296.98,124.20) {Bsv2= 0};
+\definecolor[named]{drawColor}{rgb}{0.00,0.00,1.00}
+
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (296.98,102.74) {Bsv2= 0.1};
+\definecolor[named]{drawColor}{rgb}{1.00,0.00,0.00}
+
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (296.98, 81.29) {Bsv2= 0.2};
+\definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
+
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (296.98, 59.84) {Bsv2= 0.3};
+\definecolor[named]{drawColor}{rgb}{1.00,0.65,0.00}
+
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (464.38,133.07) {none};
+\definecolor[named]{drawColor}{rgb}{0.00,0.00,1.00}
+
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (464.38,155.27) {some};
+\definecolor[named]{drawColor}{rgb}{1.00,0.00,0.00}
+
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (464.38,177.46) {more};
+\definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
+
+\node[color=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.84] at (464.38,199.65) {most};
 \end{scope}
 \end{tikzpicture}
 

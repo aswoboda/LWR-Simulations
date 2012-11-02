@@ -1,24 +1,12 @@
-% setwd("SpecificationSims/Writeup/")
-\documentclass{article}
-\usepackage[height = 9in, top = 1in, width = 6.3 in]{geometry}
-\usepackage{verbatim, amsmath, amsthm, amssymb}
-% Palatino for rm and math | Helvetica for ss | Courier for tt
-\usepackage{mathpazo} % math & rm
-\linespread{1.05}        % Palatino needs more leading (space between lines)
-\usepackage[scaled]{helvet} % ss
-\usepackage{courier} % tt
-\normalfont
-\usepackage[T1]{fontenc}
-
-\title{A Monte Carlo Investigation of Locally Weighted Regression}
-\author{Aaron Swoboda and Sam Carruthers}
-\begin{document}
-
-\maketitle
 
 This document writes up the results of the recent run of \texttt{uberScript.R}. It contains the following code:
 
-<<eval=FALSE, tidy=FALSE>>=
+<<SettingOptions>>=
+options(width = 88)
+opts_chunk$set(tidy = FALSE)
+@
+
+<<eval=FALSE>>=
 # set our simulation parameters
 Replications = 100
 sample.size = c(50, 100, 200, 500, 1000)
@@ -92,7 +80,7 @@ where $error \sim n(0, \sigma ^2)$. Each observation is located within a geograp
 \end{eqnarray}
 In our simulations we let $Bsv_i$ vary $\{0, 0.1, 0.2, 0.3\}$, thus the relationship between $\beta$s and location can be visualized as:
 
-<<SpatVarBeta, cache=TRUE, fig = T, fig.height= 4, fig.width=7>>=
+<<SpatVarBeta, cache=TRUE, dev='tikz', fig.height= 4, fig.width=7, include =FALSE>>=
 east = north = 0:10
 BetaFunc = function(x, Bsv) {
  1 + Bsv * x - 5*Bsv
@@ -227,8 +215,10 @@ In this section we compare the bandwidth selected by the different metrics.
 mymetrics = c("CV", "GCV", "SCV", "AICc")
 summary.table = matrix(0, length(mymetrics), 7)
 for (mymetric in mymetrics) {
-  summary.table[which(mymetrics == mymetric), 1:6] = summary(MetricOutput[ , , , , , mymetric, "bandwidths"])
-  summary.table[which(mymetrics == mymetric), 7] = sd(MetricOutput[ , , , , , mymetric, "bandwidths"])
+  summary.table[which(mymetrics == mymetric), 1:6] = 
+                summary(MetricOutput[ , , , , , mymetric, "bandwidths"])
+  summary.table[which(mymetrics == mymetric), 7] = 
+                sd(MetricOutput[ , , , , , mymetric, "bandwidths"])
 }
 rownames(summary.table) = mymetrics
 colnames(summary.table) = c("min", "Q1", "median", "mean", "Q3", "max", "sd")
@@ -248,8 +238,10 @@ mymetrics = c("CV", "GCV", "SCV", "AICc")
 for (ssi in myss) {
   summary.table = matrix(0, length(mymetrics), 7)
   for (mymetric in mymetrics) {
-    summary.table[which(mymetrics == mymetric), 1:6] = summary(MetricOutput[ ssi, , , , , mymetric, "bandwidths"])
-    summary.table[which(mymetrics == mymetric), 7] = sd(MetricOutput[ ssi, , , , , mymetric, "bandwidths"])
+    summary.table[which(mymetrics == mymetric), 1:6] = 
+                  summary(MetricOutput[ ssi, , , , , mymetric, "bandwidths"])
+    summary.table[which(mymetrics == mymetric), 7] = 
+                  sd(MetricOutput[ ssi, , , , , mymetric, "bandwidths"])
   }
   rownames(summary.table) = mymetrics
   colnames(summary.table) = c("min", "Q1", "median", "mean", "Q3", "max", "sd")
@@ -259,7 +251,7 @@ for (ssi in myss) {
 
 @
 
-<<beanplots, dev='tikz', cache=TRUE, fig.height = 8, fig.width = 6, fig = T, tidy= FALSE, external=TRUE, fig.cap= 'Hello World. This is a figure caption. I am going to keep writing for a bit to see what happens if I just keep writing and writing. What is the point of this graphic? You will find that out right here.'>>=
+<<beanplots, dev='tikz', cache=TRUE, fig.height = 8, fig.width = 6, include=FALSE>>=
 require(beanplot)
 require(RColorBrewer)
 mypal = brewer.pal(4, "Set2")
@@ -295,6 +287,7 @@ for (myssi in myss) {
 
 }
 @
+\includegraphics[width = .9\textwidth]{figure/beanplots.pdf}
 
 Notice that the distributions of selected bandwidths are similar for the CV, GCV, and AICc metrics, while the SCV metric distribution stands out, especially at higher bandwidths. Additionally, note that most distributions have a cluster of selected bandwidths near the sample size. Given that one simulation parameterization included no spatial variation within the data generation coefficients, it makes sense to see a cluster of large bandwidths, a model specification that approaches Ordinary Least Squares. We now proceed to show the distributions by degree of spatial variation in the model coefficients. Figure \ref{fig:beanplots}.
 
@@ -302,7 +295,7 @@ Notice that the distributions of selected bandwidths are similar for the CV, GCV
 
 Challenge: We used four different levels of spatial variation in each of our two model coefficients, giving us a total of 16 spatial variation cases.
 
-<<MegaFig, dev='tikz', cache=TRUE, fig.height= 7, fig.width=7, fig.align='left', out.width='.9\\textwidth'>>=
+<<MegaFig, dev='tikz', cache=TRUE, fig.height= 7, fig.width=7, include=FALSE>>=
 # The goal of this code is to make a 4 x 4 gird of beanplots showing the distributions of optimal bandwidths across the four different LWR metrics and the combinations of Bsv parameters. 
 
 require(RColorBrewer)
@@ -344,12 +337,10 @@ for (my.B2 in 1:4){ # four because there are four different B2sv parameter files
              cutmin = 5, 
              cutmax = as.numeric(myssi),
              ylim = c(0, as.numeric(myssi)),
-             #names = mymetrics,
-             axes = FALSE,
              main = "",
-             ylab = "",
+             axes = FALSE,
              col = list(col = mypal[1], col = mypal[2], col = mypal[3], col = mypal[4]))
-    if(my.B1 == 1) axis(2, las = 1)
+    if(my.B1 == 1) axis(2, las = 1) #, at = seq(0, as.numeric(myssi), l = 5)
     if(my.B1 == 4) axis(4, las = 1)
   }
 }
@@ -362,7 +353,7 @@ axis(1, line = -2, at = spots,
      labels = F, col = "red")
 text(spots, rep(0, 4), c("none", "some", "more", "most"), 
      col = "red", pos = 3, cex = 1.3)
-text(.5, .4, expression(paste("Degree of Spatial Variation in ", beta[1])), 
+text(.5, .4, "Degree of Spatial Variation in $\\beta_1$", 
      col = "red", cex = 1.5, font = 2)
 #points((0:100)/100, rep(0, 101), col = c("red", rep("black", 9)))
 
@@ -372,33 +363,19 @@ axis(4, line = -5, at = spots,
      labels = F, col = "red")
 text(rep(.5, 4), spots, c("most", "more", "some", "none"), 
      col = "red", cex = 1.3, srt = 90)
-text(.2, .5, expression(paste("Degree of Spatial Variation in ", beta[2])), 
+text(.2, .5, "Degree of Spatial Variation in $\\beta_2$", 
      col = "red", cex = 1.5, srt = 90)
 
 # Title and Legend
 mtext(paste("Bandwidth Distributions by Metric and Degree of Spatial Variation"), 
-      outer = TRUE, line = -2.5, side = 3, font = 2, cex = 1.5, at = .52)
-mtext(c("Metric =", "CV", "GCV", "SCV", "AICc"), outer = TRUE, line = -21, side = 3, 
-      cex = .8, at = c(.3, .375, .41, .46, .508), adj = 0, 
+      outer = TRUE, line = -2.5, side = 3, font = 2, cex = 1, at = .52)
+mtext(c("Metric =", "CV", "GCV", "SCV", "AICc"), outer = TRUE, line = -23, side = 3, 
+      cex = .8, at = c(.29, .37, .41, .46, .508), adj = 0, 
       col = c("black", mypal), font = 2)
 @
 
+\includegraphics[width = .9\textwidth]{figure/MegaFigFinal.pdf}
 
 
-\section{How Accurate Are the Coefficient Estimates?}
-
-Rather than just looking at the bandwidths selected, researchers are probably more interested in the accuracy of the model predictions, specifically with regard to the model coefficients. In particular, does LWR tend to overfit the data by choosing small bandwidths and spurious coefficients? In this section we compare the estimated model coefficients to the true model coefficients to better understand the reliability of the LWR procedure.
-
-
-\section{What Happens When the Model is Misspecified?}
-
-In previous sections we assumed that the model to be estimated using LWR was properly specified. That is, bothe variables ($X_1$ and $X_2$) are included and their coefficients are allowed to vary over space to reflect the true data generation process. This section relaxes the assumption of a perfectly specified model and omits one variable in the regression. Our new regression equation becomes:
-\begin{equation}
-y = \alpha (location) + \beta _1 (location) X_1 + error
-\end{equation}
-
-An important question to consider in these circumstances is, ``What happens when the omitted variable had a spatially varying coefficient, but the included variable coefficients are stationary?'' Does LWR choose a large bandwidth and reflect the stationarity of the included model parameters? Does LWR select a small bandwidth and estimate spatially varying intercept terms? If so, what are the impacts on our estimates of the stationary parameter?
-
-
-
-\end{document}
+<<TestChild, child='results.Rnw'>>=
+@

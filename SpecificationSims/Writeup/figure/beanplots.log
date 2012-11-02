@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  29 OCT 2012 19:19
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  31 OCT 2012 21:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -468,9 +468,6 @@ Package: mathpazo 2005/04/12 PSNFSS-v9.2a Palatino w/ Pazo Math (D.Puga, WaS)
 (/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/helvet.sty
 Package: helvet 2005/04/12 PSNFSS-v9.2a (WaS) 
 )
-(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/courier.sty
-Package: courier 2005/04/12 PSNFSS-v9.2a (WaS) 
-)
 LaTeX Font Info:    Try loading font information for OT1+ppl on input line 27.
 
 (/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/ot1ppl.fd
@@ -597,16 +594,21 @@ Preview: PDFoutput 1
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <10> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 4183.
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 4191.
+
+Overfull \hbox (14.44879pt too wide) in paragraph at lines 21025--21025
+[][] 
+ []
+
 Preview: Tightpage 0 0 0 0
 [1{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 Non-PDF special ignored!
 Non-PDF special ignored!] (./beanplots.aux) ) 
 Here is how much of TeX's memory you used:
- 28313 strings out of 493633
- 542506 string characters out of 3143378
- 908921 words of memory out of 3000000
- 31366 multiletter control sequences out of 15000+200000
+ 28828 strings out of 493633
+ 553015 string characters out of 3143378
+ 910176 words of memory out of 3000000
+ 31884 multiletter control sequences out of 15000+200000
  7122 words of font info for 19 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
  56i,7n,55p,400b,624s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -614,7 +616,7 @@ Here is how much of TeX's memory you used:
 t/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2011/texmf-dist/fonts/type1/u
 rw/palatino/uplb8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/pala
 tino/uplr8a.pfb>
-Output written on beanplots.pdf (1 page, 175163 bytes).
+Output written on beanplots.pdf (1 page, 169828 bytes).
 PDF statistics:
  20 PDF objects out of 1000 (max. 8388607)
  14 compressed objects within 1 object stream

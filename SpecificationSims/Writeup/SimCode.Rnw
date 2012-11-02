@@ -1,0 +1,49 @@
+This section includes the code used to run our simulations.
+
+The Data Generation Process is achieved using the \texttt{DataGen} function, the code for which is given below. 
+<<cache=TRUE>>=
+source("../SimFunctions.R")
+DataGen
+@
+
+The simulations were run and initial metrics calculated in a recent run of \texttt{uberScript.R}. It contains the following code:
+
+<<uberScript, eval=FALSE>>=
+# set our simulation parameters
+Replications = 100
+sample.size = c(50, 100, 200, 500, 1000)
+error.sd = c(2, 4, 6)
+B1.spatial.var = c(0, .1, .2, .3)
+B2.spatial.var = c(0, .1, .2, .3)
+
+# now march through the different parameter combinations running the simulations
+
+for( i in 1:meta.sim.num) { 
+  start = Sys.time()
+  simRepOut = simulationReplicator(Replications, sim.parameters[i, ], MC = TRUE)
+  simOut = simRepReorganizer(simRepOut)
+  
+  R2Output[as.character(sim.parameters[i, "sample.size"]),
+           as.character(sim.parameters[i, "error.sd"]),
+           as.character(sim.parameters[i, "B1.spatial.var"]),
+           as.character(sim.parameters[i, "B2.spatial.var"]), , ] = simOut[[1]]
+  
+  MetricOutput[as.character(sim.parameters[i, "sample.size"]),
+               as.character(sim.parameters[i, "error.sd"]),
+               as.character(sim.parameters[i, "B1.spatial.var"]),
+               as.character(sim.parameters[i, "B2.spatial.var"]), , , ] = simOut[[2]]
+  end = Sys.time()
+
+  print(paste("For loop", i,"of", meta.sim.num))
+  print(round(difftime(end, start, units = "m"), 2))
+  save(R2Output, MetricOutput, file = "SpecificationSims/uberScriptOutput.RData")
+}
+@
+
+I'm not going to run that code here (it took almost a month to run on the R Server), but let's load up the results and start to look at them. Or at least come up with some questions to ask of the data and a plan for the future.
+
+<<cache=TRUE>>=
+load("../Data/uberScriptOutput20120919.RData")
+dimnames(MetricOutput)
+dimnames(R2Output)
+@

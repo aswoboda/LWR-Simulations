@@ -1,0 +1,12 @@
+SpatVarBeta	(	axis	c	lines	mtext	par	paste	plot	rep	seq	text
+unnamed-chunk-1	DataGen	source
+unnamed-chunk-2	MetricOutput	R2Output	dimnames	load
+beanplots	==	MetricOutput	T	as.numeric	axis	beanplot	brewer.pal	c	for	layout	list	matrix	mtext	mymetrics	par	paste	require	which
+MegaFig	==	F	MetricOutput	T	as.numeric	axis	beanplot	brewer.pal	c	for	if	layout	list	matrix	mtext	par	paste	plot	rep	require	seq	text	which
+unnamed-chunk-3	MetricOutput	R2Output	dimnames	load
+unnamed-chunk-4	MetricOutput	R2Output	dimnames	load
+bandwidthSumStats	==	MetricOutput	[<-	c	colnames<-	for	length	matrix	require	round	rownames<-	sd	summary	which	xtable
+bandwidthsBySS	==	MetricOutput	[<-	c	colnames<-	for	length	matrix	paste	print	round	rownames<-	sd	summary	which
+bandwidthsSS50bySpatVar	==	F	MetricOutput	T	as.numeric	axis	beanplot	brewer.pal	c	for	if	layout	list	matrix	mtext	par	paste	plot	rep	require	seq	text	which
+bandwidthsSS1000bySpatVar	==	F	MetricOutput	T	as.numeric	axis	beanplot	brewer.pal	c	for	if	layout	list	matrix	mtext	par	paste	plot	rep	require	seq	text	which
+bandwidthsSS50bySpatVarError	==	F	MetricOutput	T	as.numeric	axis	brewer.pal	c	for	if	layout	lines	matrix	mean	mtext	par	paste	paste0	plot	points	quantile	rep	require	seq	text
