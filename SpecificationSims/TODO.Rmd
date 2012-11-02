@@ -14,3 +14,4 @@ This is a place to keep track of future ideas, concerns, and tasks that need to 
   * should I have separate scripts for analysis and big figures?
   * how do I reference a tikZ figure?
 * How do I include citations in my knitR document?
+* switch the "spatial variation in beta 2" labels to the right (instead of left)?
