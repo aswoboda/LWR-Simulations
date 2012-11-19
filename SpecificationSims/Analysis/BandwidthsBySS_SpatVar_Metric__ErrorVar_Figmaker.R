@@ -33,7 +33,7 @@ df = layout( matrix(c(0, rep(17, 4),
 myssi = myss[1]
 for (myssi in myss) {
 
-par(oma = c(0, 0, 1, 2.5))
+par(oma = c(0, 0, 1, 3.5))
 par(mar = c(1, 1, 1, 1))
 
 my.B1 = my.B2 = 1
@@ -89,13 +89,13 @@ text(.2, .5, "Degree of Spatial Variation in $\\beta_2$",
      col = "red", cex = 1.2, srt = 90)
 
 # Title and Legend
-mtext(paste("Bandwidth Distributions by Degree of Spatial Variation and Metric"), 
-      outer = TRUE, line = -1.5, side = 3, font = 2, cex = 1.2, at = .53)
+mtext(paste("Bandwidth Distributions by Degree of Spatial Variation, Metric, and Error Variance"), 
+      outer = TRUE, line = -1.5, side = 3, font = 2, cex = 1, at = .53)
 mtext(c("Metric =", "CV", "GCV", "SCV", "AICc"), outer = TRUE, line = -21.5, side = 3, 
       cex = .8, at = c(.28, .37, .405, .46, .508), adj = 0, 
       col = c("black", mypal), font = 2)
 mtext(paste0("(Sample Size = ", as.numeric(myssi),")"), outer = TRUE, side = 3, 
-      line = -3, at = .8, cex = .95, adj = 0)
+      line = -3, at = .84, cex = .95, adj = 0)
 mtext("# of obs. in \nbandwidth", side = 3, outer = TRUE, line = -8.5, at = .07, adj = 0, cex = .7)
 }
 dev.off()

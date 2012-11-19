@@ -1,0 +1,23 @@
+\begin{thebibliography}{2}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Anderson and West(2006)]{Anderson2006d}
+S~Anderson and S~West.
+\newblock {Open space, residential property values, and spatial context}.
+\newblock \emph{Regional Science and Urban Economics}, 36\penalty0
+  (6):\penalty0 773--789, November 2006.
+\newblock ISSN 01660462.
+
+\bibitem[Koschinsky et~al.(2011)Koschinsky, Lozano-Gracia, and
+  Piras]{Koschinsky2011}
+Julia Koschinsky, Nancy Lozano-Gracia, and Gianfranco Piras.
+\newblock {The Welfare Benefit of a Home's Location: An Empirical Comparison of
+  Recent Spatial Estimators. Journal of Geographical Systems}.
+\newblock \emph{Journal of Geographical Systems}, 14\penalty0 (3):\penalty0
+  320--356, 2011.
+
+\end{thebibliography}

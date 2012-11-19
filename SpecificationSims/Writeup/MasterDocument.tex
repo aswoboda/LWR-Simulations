@@ -64,12 +64,17 @@
 %\usepackage{courier} % tt
 \normalfont
 \usepackage[T1]{fontenc}
+\usepackage[round]{natbib}
 
 \title{A Monte Carlo Investigation of Locally Weighted Regression}
 \author{Aaron Swoboda and Sam Carruthers}
 \begin{document}
 
 \maketitle
+
+\citet{Anderson2006d}
+
+\citet{Koschinsky2011}
 
 
 
@@ -139,9 +144,10 @@ The above equations show that when $Bsv_i$ is 0, the $\beta$s used to generate t
 
 
 
-\begin{figure}\label{fig:SpatVarBeta}
+\begin{figure}
 \includegraphics[width = \textwidth]{figure/SpatVarBeta.pdf}
 \caption{The above images depict the different degrees of spatial variation in our DGP coefficients. Horizontal lines indicate that the coefficient is constant over space, while the steeper sloping lines indicate DGPs with higher degrees of spatial variation.}
+\label{fig:SpatVarBeta}
 \end{figure}
 Given the different combinations of coefficient spatial variation parameters, we have data generation processes in which:
 \begin{enumerate}
@@ -297,9 +303,10 @@ Table \ref{tab:bandwidthsbySS} breaks down the results from Table \ref{tab:bandw
 
 
 
-\begin{figure}\label{fig:beanplots}
+\begin{figure}
 \includegraphics{figure/beanplots.pdf}
 \caption{The ``beanplots'' above show the distribution of bandwidths chosen by each of the four metrics across all simulation sample sizes. Wider areas in the graph represent more data. Note that the data for the Standardized Cross Validation metric (SCV) tend to be more tightly clustered than the others. The horizontal black lines show the mean bandwidth for the given metric.}
+\label{fig:beanplots}
 \end{figure}
 
 Figure \ref{fig:beanplots} visually presents the bandwidths selected by the different metrics and sample sizes of the simulations. Notice that the distributions of selected bandwidths are similar for the CV, GCV, and AICc metrics, while the SCV metric distribution stands out, especially at higher bandwidths. Additionally, note that most distributions have a cluster of selected bandwidths near the sample size. Given that one simulation parameterization included no spatial variation within the data generation coefficients, it is promising to see a cluster of large bandwidths (the more data that are considered to be ``local,'' the closer the model is to Ordinary Least Squares regression). 
@@ -313,17 +320,19 @@ Figures~\ref{fig:bandwidthsSS50bySpatVar} and \ref{fig:bandwidthsSS1000bySpatVar
 
 
 
-\begin{figure}\label{fig:bandwidthsSS50bySpatVar}
+\begin{figure}
 \includegraphics{figure/bandwidthsSS50bySpatVar.pdf}
 \caption{These images display ``beanplots'' of the bandwidths selected by each metric for each combination of $\beta _1$ and $\beta _2$ spatial variation for a sample size of 50 data points. Note how the distributions change from the upper left (no spatial variation in either coeffient) to the lower right (the most spatial variation in both coefficients). The size of the selected bandwidth tends to be inversely related to the degree of spatial variation in the coefficients.}
+\label{fig:bandwidthsSS50bySpatVar}
 \end{figure}
 
 
 
 
-\begin{figure}\label{fig:bandwidthsSS1000bySpatVar}
+\begin{figure}
 \includegraphics{figure/bandwidthsSS1000bySpatVar.pdf}
 \caption{These images display ``beanplots'' of the bandwidths selected by each metric for each combination of $\beta _1$ and $\beta _2$ spatial variation for a sample size of 1000 data points. Note how the distributions change from the upper left (no spatial variation in either coeffient) to the lower right (the most spatial variation in both coefficients). The size of the selected bandwidth tends to be inversely related to the degree of spatial variation in the coefficients.}
+\label{fig:bandwidthsSS1000bySpatVar}
 \end{figure}
 
 \subsection{Bandwidth and Error Term Variances}
@@ -335,11 +344,20 @@ Figures~\ref{fig:bandwidthsSS50bySpatVarError} and \ref{fig:bandwidthsSS1000bySp
 
 
 
-\begin{figure}\label{fig:bandwidthsSS50bySpatVarError}
-\includegraphics{figure/bandwidthsSS50bySpatVarError.pdf}
-\caption{These images display the bandwidths selected by each metric for each combination of $\beta _1$ and $\beta _2$ spatial variation and DGP error variance for a sample size of 50 data points. Note how the distributions change from the upper left (no spatial variation in either coeffient) to the lower right (the most spatial variation in both coefficients). The size of the selected bandwidth tends to be inversely related to the degree of spatial variation in the coefficients.}
+\begin{figure}
+\centerline{\includegraphics{figure/bandwidthsSS50bySpatVarError.pdf}}
+\caption{These images display the bandwidths selected by each metric for each combination of variation in $\beta _1$ and $\beta _2$ and DGP error variance for a sample size of 50 data points. Note how the distributions change from the upper left (no spatial variation in either coeffient) to the lower right (the most spatial variation in both coefficients). The size of the selected bandwidth tends to be inversely related to the degree of spatial variation in the coefficients.}
+\label{fig:bandwidthsSS50bySpatVarError}
 \end{figure}
 
+
+
+
+\begin{figure}
+\centerline{\includegraphics{figure/bandwidthsSS1000bySpatVarError.pdf}}
+\caption{These images display the bandwidths selected by each metric for each combination of variation in $\beta _1$ and $\beta _2$ and DGP error variance for a sample size of 1000 data points. Note how the distributions change from the upper left (no spatial variation in either coeffient) to the lower right (the most spatial variation in both coefficients). The size of the selected bandwidth tends to be inversely related to the degree of spatial variation in the coefficients.}
+\label{fig:bandwidthsSS1000bySpatVarError}
+\end{figure}
 
 
 \section{How Accurate are the LWR Coefficient Estimates?}
@@ -499,4 +517,7 @@ I'm not going to run that code here (it took almost a month to run on the R Serv
 \end{knitrout}
 
 
+
+\bibliographystyle{plainnat}
+\bibliography{LWRbibliography}
 \end{document}

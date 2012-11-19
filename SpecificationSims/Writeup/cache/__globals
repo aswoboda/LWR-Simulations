@@ -10,3 +10,4 @@ bandwidthsBySS	==	MetricOutput	[<-	c	colnames<-	for	length	matrix	paste	print	ro
 bandwidthsSS50bySpatVar	==	F	MetricOutput	T	as.numeric	axis	beanplot	brewer.pal	c	for	if	layout	list	matrix	mtext	par	paste	plot	rep	require	seq	text	which
 bandwidthsSS1000bySpatVar	==	F	MetricOutput	T	as.numeric	axis	beanplot	brewer.pal	c	for	if	layout	list	matrix	mtext	par	paste	plot	rep	require	seq	text	which
 bandwidthsSS50bySpatVarError	==	F	MetricOutput	T	as.numeric	axis	brewer.pal	c	for	if	layout	lines	matrix	mean	mtext	par	paste	paste0	plot	points	quantile	rep	require	seq	text
+bandwidthsSS1000bySpatVarError	==	F	MetricOutput	T	as.numeric	axis	brewer.pal	c	for	if	layout	lines	matrix	mean	mtext	par	paste	paste0	plot	points	quantile	rep	require	seq	text

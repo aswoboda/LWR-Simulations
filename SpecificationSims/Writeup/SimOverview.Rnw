@@ -87,9 +87,10 @@ text(rep(10, 4), seq(1, 2.5, length = 4), c("none", "some", "more", "most"), pos
      col = c("orange", "blue", "red", "black"), cex = .7, offset = 0)
 
 @
-\begin{figure}\label{fig:SpatVarBeta}
+\begin{figure}
 \includegraphics[width = \textwidth]{figure/SpatVarBeta.pdf}
 \caption{The above images depict the different degrees of spatial variation in our DGP coefficients. Horizontal lines indicate that the coefficient is constant over space, while the steeper sloping lines indicate DGPs with higher degrees of spatial variation.}
+\label{fig:SpatVarBeta}
 \end{figure}
 Given the different combinations of coefficient spatial variation parameters, we have data generation processes in which:
 \begin{enumerate}

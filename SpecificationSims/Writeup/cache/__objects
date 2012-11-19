@@ -9,4 +9,5 @@ bandwidthSumStats	mymetric	mymetrics	summary.table
 bandwidthsBySS	mymetric	mymetrics	myss	ssi	summary.table
 bandwidthsSS50bySpatVar	bws	df	my.B1	my.B2	mymetrics	mypal	myss	myssi	spots
 bandwidthsSS1000bySpatVar	bws	df	my.B1	my.B2	mymetrics	mypal	myss	myssi	spots
-bandwidthsSS50bySpatVarError	bandwidthMean	bandwidthRange	df	errorVar	metric	my.B1	my.B2	mybandwidths	mymetrics	mypal	myss	myssi	myx	myxs	spots
+bandwidthsSS50bySpatVarError	bandwidthMean	bandwidthRange	bws	df	errorVar	metric	my.B1	my.B2	mybandwidths	mymetrics	mypal	myss	myssi	myx	myxs	spots
+bandwidthsSS1000bySpatVarError	bandwidthMean	bandwidthRange	bws	df	errorVar	metric	my.B1	my.B2	mybandwidths	mymetrics	mypal	myss	myssi	myx	myxs	spots

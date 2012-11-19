@@ -1,8 +1,8 @@
-xtable
+RColorBrewer
+beanplot
 tikzDevice
 filehash
-beanplot
-RColorBrewer
+xtable
 knitr
 stats
 graphics

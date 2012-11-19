@@ -84,9 +84,10 @@ for (myssi in myss) {
 
 }
 @
-\begin{figure}\label{fig:beanplots}
+\begin{figure}
 \includegraphics{figure/beanplots.pdf}
 \caption{The ``beanplots'' above show the distribution of bandwidths chosen by each of the four metrics across all simulation sample sizes. Wider areas in the graph represent more data. Note that the data for the Standardized Cross Validation metric (SCV) tend to be more tightly clustered than the others. The horizontal black lines show the mean bandwidth for the given metric.}
+\label{fig:beanplots}
 \end{figure}
 
 Figure \ref{fig:beanplots} visually presents the bandwidths selected by the different metrics and sample sizes of the simulations. Notice that the distributions of selected bandwidths are similar for the CV, GCV, and AICc metrics, while the SCV metric distribution stands out, especially at higher bandwidths. Additionally, note that most distributions have a cluster of selected bandwidths near the sample size. Given that one simulation parameterization included no spatial variation within the data generation coefficients, it is promising to see a cluster of large bandwidths (the more data that are considered to be ``local,'' the closer the model is to Ordinary Least Squares regression). 
@@ -176,9 +177,10 @@ mtext(c("Metric =", "CV", "GCV", "SCV", "AICc"), outer = TRUE, line = -22, side 
       col = c("black", mypal), font = 2)
 @
 
-\begin{figure}\label{fig:bandwidthsSS50bySpatVar}
+\begin{figure}
 \includegraphics{figure/bandwidthsSS50bySpatVar.pdf}
 \caption{These images display ``beanplots'' of the bandwidths selected by each metric for each combination of $\beta _1$ and $\beta _2$ spatial variation for a sample size of 50 data points. Note how the distributions change from the upper left (no spatial variation in either coeffient) to the lower right (the most spatial variation in both coefficients). The size of the selected bandwidth tends to be inversely related to the degree of spatial variation in the coefficients.}
+\label{fig:bandwidthsSS50bySpatVar}
 \end{figure}
 
 <<bandwidthsSS1000bySpatVar, dev='tikz', cache=TRUE, fig.height=7, fig.width=6.5, include=FALSE>>=
@@ -260,9 +262,10 @@ mtext(c("Metric =", "CV", "GCV", "SCV", "AICc"), outer = TRUE, line = -22, side 
       col = c("black", mypal), font = 2)
 @
 
-\begin{figure}\label{fig:bandwidthsSS1000bySpatVar}
+\begin{figure}
 \includegraphics{figure/bandwidthsSS1000bySpatVar.pdf}
 \caption{These images display ``beanplots'' of the bandwidths selected by each metric for each combination of $\beta _1$ and $\beta _2$ spatial variation for a sample size of 1000 data points. Note how the distributions change from the upper left (no spatial variation in either coeffient) to the lower right (the most spatial variation in both coefficients). The size of the selected bandwidth tends to be inversely related to the degree of spatial variation in the coefficients.}
+\label{fig:bandwidthsSS1000bySpatVar}
 \end{figure}
 
 \subsection{Bandwidth and Error Term Variances}
@@ -271,27 +274,27 @@ None of the previous analysis has examined the role of the Data Generation Proce
 
 Figures~\ref{fig:bandwidthsSS50bySpatVarError} and \ref{fig:bandwidthsSS1000bySpatVarError} are similar to Figures~\ref{fig:bandwidthsSS50bySpatVar} and \ref{fig:bandwidthsSS1000bySpatVar}, with a few important differences. First, rather than plotting the entire bandwidth distribution density for a given simulation scenario, we make a line plot showing the middle 90 percent of the distribution and denote the mean selected bandwidth. This decision helps to fit the large amount of data into Figures~\ref{fig:bandwidthsSS50bySpatVarError} and \ref{fig:bandwidthsSS1000bySpatVarError}.
 
-<<bandwidthsSS50bySpatVarError, dev='tikz', fig.width=6.5, fig.height=8, cache= TRUE, include=FALSE>>=
+<<bandwidthsSS50bySpatVarError, dev='tikz', fig.width=7.5, fig.height=8, cache= TRUE, include=FALSE>>=
 require(RColorBrewer)
 require(beanplot)
 mypal = brewer.pal(4, "Set2")
 
 myss = c("50", "100", "200", "500", "1000")
 mymetrics = c("CV", "GCV", "SCV", "AICc")
+bws = c(2.5, 2.5, 5, 5, 10)
 
 df = layout( matrix(c(0, rep(17, 4),
                       18, 1:4,
                       18, 5:8,
                       18, 9:12,
                       18, 13:16), 5, 5, byrow = T),
-             widths = c(.6, rep(1, 4)),
+             widths = c(.45, rep(1, 4)),
              heights = c(.6, rep(1, 4)))
 myssi = myss[1]
 
-par(oma = c(0, 0, 1, 2.5))
+par(oma = c(0, 0, 1, 6))
 par(mar = c(1, 1, 1, 1))
 
-my.B1 = my.B2 = 1
 for (my.B2 in 1:4){ # four because there are four different B2sv parameter files
   for (my.B1 in 1:4) { # four because there are four different B1sv parameter files
     # now make a plot for the given Bsv1 and Bsv2
@@ -336,26 +339,115 @@ text(.5, .4, "Degree of Spatial Variation in $\\beta_1$",
 
 # Now work on the row labels
 plot(1, xaxs="i", xlim = c(0, 1), yaxs = "i", ylim = c(0, 1), type = "n", axes = F)
-axis(4, line = -3.5, at = spots, 
+axis(4, line = -4, at = spots, 
      labels = F, col = "red")
-text(rep(.65, 4), spots, c("most", "more", "some", "none"), 
+text(rep(.55, 4), spots, c("most", "more", "some", "none"), 
      col = "red", cex = 1.3, srt = 90)
 text(.2, .5, "Degree of Spatial Variation in $\\beta_2$", 
      col = "red", cex = 1.2, srt = 90)
 
 # Title and Legend
-mtext(paste("Bandwidth Distributions by Degree of Spatial Variation and Metric"), 
-      outer = TRUE, line = -1.5, side = 3, font = 2, cex = 1.2, at = .53)
-mtext(c("Metric =", "CV", "GCV", "SCV", "AICc"), outer = TRUE, line = -21.5, side = 3, 
+mtext(paste("Bandwidth Distributions by Degree of Spatial Variation, Metric, and Error Variance"), 
+      outer = TRUE, line = -1.5, side = 3, font = 2, cex = 1, at = .53)
+mtext(c("Metric =", "CV", "GCV", "SCV", "AICc"), outer = TRUE, line = -26, side = 3, 
       cex = .8, at = c(.28, .37, .405, .46, .508), adj = 0, 
       col = c("black", mypal), font = 2)
 mtext(paste0("(Sample Size = ", as.numeric(myssi),")"), outer = TRUE, side = 3, 
-      line = -3, at = .8, cex = .95, adj = 0)
-mtext("\\# of obs. in \nbandwidth", side = 3, outer = TRUE, line = -8.5, at = .07, adj = 0, cex = .7)
+      line = -3, at = 1.0, cex = .95, adj = 1)
+mtext("\\# of obs. in \nbandwidth", side = 3, outer = TRUE, line = -9.5, at = .03, adj = 0, cex = .7)
 @
 
-\begin{figure}\label{fig:bandwidthsSS50bySpatVarError}
-\includegraphics{figure/bandwidthsSS50bySpatVarError.pdf}
-\caption{These images display the bandwidths selected by each metric for each combination of $\beta _1$ and $\beta _2$ spatial variation and DGP error variance for a sample size of 50 data points. Note how the distributions change from the upper left (no spatial variation in either coeffient) to the lower right (the most spatial variation in both coefficients). The size of the selected bandwidth tends to be inversely related to the degree of spatial variation in the coefficients.}
+\begin{figure}
+\centerline{\includegraphics{figure/bandwidthsSS50bySpatVarError.pdf}}
+\caption{These images display the bandwidths selected by each metric for each combination of variation in $\beta _1$ and $\beta _2$ and DGP error variance for a sample size of 50 data points. Note how the distributions change from the upper left (no spatial variation in either coeffient) to the lower right (the most spatial variation in both coefficients). The size of the selected bandwidth tends to be inversely related to the degree of spatial variation in the coefficients.}
+\label{fig:bandwidthsSS50bySpatVarError}
 \end{figure}
 
+<<bandwidthsSS1000bySpatVarError, dev='tikz', fig.width=7.5, fig.height=8, cache= TRUE, include=FALSE>>=
+require(RColorBrewer)
+require(beanplot)
+mypal = brewer.pal(4, "Set2")
+
+myss = c("50", "100", "200", "500", "1000")
+mymetrics = c("CV", "GCV", "SCV", "AICc")
+bws = c(2.5, 2.5, 5, 5, 10)
+
+df = layout( matrix(c(0, rep(17, 4),
+                      18, 1:4,
+                      18, 5:8,
+                      18, 9:12,
+                      18, 13:16), 5, 5, byrow = T),
+             widths = c(.45, rep(1, 4)),
+             heights = c(.6, rep(1, 4)))
+myssi = myss[5]
+
+par(oma = c(0, 0, 1, 6))
+par(mar = c(1, 1, 1, 1))
+
+for (my.B2 in 1:4){ # four because there are four different B2sv parameter files
+  for (my.B1 in 1:4) { # four because there are four different B1sv parameter files
+    # now make a plot for the given Bsv1 and Bsv2
+    plot(c(0.5, 15.5), c(0, as.numeric(myssi)), type = "n", 
+         main = "", ylab = "", xlab = "", axes = F)
+
+    myxs = matrix(c(1:3, 5:7, 9:11, 13:15), ncol = 4, nrow = 3)
+    
+    for (metric in 1:4) { #loop through the four metrics
+      for (errorVar in 1:3) { #loop through the thres error variances
+        # grab the relevant bandwidths
+        mybandwidths = MetricOutput[myssi, errorVar, my.B1, my.B2, , mymetrics[metric], "bandwidths"]
+        # plot the middle 90% of the bandwidths and the mean bandwidth
+            # x = 1:3, 4:7, 9:11, 13:15
+          myx = myxs[errorVar, metric]
+            # middle 90% = 
+          bandwidthRange = quantile(mybandwidths, c(.05, .95))
+            # mean
+          bandwidthMean = mean(mybandwidths)
+        lines(rep(myx, 2), bandwidthRange, col = mypal[metric], lwd = 2)
+        points(myx, bandwidthMean, pch = 16, col = "white", cex = 1.5)
+        text(myx, bandwidthMean, c("S", "M", "L")[errorVar], col = mypal[metric], cex = .8)
+      }
+    }
+    
+    if(my.B1 == 1) axis(2, las = 1) #, at = seq(0, as.numeric(myssi), l = 5)
+    if(my.B1 == 4) axis(4, las = 1)
+  }
+}
+
+# Now work on the column labels
+par(mar = c(0, 0, 0, 0))
+spots = seq(.125, .875, l = 4)
+plot(1, xaxs="i", xlim = c(0, 1), yaxs = "i", ylim = c(0, 1), type = "n", axes = F)
+axis(1, line = -2, at = spots, 
+     labels = F, col = "red")
+text(spots, rep(0, 4), c("none", "some", "more", "most"), 
+     col = "red", pos = 3, cex = 1.3)
+text(.5, .4, "Degree of Spatial Variation in $\\beta_1$", 
+     col = "red", cex = 1.2)
+#points((0:100)/100, rep(0, 101), col = c("red", rep("black", 9)))
+
+# Now work on the row labels
+plot(1, xaxs="i", xlim = c(0, 1), yaxs = "i", ylim = c(0, 1), type = "n", axes = F)
+axis(4, line = -4, at = spots, 
+     labels = F, col = "red")
+text(rep(.55, 4), spots, c("most", "more", "some", "none"), 
+     col = "red", cex = 1.3, srt = 90)
+text(.2, .5, "Degree of Spatial Variation in $\\beta_2$", 
+     col = "red", cex = 1.2, srt = 90)
+
+# Title and Legend
+mtext(paste("Bandwidth Distributions by Degree of Spatial Variation, Metric, and Error Variance"), 
+      outer = TRUE, line = -1.5, side = 3, font = 2, cex = 1, at = .53)
+mtext(c("Metric =", "CV", "GCV", "SCV", "AICc"), outer = TRUE, line = -26, side = 3, 
+      cex = .8, at = c(.28, .37, .405, .46, .508), adj = 0, 
+      col = c("black", mypal), font = 2)
+mtext(paste0("(Sample Size = ", as.numeric(myssi),")"), outer = TRUE, side = 3, 
+      line = -3, at = 1.0, cex = .95, adj = 1)
+mtext("\\# of obs. in \nbandwidth", side = 3, outer = TRUE, line = -9.5, at = .03, adj = 0, cex = .7)
+@
+
+\begin{figure}
+\centerline{\includegraphics{figure/bandwidthsSS1000bySpatVarError.pdf}}
+\caption{These images display the bandwidths selected by each metric for each combination of variation in $\beta _1$ and $\beta _2$ and DGP error variance for a sample size of 1000 data points. Note how the distributions change from the upper left (no spatial variation in either coeffient) to the lower right (the most spatial variation in both coefficients). The size of the selected bandwidth tends to be inversely related to the degree of spatial variation in the coefficients.}
+\label{fig:bandwidthsSS1000bySpatVarError}
+\end{figure}

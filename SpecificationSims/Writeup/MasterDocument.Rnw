@@ -9,6 +9,7 @@
 %\usepackage{courier} % tt
 \normalfont
 \usepackage[T1]{fontenc}
+\usepackage[round]{natbib}
 
 \title{A Monte Carlo Investigation of Locally Weighted Regression}
 \author{Aaron Swoboda and Sam Carruthers}
@@ -34,6 +35,12 @@ What do we want to know about LWR? The goal of this work is to address the follo
   \item What happens when the LWR model is misspecified?
 \end{itemize}
 
+\subsection{Contribution}
+
+\begin{itemize}
+\item varying degrees of spatial non-stationarity in the model
+\end{itemize}
+
 \section{Simulation Overview}
 <<SimulationOverview, child='SimOverview.Rnw'>>=
 @
@@ -57,4 +64,7 @@ What do we want to know about LWR? The goal of this work is to address the follo
 \section{Simulation Code}
 <<SimCode, child='SimCode.Rnw'>>=
 @
+
+\bibliographystyle{plainnat}
+\bibliography{LWRbibliography}
 \end{document}
