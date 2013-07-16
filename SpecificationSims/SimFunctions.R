@@ -157,7 +157,7 @@ GCV = function(leverages, yhats, dep.var) {
 }
 
 # Row standardized CV from Paez et all
-# Need to make sure that we are supposed to square denominator
+# Need to make sure that we are supposed to square denominator -- confirmed via email
 row.standardized.CV = function(dep.var, yhats.without) {
   numer = ((dep.var - yhats.without)^2)
   denom = rowSums(numer) 
