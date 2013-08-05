@@ -1,0 +1,13 @@
+SpatVarBeta	BetaFunc	east	north
+unnamed-chunk-1
+unnamed-chunk-2	MetricOutput	R2Output
+beanplots	bws	df	mypal	myss	myssi
+MegaFig	bws	df	my.B1	my.B2	mymetrics	mypal	myss	myssi	spots
+unnamed-chunk-3	MetricOutput	R2Output
+unnamed-chunk-4	MetricOutput	R2Output
+bandwidthSumStats	mymetric	mymetrics	summary.table
+bandwidthsBySS	mymetric	mymetrics	myss	ssi	summary.table
+bandwidthsSS50bySpatVar	bws	df	my.B1	my.B2	mymetrics	mypal	myss	myssi	spots
+bandwidthsSS1000bySpatVar	bws	df	my.B1	my.B2	mymetrics	mypal	myss	myssi	spots
+bandwidthsSS50bySpatVarError	bandwidthMean	bandwidthRange	bws	df	errorVar	metric	my.B1	my.B2	mybandwidths	mymetrics	mypal	myss	myssi	myx	myxs	spots
+bandwidthsSS1000bySpatVarError	bandwidthMean	bandwidthRange	bws	df	errorVar	metric	my.B1	my.B2	mybandwidths	mymetrics	mypal	myss	myssi	myx	myxs	spots

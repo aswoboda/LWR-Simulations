@@ -1,17 +1,12 @@
-% setwd("SpecificationSims/Writeup/")
-\documentclass{article}
-\usepackage[height = 9in, top = 1in, width = 6.3 in]{geometry}
-\usepackage{verbatim, amsmath, amsthm, amssymb}
-
-\title{A Monte Carlo Investigation of Locally Weighted Regression}
-\author{Aaron Swoboda and Sam Carruthers}
-\begin{document}
-
-\maketitle
 
 This document writes up the results of the recent run of \texttt{uberScript.R}. It contains the following code:
 
-<<eval=FALSE, tidy=FALSE>>=
+<<SettingOptions>>=
+options(width = 88)
+opts_chunk$set(tidy = FALSE)
+@
+
+<<eval=FALSE>>=
 # set our simulation parameters
 Replications = 100
 sample.size = c(50, 100, 200, 500, 1000)
@@ -69,7 +64,7 @@ We kept track of the following model performance metrics, the pseudo $R^2$ of th
 \subsection{Data Generation Process}
 
 The Data Generation Process is achieved using the \texttt{DataGen} function, the code for which is given below. 
-<<>>=
+<<cache=TRUE>>=
 source("../SimFunctions.R")
 DataGen
 @
@@ -85,7 +80,7 @@ where $error \sim n(0, \sigma ^2)$. Each observation is located within a geograp
 \end{eqnarray}
 In our simulations we let $Bsv_i$ vary $\{0, 0.1, 0.2, 0.3\}$, thus the relationship between $\beta$s and location can be visualized as:
 
-<<fig = T, fig.height= 4, fig.width=7>>=
+<<SpatVarBeta, cache=TRUE, dev='tikz', fig.height= 4, fig.width=7, include =FALSE>>=
 east = north = 0:10
 BetaFunc = function(x, Bsv) {
  1 + Bsv * x - 5*Bsv
@@ -204,5 +199,183 @@ Something about Paez, who wanted a CV score that was more robust to outliers.
   2*n*ln(\hat{\sigma}) + n*ln(2*\pi) + 
     n*\frac{n + v_1}{n - 2 - v_1}
     \end{equation}
+    
+\section{Which Bandwidths Do Selection Metrics Suggest?}
 
-\end{document}
+In this section we compare the bandwidth selected by the different metrics.
+
+\subsection{Overall}
+
+\begin{itemize}
+\item What are some summary stats about the bandwidths selected by each metric? (table: row for each metric, column for min, median, mean, max, sd)
+\item What is the visual distribution of bandwidths selected by each metric? (small multiples of a histogram for each metric)
+\end{itemize}
+
+<<cache=TRUE>>=
+mymetrics = c("CV", "GCV", "SCV", "AICc")
+summary.table = matrix(0, length(mymetrics), 7)
+for (mymetric in mymetrics) {
+  summary.table[which(mymetrics == mymetric), 1:6] = 
+                summary(MetricOutput[ , , , , , mymetric, "bandwidths"])
+  summary.table[which(mymetrics == mymetric), 7] = 
+                sd(MetricOutput[ , , , , , mymetric, "bandwidths"])
+}
+rownames(summary.table) = mymetrics
+colnames(summary.table) = c("min", "Q1", "median", "mean", "Q3", "max", "sd")
+print(round(summary.table))
+@
+
+
+
+Comparing the bandwidths at this level of aggregation is of limited use because we do not expect the same bandwidth to always be suggested. First, the bandwidth suggestion is constrained to be smaller than the sample size of the data, and so we should break out the simulation. Second, we expect the bandwidth selected to be a function of the degree of spatial variation in the underlying data generation process.
+
+\subsection{Sample Size}
+
+<<cache=TRUE>>=
+myss = c("50", "100", "200", "500", "1000")
+mymetrics = c("CV", "GCV", "SCV", "AICc")
+
+for (ssi in myss) {
+  summary.table = matrix(0, length(mymetrics), 7)
+  for (mymetric in mymetrics) {
+    summary.table[which(mymetrics == mymetric), 1:6] = 
+                  summary(MetricOutput[ ssi, , , , , mymetric, "bandwidths"])
+    summary.table[which(mymetrics == mymetric), 7] = 
+                  sd(MetricOutput[ ssi, , , , , mymetric, "bandwidths"])
+  }
+  rownames(summary.table) = mymetrics
+  colnames(summary.table) = c("min", "Q1", "median", "mean", "Q3", "max", "sd")
+    print(paste("Sample Size =", ssi))
+    print(round(summary.table))
+}
+
+@
+
+<<beanplots, dev='tikz', cache=TRUE, fig.height = 8, fig.width = 6, include=FALSE>>=
+require(beanplot)
+require(RColorBrewer)
+mypal = brewer.pal(4, "Set2")
+
+par(mfrow = c(3, 2))
+par(oma = c(0, 0, 2, 0))
+par(mar = c(2, 4.5, 3, 0))
+myss = c("50", "100", "200", "500", "1000")
+bws = c(2.5, 2.5, 5, 5, 10)
+myssi = "1000"
+for (myssi in myss) {
+  beanplot(MetricOutput[ myssi, , , , , mymetrics[1], "bandwidths"],
+           MetricOutput[ myssi, , , , , mymetrics[2], "bandwidths"],
+           MetricOutput[ myssi, , , , , mymetrics[3], "bandwidths"],
+           MetricOutput[ myssi, , , , , mymetrics[4], "bandwidths"],
+           what = c(0, 1, 1, 0) , 
+           log = "",
+           bw = bws[which(myss == myssi)], 
+           cutmin = 5, 
+           cutmax = as.numeric(myssi),
+           ylim = c(0, as.numeric(myssi)),
+           xlim = c(0.5, 4.5),
+           names = FALSE,
+           main = paste("Sample Size = ", myssi),
+           ylab = "",
+           col = list(col = mypal[1], col = mypal[2], col = mypal[3], col = mypal[4]), 
+           axes = FALSE)
+  mtext(mymetrics, 1, line = 0, at = 1:4, col= mypal, font = 2)
+  mtext("\\# of obs in LWR bandwidth", 2, line = 3, cex = .8)
+  axis(2, las = 1)
+  mtext("Bandwidth Distributions by Metric and Sample Sizes", 3, 
+        outer = TRUE, line = 0, cex = 1.5)
+
+}
+@
+\includegraphics[width = .9\textwidth]{figure/beanplots.pdf}
+
+Notice that the distributions of selected bandwidths are similar for the CV, GCV, and AICc metrics, while the SCV metric distribution stands out, especially at higher bandwidths. Additionally, note that most distributions have a cluster of selected bandwidths near the sample size. Given that one simulation parameterization included no spatial variation within the data generation coefficients, it makes sense to see a cluster of large bandwidths, a model specification that approaches Ordinary Least Squares. We now proceed to show the distributions by degree of spatial variation in the model coefficients. Figure \ref{fig:beanplots}.
+
+\subsection{By Degree of Coefficient Variation}
+
+Challenge: We used four different levels of spatial variation in each of our two model coefficients, giving us a total of 16 spatial variation cases.
+
+<<MegaFig, dev='tikz', cache=TRUE, fig.height= 7, fig.width=7, include=FALSE>>=
+# The goal of this code is to make a 4 x 4 gird of beanplots showing the distributions of optimal bandwidths across the four different LWR metrics and the combinations of Bsv parameters. 
+
+require(RColorBrewer)
+require(beanplot)
+mypal = brewer.pal(4, "Set2")
+
+# set some figure margin parameters
+
+my.B1 = my.B2 = 1
+
+df = layout( matrix(c(0, rep(17, 4),
+                      18, 1:4,
+                      18, 5:8,
+                      18, 9:12,
+                      18, 13:16), 5, 5, byrow = T),
+             widths = c(.6, rep(1, 4)),
+             heights = c(.6, rep(1, 4)))
+
+#layout.show(df)
+
+myssi = "1000"
+myss = c("50", "100", "200", "500", "1000")
+mymetrics = c("CV", "GCV", "SCV", "AICc")
+bws = c(2.5, 2.5, 5, 5, 10)
+
+par(oma = c(0, 0, 0, 2.5))
+par(mar = c(.5, .5, .5, .5))
+
+for (my.B2 in 1:4){ # four because there are four different B2sv parameter files
+  for (my.B1 in 1:4) { # four because there are four different B1sv parameter files
+    # now make a beanplot for the given Bsv1 and Bsv2
+    beanplot(MetricOutput[myssi, , my.B1, my.B2, , mymetrics[1], "bandwidths"],
+             MetricOutput[myssi, , my.B1, my.B2, , mymetrics[2], "bandwidths"],
+             MetricOutput[myssi, , my.B1, my.B2, , mymetrics[3], "bandwidths"],
+             MetricOutput[myssi, , my.B1, my.B2, , mymetrics[4], "bandwidths"],
+             what = c(0, 1, 1, 0) , 
+             log = "",
+             bw = bws[which(myss == myssi)], 
+             cutmin = 5, 
+             cutmax = as.numeric(myssi),
+             ylim = c(0, as.numeric(myssi)),
+             main = "",
+             axes = FALSE,
+             col = list(col = mypal[1], col = mypal[2], col = mypal[3], col = mypal[4]))
+    if(my.B1 == 1) axis(2, las = 1) #, at = seq(0, as.numeric(myssi), l = 5)
+    if(my.B1 == 4) axis(4, las = 1)
+  }
+}
+
+# Now work on the column labels
+par(mar = c(0, 0, 0, 0))
+spots = seq(.125, .875, l = 4)
+plot(1, xaxs="i", xlim = c(0, 1), yaxs = "i", ylim = c(0, 1), type = "n", axes = F)
+axis(1, line = -2, at = spots, 
+     labels = F, col = "red")
+text(spots, rep(0, 4), c("none", "some", "more", "most"), 
+     col = "red", pos = 3, cex = 1.3)
+text(.5, .4, "Degree of Spatial Variation in $\\beta_1$", 
+     col = "red", cex = 1.5, font = 2)
+#points((0:100)/100, rep(0, 101), col = c("red", rep("black", 9)))
+
+# Now work on the row labels
+plot(1, xaxs="i", xlim = c(0, 1), yaxs = "i", ylim = c(0, 1), type = "n", axes = F)
+axis(4, line = -5, at = spots, 
+     labels = F, col = "red")
+text(rep(.5, 4), spots, c("most", "more", "some", "none"), 
+     col = "red", cex = 1.3, srt = 90)
+text(.2, .5, "Degree of Spatial Variation in $\\beta_2$", 
+     col = "red", cex = 1.5, srt = 90)
+
+# Title and Legend
+mtext(paste("Bandwidth Distributions by Metric and Degree of Spatial Variation"), 
+      outer = TRUE, line = -2.5, side = 3, font = 2, cex = 1, at = .52)
+mtext(c("Metric =", "CV", "GCV", "SCV", "AICc"), outer = TRUE, line = -23, side = 3, 
+      cex = .8, at = c(.29, .37, .41, .46, .508), adj = 0, 
+      col = c("black", mypal), font = 2)
+@
+
+\includegraphics[width = .9\textwidth]{figure/MegaFigFinal.pdf}
+
+
+<<TestChild, child='results.Rnw'>>=
+@

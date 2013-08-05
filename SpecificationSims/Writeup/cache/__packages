@@ -1,3 +1,8 @@
+RColorBrewer
+beanplot
+tikzDevice
+filehash
+xtable
 knitr
 stats
 graphics

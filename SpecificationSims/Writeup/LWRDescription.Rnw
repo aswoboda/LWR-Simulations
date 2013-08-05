@@ -1,0 +1,74 @@
+
+After generating the data, we implemented Locally Weighted Regression with the data and calculated numerous diagnostics in order to measure the performance of the regression technique and answer our research questions.
+
+Locally Weighted Regression (LWR) is an estimation strategy allowing non-stationary model parameters. Specifically, a vector of regression parameters is estimated using Equation~\eqref{eq:LWR} for \emph{each location within the dataset,} 
+\begin{equation}\label{eq:LWR}
+\hat{\beta}_{location_i} =(X^TW_{location_i}X)^{-1}X^TW_{location_i}Y,
+\end{equation}
+where $X$ is an $n$ x $m$ data matrix, $Y$ the $n$ x $1$ vector of dependent variable values, and $W_{location_i}$ is an $n$ x $n$ weights matrix. We construct the weights matrix for a given $location_i$ to give positive weights to the $k$-nearest data points to $location_i$, with weights $\in [0, 1]$ and inversely related to the distance between data observations and $location_i$.  Specifically, we create the weights matrix \emph{for $location_i$} with zeros on the off-diagonal and calculate the $jj$th diagonal element as,
+\begin{equation}\label{eq:bisquare}
+w_{jj}= 
+\begin{cases} \left[1-\left(\frac{d_{ij}}{d_{ik}}\right)^2\right]^2 & \text{if $d_{ij}\leq d_{ik}$} \\
+0 &\text{if $d_{ij} > d_{ik}$}
+\end{cases}
+\end{equation}
+where $d_{ij}$ is the distance between observations $j$ and $location_i$, and $d_{ik}$ is the distance to the $k$th nearest observation to observation $i$. Thus, one of the additional parameters necessary for the implementation of LWR is selecting $k$, the local regression bandwidth. 
+
+Theory does not provide guidance as to how many observations should receive positive weights in the local regression and must be determined by the researcher for the problem at hand. Typically, the $k$ parameter is determined by implementing LWR with several different bandwidths and then selecting the $k$ value that minimizes a model performance metric (usally a cross-validation score). This research aims to systematically compare the performance of four different cross-validation metrics used in LWR research under different, but known, data generation processes. Does choosing the LWR bandwidth through these four strategies yield similar results? If there are differences, are there patterns in how they are different?
+
+\subsection{Bandwidth Selection Metrics}
+We compare the performance of four different bandwidth selection metrics. In particular, we examine:
+\begin{enumerate}
+\item Leave-One-Out Cross-Validation
+\item Generalized Cross-Validation 
+\item Standardized Cross-Validation
+\item Akaike Information Criterion
+\end{enumerate}
+
+\subsubsection{Leave-One Out Cross-Validation}
+The simplest cross-validation metric used in the study is denoted in equation \eqref{eq:CV}. 
+\begin{equation}
+CV(k) = \sum _i (y_i - \hat{y}_{-i}(k))^2
+\label{eq:CV}
+\end{equation}
+In the equation $\hat{y}_{-i}(k)$ represents the predicted value of the dependent variable using the nearest $k$ observations, \emph{but excluding observation i}. That is, $y_i - \hat{y}_{-i}(k)$ represents the out-of-sample prediction error for observation $i$ using the regression output for the nearest $k$ values. Leaving the observation out of the regression is important in order to prevent the observation from exerting undue influence on the regression coefficients and thereby tending to choose artificially small bandwidths. 
+
+This metric is commonly used in the LWR empirical literature.  \citet{Cho2006a} use this method with a sample size of approximately 15,000 houses spread over 500 square miles and chooses a bandwidth of roughly four miles. 
+
+\citet{Yu2006} uses the metric and chooses a bandwidth of the nearest 69 regions of approximately 170 regions in the greater Beijing area. (They are also one of the only articles that uses the AIC).
+
+
+\subsubsection{Generalized Cross-Validation Score}
+\begin{equation}\label{eq:GCV}
+  n*\sum_{i=1}^{n}\frac{(y_i-\hat{y}_i)^2}{(n-v_1)^2}, 
+  \end{equation}
+where $y_i$ is the dependent variable value, $\hat{y}_i$ is the predicted dependent variable value for observation $i$, and $v_1$ is the ``effective number of model parameters.''\footnote{
+  $v_1=$tr(\textbf{S}), where the matrix \textbf{S} is the ``hat matrix'' which maps $y$ onto $\hat{y}$,
+\begin{equation*}
+  \hat{y}=\textbf{S}y,
+  \end{equation*}
+  and each row of \textbf{S}, $r_i$ is given by:
+  \begin{equation*}
+    r_i=X_i(X^TW(location_i)X)^{-1}X^TW(location_i).
+    \end{equation*}
+}
+In an LWR model, the number of parameters to be estimated is no longer equal to the number of variables included because we allow the regression coefficients to vary over space. The GCV score calculates the ``effective'' number of model parameters, $v_1$, and penalizes the model for increasing the number of parameters without sufficient reduction in model accuracy. Taking the square root of Equation~\eqref{eq:GCV} and rearranging yields,
+\begin{equation}
+  \sqrt{GCV}=\sqrt{\frac{n}{n-v_1}} \sqrt{\frac{\textrm{Sum of Squared Residuals}}{n-v_1}},
+\end{equation}
+which approaches $\hat{\sigma}$ as $v_1$ approaches $m$ for large $n$. Henceforth, throughout the paper we report the square root of \eqref{eq:GCV} because of its similarity to $\hat{\sigma}$.  
+
+\subsubsection{Row Standardized Cross-Validation}
+
+Something about Paez, who wanted a CV score that was more robust to outliers.
+
+\begin{equation}\label{eq:SCV}
+\frac{\sum (y - y_{-i})^2} {\sum y}
+\end{equation}
+
+\subsubsection{Akaike Information Criterion}
+
+\begin{equation}\label{eq:AIC}
+  2*n*ln(\hat{\sigma}) + n*ln(2*\pi) + 
+    n*\frac{n + v_1}{n - 2 - v_1}
+    \end{equation}

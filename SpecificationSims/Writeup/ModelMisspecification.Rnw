@@ -1,0 +1,7 @@
+
+In previous sections we assumed that the model to be estimated using LWR was properly specified. That is, bothe variables ($X_1$ and $X_2$) are included and their coefficients are allowed to vary over space to reflect the true data generation process. This section relaxes the assumption of a perfectly specified model and omits one variable in the regression. Our new regression equation becomes:
+\begin{equation}
+y = \alpha (location) + \beta _1 (location) X_1 + error
+\end{equation}
+
+An important question to consider in these circumstances is, ``What happens when the omitted variable had a spatially varying coefficient, but the included variable coefficients are stationary?'' Does LWR choose a large bandwidth and reflect the stationarity of the included model parameters? Does LWR select a small bandwidth and estimate spatially varying intercept terms? If so, what are the impacts on our estimates of the stationary parameter?

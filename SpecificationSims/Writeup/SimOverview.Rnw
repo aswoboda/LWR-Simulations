@@ -1,0 +1,102 @@
+
+
+This article simulates data under known conditions and examines the results of Locally Weighted Regression to better understand the accuracy and reliability of the technique. To do this we replicated simulations under multiple parameter combinations and ran some simulations, varying the sample size of the data set, the standard deviation of the error term in the model and the degree of spatial variation in the model coefficients. 
+
+Each simulation was conducted as follows:
+\begin{enumerate}
+\item Determine the number of simulation replications and a set of values for each of the four simulation parameters: 
+    \begin{enumerate}
+    \item sample size
+    \item variance in model error term
+    \item degree of spatial variation in $\beta _1$
+    \item degree of spatial variation in $\beta _2$
+    \end{enumerate}
+\item Select a value for each parameter from the set of values.
+\item Generate the data according to the chosen parameters. 
+\item Select a bandwidth for the Locally Weighted Regression (the number of observations to receive positive weights in the regression equation) from the set of all acceptable bandwidths (ranging from 5 to the sample size).
+\item Estimate a Locally Weighted Regression model using the selected bandwidth for each observation in the dataset.
+\item Calculate a number of metrics for the given bandwidth (cross validation scores, pseudo $R^2$, Root Mean Squared Errors, etc.).
+\item Return to Step 4 and choose another bandwidth
+\item Repeat Steps 4) - 7) until all bandwidths have been implemented.
+\item Replicate the simulations in Steps 3) - 8) until the desired number of replications has been reached.
+\item Repeat Steps 2) - 9) until all combinations of simulation parameter values have been achieved.
+\end{enumerate}
+
+We chose the following sets of simulation parameter values and replicated each simulation 100 times (for a total of \Sexpr{100*5*3*4*4} different simulated data sets and simulations.\footnote{100 replications, 5 different sample sizes, 3 different error term variances, and 4 different degrees of spatial variation for both $\beta _1$ and $\beta _2$.}):
+\begin{itemize}
+\item sample size $\{$50, 200, 500, 1000$\}$
+\item variance of the error term $\{2^2$, $4^2$, $6^2\}$
+\item degree of spatial variation in $\beta _1$  $\{0$, .1, .2, .3$\}$
+\item degree of spatial variation in $\beta _2$  $\{$0, .1, .2, .3$\}$
+\end{itemize}
+
+We kept track of the following model performance metrics, the pseudo $R^2$ of the model results, the correlation between the $\hat{\beta}$ and the true $\beta$, the percent of the observations for which we can reject the null hypothesis that $\hat{\beta}=\beta$, cross validation scores (leave one out, generalized, and standardized according to Paez), lastly the AIC score.
+
+\subsection{Data Generation Process}
+
+The Data Generation Process (DGP) is a modified version of a two variable linear DGP. In particular, rather than,
+\begin{equation}
+Y = \beta _0 + \beta _1 X_1 + \beta _2 X_2 + error,
+\end{equation}
+where $\beta _0$, $\beta _1$, and $\beta _2$ are constants, and $error \sim n(0, \sigma ^2)$, we construct a dataset according to Equation \eqref{eq:DGP}.
+\begin{equation}\label{eq:DGP}
+Y = \beta _0 + \beta _1(location) X_1 + \beta _2(location) X_2 + error
+\end{equation}
+The difference is that $\beta _1$ and $\beta _2$ are a function of location rather than constant. Each observation is located within a geographic coordinate system $(east, north)$ where both $east$ and $north$ values are $\sim u(0, 10)$. The functions determining $\beta _1$ and $\beta _2$ are :
+\begin{eqnarray}
+\beta _1 (east, north) &=& 1 + Bsv_1 * north - 5*Bsv_1 \\
+\beta _2 (east, north) &=& 1 + Bsv_2 * east - 5*Bsv_2
+\end{eqnarray}
+The above equations show that when $Bsv_i$ is 0, the $\beta$s used to generate the dependent variable are constant across space. However, non-zero values of $Bsv_i$ imply that the marginal impact of the independent variables will differ over space. The $\beta$s used in our simulations are visualized in Figure \ref{fig:SpatVarBeta}.
+
+<<SpatVarBeta, cache=TRUE, dev='tikz', fig.height=3.5, fig.width=7, include=FALSE>>=
+east = north = 0:10
+BetaFunc = function(x, Bsv) {
+ 1 + Bsv * x - 5*Bsv
+}
+par(mfrow = c(1, 2))
+par(mar = c(3.1, 3, 2, 0))
+plot(north, BetaFunc(north, .3), type = "l", 
+     xlim = c(0, 12), ylim = c(-1, 3), axes = FALSE, ylab = "")
+mtext("Degree of Spatial Variation in $\\beta _1$", 3, line = 1, at = 5)
+axis(1, at = c(0, 5, 10))
+mtext("north", 1, line = 2, at = 5)
+axis(2, las = 1)
+mtext("True $\\beta$", 2, line =2)
+lines(north, BetaFunc(north, .2), col = "red")
+lines(north, BetaFunc(north, .1), col = "blue")
+lines(north, BetaFunc(north, 0), col = "orange")
+text(rep(0, 4), seq(.85, -.65, length = 4), paste("Bsv1=",(0:3)/10), pos = 4,
+     col = c("orange", "blue", "red", "black"), cex = .7, offset = 0)
+text(rep(10, 4), seq(1, 2.5, length = 4), c("none", "some", "more", "most"), pos = 4,
+     col = c("orange", "blue", "red", "black"), cex = .7, offset = 0)
+
+plot(east, BetaFunc(east, .3), type = "l", 
+     xlim = c(0, 12), ylim = c(-1, 3), axes = FALSE, ylab = "")
+axis(1, at = c(0, 5, 10))
+mtext("Degree of Spatial Variation in $\\beta _2$", 3, line = 1, at = 5)
+mtext("east", 1, line = 2, at = 5)
+axis(2, las = 1)
+mtext("True $\\beta$", 2, line =2)
+lines(east, BetaFunc(east, .2), col = "red")
+lines(east, BetaFunc(east, .1), col = "blue")
+lines(east, BetaFunc(east, 0), col = "orange")
+text(rep(0, 4), seq(.8, -.65, length = 4), paste("Bsv2=",(0:3)/10), pos = 4,
+     col = c("orange", "blue", "red", "black"), cex = .7, offset = 0)
+text(rep(10, 4), seq(1, 2.5, length = 4), c("none", "some", "more", "most"), pos = 4,
+     col = c("orange", "blue", "red", "black"), cex = .7, offset = 0)
+
+@
+\begin{figure}
+\includegraphics[width = \textwidth]{figure/SpatVarBeta.pdf}
+\caption{The above images depict the different degrees of spatial variation in our DGP coefficients. Horizontal lines indicate that the coefficient is constant over space, while the steeper sloping lines indicate DGPs with higher degrees of spatial variation.}
+\label{fig:SpatVarBeta}
+\end{figure}
+Given the different combinations of coefficient spatial variation parameters, we have data generation processes in which:
+\begin{enumerate}
+\item neither coefficient varies over space ($Bsv_1 = 0$ \& $Bsv_2 = 0$)
+\item both coefficients vary over space ($Bsv_1 \neq 0$ \& $Bsv_2 \neq 0$)
+\item only one coefficient varies over space ($Bsv_1 = 0$ \& $Bsv_2 \neq 0$ OR $Bsv_1 \neq 0$ \& $Bsv_2 = 0$)
+\end{enumerate}
+
+One of the goals of our research is to better understand the results of Locally Weighted Regression in the presence of these various underlying DGPs. 
