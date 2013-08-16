@@ -1,0 +1,161 @@
+"","True Model Number","True Model Variables","Model Error","Sample Size","Repetition","True Model Min GCV","True Model Bandwidth","Best Model Number","Best Model Variables","Best Model GCV","Best Model Bandwidth","Best Model = True Model"
+"1","1","stationary, stationary, non-stationary","2.45373056523968","100","1","5.09571060527345","99","5",NA,"4.9384878656688","44","FALSE"
+"2","1","stationary, stationary, non-stationary","2.48493209532695","100","2","6.59627089579021","99","5",NA,"6.51641398167105","99","FALSE"
+"3","1","stationary, non-stationary, stationary","2.48549072227441","100","3","7.74314838052888","99","3",NA,"7.5951386338934","99","FALSE"
+"4","1","stationary, stationary, non-stationary","2.41678704960505","100","4","5.64966364379565","99","5",NA,"5.53647597891316","99","FALSE"
+"5","1","non-stationary, stationary, stationary","2.44660581186414","100","5","6.27218154241343","99","2",NA,"5.98330533942015","29","FALSE"
+"6","1","stationary, non-stationary, stationary","2.52195157526759","300","1","6.33339374582777","299","3",NA,"6.25454663369317","299","FALSE"
+"7","1","non-stationary, non-stationary, non-stationary","2.4871513000379","300","2","6.60176577460013","299","8",NA,"6.52478207363538","299","FALSE"
+"8","1","stationary, non-stationary, stationary","2.50562980086077","300","3","6.2778105946771","299","3",NA,"6.24952695231023","299","FALSE"
+"9","1","stationary, stationary, non-stationary","2.48826834491687","300","4","6.35139080522498","299","5",NA,"6.32805046689255","299","FALSE"
+"10","1","stationary, non-stationary, stationary","2.5138504716071","300","5","5.15919514757333","299","3",NA,"5.12087973474071","299","FALSE"
+"11","1","non-stationary, stationary, stationary","2.51833416005364","500","1","6.18869097970187","499","2",NA,"6.14688414049921","499","FALSE"
+"12","1","non-stationary, stationary, non-stationary","2.50733632705035","500","2","6.54300094402804","499","6",NA,"6.480710239292","333","FALSE"
+"13","1","stationary, stationary, non-stationary","2.49451643969538","500","3","6.2502697193908","499","5",NA,"6.21241725346287","499","FALSE"
+"14","1","stationary, stationary, non-stationary","2.46024018878723","500","4","5.7574420027295","499","5",NA,"5.72691397403379","333","FALSE"
+"15","1","stationary, stationary, non-stationary","2.51851641680859","500","5","6.64561224385842","499","5",NA,"6.62684010414647","499","FALSE"
+"16","1","stationary, non-stationary, stationary","2.49794500775496","1000","1","6.26781826974562","999","3",NA,"6.25082532425227","999","FALSE"
+"17","1","non-stationary, stationary, stationary","2.50068921315134","1000","2","6.84752436341585","999","2",NA,"6.83443343911907","999","FALSE"
+"18","1","stationary, non-stationary, stationary","2.49448856525193","1000","3","5.47009544082258","999","3",NA,"5.44550110550993","666","FALSE"
+"19","1","stationary, non-stationary, stationary","2.48044835268846","1000","4","5.75681305263788","999","3",NA,"5.7470424184627","999","FALSE"
+"20","1","stationary, non-stationary, stationary","2.48409085352276","1000","5","5.79181625067554","999","3",NA,"5.76001112109218","296","FALSE"
+"21","2","stationary, stationary, non-stationary","2.53320651749265","100","1","6.37661685169123","66","5",NA,"6.16621693499745","66","FALSE"
+"22","2","non-stationary, stationary, stationary","2.62060277071316","100","2","6.06111037355353","13","2","non-stationary, stationary, stationary","6.06111037355353","13","TRUE"
+"23","2","non-stationary, stationary, stationary","2.54223793454701","100","3","6.31959190376701","44","2","non-stationary, stationary, stationary","6.31959190376701","44","TRUE"
+"24","2","stationary, non-stationary, stationary","2.64098089573905","100","4","7.4194507749839","29","3",NA,"6.89259196311029","29","FALSE"
+"25","2","non-stationary, stationary, stationary","2.60726869830047","100","5","7.36715249399423","9","2","non-stationary, stationary, stationary","7.36715249399423","9","TRUE"
+"26","2","non-stationary, stationary, stationary","2.57385515784728","300","1","6.15680817982814","59","2","non-stationary, stationary, stationary","6.15680817982814","59","TRUE"
+"27","2","non-stationary, stationary, stationary","2.45454732570409","300","2","5.82325297570223","59","2","non-stationary, stationary, stationary","5.82325297570223","59","TRUE"
+"28","2","non-stationary, stationary, stationary","2.57967618476095","300","3","6.52264943388534","133","2","non-stationary, stationary, stationary","6.52264943388534","133","TRUE"
+"29","2","non-stationary, stationary, stationary","2.52692790403652","300","4","5.74490104236119","89","2","non-stationary, stationary, stationary","5.74490104236119","89","TRUE"
+"30","2","non-stationary, stationary, stationary","2.52059628513913","300","5","6.5392801827311","26","2","non-stationary, stationary, stationary","6.5392801827311","26","TRUE"
+"31","2","non-stationary, stationary, stationary","2.51905590292998","500","1","6.23243019410789","148","2","non-stationary, stationary, stationary","6.23243019410789","148","TRUE"
+"32","2","non-stationary, stationary, stationary","2.53386170731275","500","2","6.58983936132997","148","2","non-stationary, stationary, stationary","6.58983936132997","148","TRUE"
+"33","2","non-stationary, stationary, stationary","2.47765665045497","500","3","6.58540709859654","99","2","non-stationary, stationary, stationary","6.58540709859654","99","TRUE"
+"34","2","non-stationary, stationary, stationary","2.54495762275625","500","4","6.74818428764127","148","2","non-stationary, stationary, stationary","6.74818428764127","148","TRUE"
+"35","2","non-stationary, stationary, stationary","2.53834274377977","500","5","7.23605660123301","99","2","non-stationary, stationary, stationary","7.23605660123301","99","TRUE"
+"36","2","non-stationary, stationary, stationary","2.47667590940208","1000","1","5.83469682206744","197","2","non-stationary, stationary, stationary","5.83469682206744","197","TRUE"
+"37","2","non-stationary, stationary, stationary","2.50425155682769","1000","2","6.68917951914301","87","2","non-stationary, stationary, stationary","6.68917951914301","87","TRUE"
+"38","2","non-stationary, stationary, stationary","2.503567154638","1000","3","6.69843470898357","197","2","non-stationary, stationary, stationary","6.69843470898357","197","TRUE"
+"39","2","non-stationary, stationary, stationary","2.51541265797114","1000","4","5.89787927995132","131","2","non-stationary, stationary, stationary","5.89787927995132","131","TRUE"
+"40","2","non-stationary, stationary, stationary","2.49096122930234","1000","5","6.48365618708768","296","2","non-stationary, stationary, stationary","6.48365618708768","296","TRUE"
+"41","3","stationary, non-stationary, stationary","2.32575988404149","100","1","5.27889362560893","66","3","stationary, non-stationary, stationary","5.27889362560893","66","TRUE"
+"42","3","stationary, non-stationary, stationary","2.24840012130505","100","2","6.40797282828388","66","3","stationary, non-stationary, stationary","6.40797282828388","66","TRUE"
+"43","3","non-stationary, stationary, stationary","2.2473845471904","100","3","5.43827424181843","99","2",NA,"5.42358679014412","99","FALSE"
+"44","3","stationary, non-stationary, stationary","2.19445703886552","100","4","5.62681827698979","66","3","stationary, non-stationary, stationary","5.62681827698979","66","TRUE"
+"45","3","non-stationary, stationary, stationary","2.22026480533261","100","5","3.91038405044213","13","2",NA,"3.59458021608778","13","FALSE"
+"46","3","stationary, non-stationary, stationary","2.24218758495265","300","1","4.96292024182445","133","3","stationary, non-stationary, stationary","4.96292024182445","133","TRUE"
+"47","3","non-stationary, non-stationary, non-stationary","2.25253710971358","300","2","5.35111377597559","133","8",NA,"5.33690843335662","133","FALSE"
+"48","3","stationary, non-stationary, stationary","2.2541698474523","300","3","4.57091694946593","199","3","stationary, non-stationary, stationary","4.57091694946593","199","TRUE"
+"49","3","stationary, non-stationary, stationary","2.32307970036796","300","4","5.65660216114817","133","3","stationary, non-stationary, stationary","5.65660216114817","133","TRUE"
+"50","3","stationary, non-stationary, stationary","2.26093580560172","300","5","4.87755983440736","133","3","stationary, non-stationary, stationary","4.87755983440736","133","TRUE"
+"51","3","stationary, non-stationary, stationary","2.27643045198138","500","1","4.79420861795665","222","3","stationary, non-stationary, stationary","4.79420861795665","222","TRUE"
+"52","3","stationary, non-stationary, stationary","2.25279782820411","500","2","4.93437370794244","222","3","stationary, non-stationary, stationary","4.93437370794244","222","TRUE"
+"53","3","stationary, non-stationary, stationary","2.22651257006968","500","3","5.24700848020254","222","3","stationary, non-stationary, stationary","5.24700848020254","222","TRUE"
+"54","3","stationary, non-stationary, stationary","2.27412630932276","500","4","5.7259925974083","148","3","stationary, non-stationary, stationary","5.7259925974083","148","TRUE"
+"55","3","stationary, non-stationary, stationary","2.25125604113265","500","5","4.84777224458278","222","3","stationary, non-stationary, stationary","4.84777224458278","222","TRUE"
+"56","3","stationary, non-stationary, stationary","2.23534568964558","1000","1","5.10938421255616","197","3","stationary, non-stationary, stationary","5.10938421255616","197","TRUE"
+"57","3","stationary, non-stationary, non-stationary","2.28169945801121","1000","2","4.96858937069622","444","7",NA,"4.96546471122089","444","FALSE"
+"58","3","stationary, non-stationary, stationary","2.26114398519484","1000","3","5.14093498306709","296","3","stationary, non-stationary, stationary","5.14093498306709","296","TRUE"
+"59","3","stationary, non-stationary, stationary","2.25497674190368","1000","4","5.18386173807165","197","3","stationary, non-stationary, stationary","5.18386173807165","197","TRUE"
+"60","3","stationary, non-stationary, stationary","2.20560378713695","1000","5","5.10049821617365","296","3","stationary, non-stationary, stationary","5.10049821617365","296","TRUE"
+"61",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"62",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"63",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"64",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"65",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"66",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"67",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"68",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"69",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"70",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"71",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"72",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"73",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"74",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"75",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"76",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"77",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"78",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"79",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"80",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"81",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"82",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"83",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"84",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"85",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"86",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"87",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"88",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"89",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"90",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"91",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"92",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"93",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"94",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"95",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"96",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"97",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"98",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"99",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"100",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"101",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"102",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"103",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"104",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"105",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"106",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"107",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"108",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"109",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"110",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"111",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"112",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"113",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"114",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"115",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"116",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"117",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"118",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"119",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"120",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"121",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"122",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"123",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"124",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"125",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"126",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"127",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"128",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"129",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"130",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"131",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"132",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"133",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"134",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"135",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"136",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"137",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"138",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"139",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"140",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"141",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"142",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"143",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"144",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"145",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"146",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"147",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"148",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"149",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"150",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"151",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"152",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"153",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"154",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"155",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"156",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"157",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"158",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"159",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"160",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
