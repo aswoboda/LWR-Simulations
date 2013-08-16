@@ -6,3 +6,13 @@ This is a place to keep track of future ideas, concerns, and tasks that need to 
 
 * Email Farber or Paez about the equation for the row standardized CV score. Is it a typo in the article? (Steven.Farber@geog.utah.edu, paezha@mcmaster.ca) 
   * Yes, it is a typo, should be squared.
+
+An interesting blog post about cross-validation and AIC http://www.petrkeil.com/?p=836
+
+Some references from the post:
+References
+1. Burnham K. P. & Anderson D. R. (2002) Model selection and multimodel inference: A practical information-theoretic approach. Springer.
+2. Hastie T., Tibshirani R. & Friedman J. (2009) The elements of statistical learning: Data mining, inference, and prediction. Springer.
+3. Shao J. (1993) Linear model selection by cross-validation. Journal of American Statistical Association, 88, 486-494.
+4. Stone M. (1977) An asymptotic equivalence of choice of model by cross-validation and Akaike’s criterion. Journal of the Royal Statistical Society Series B. 39, 44–7.
+
