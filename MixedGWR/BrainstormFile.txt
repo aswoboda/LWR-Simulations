@@ -16,8 +16,12 @@ Notes on each task:
     on all bandwidths...
     saving the relevent output needed to calculate the metrics noted in step 3).
     
-
-
+    What is the output?
+      for each model & bandwidth...
+        coefficients
+        predicted dependent variable values
+        leverages
+    What is the format of the output?
 
 3)
 
