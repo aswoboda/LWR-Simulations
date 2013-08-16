@@ -1,0 +1,19 @@
+#### Brainstorm File
+
+Working on the function to use as an argument into the (mc)lapply function for the big simulation.
+This function has to do (at least) three things:
+1) generate data based on the parameters in the expand.grid dataframe
+2) run the eight different regression models for all of the different bandwidths
+3) collect the output we want to save across replications.
+
+Notes on each task:
+
+1)
+
+
+2)
+
+
+3)
+
+
