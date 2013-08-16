@@ -8,17 +8,16 @@ This function has to do (at least) three things:
 
 Notes on each task:
 
-1)
+1) This step will create a dataset.
 
 
-2)
-Aaron will be typing here.
+2)  This step takes as an input the dataset created in 1).
+    Then runs all 8 models (ranging from global OLS to mixed LWR to full LWR)...
+    on all bandwidths...
+    saving the relevent output needed to calculate the metrics noted in step 3).
+    
 
-and here
 
-and here.
-
-still going... writing a lot
 
 3)
 
