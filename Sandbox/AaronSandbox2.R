@@ -219,12 +219,17 @@ bisquare = function(d, dk) { # takes a vector of distances and a threshold dista
   weights 
 }
 
-mixedLWR = function(depVar, statVars = NULL, nonstatVars = NULL, locVars, dataframe, bandwidth) {
+mixedLWR = function(bandwidth, stationary = c("TRUE", "TRUE", "TRUE"), vars = c("x0", "x1", "x2"),  
+                    locVars = c("east", "north"), depVar = "y", dataframe = mydata) {
   
   n = dim(dataframe)[1]
-  totalVars = length(statVars) + length(nonstatVars)
+  totalVars = length(vars)
+  statVars = vars[which(stationary == "TRUE")]
+  nonstatVars = vars[which(stationary == "FALSE")]
+  numStationary = length(statVars) # how many of them are there?
+  numNonstationary = length(nonstatVars) # how many of them are there?
   coeffs = matrix(NA, n, totalVars)
-  colnames(coeffs) = c(statVars, nonstatVars)
+  colnames(coeffs) = vars
   fittedValues = matrix(NA, n, 1)
   leverages = matrix(NA, n, 1)
   
@@ -260,15 +265,11 @@ mixedLWR = function(depVar, statVars = NULL, nonstatVars = NULL, locVars, datafr
   
   if (length(nonstatVars) > 0 & length(statVars) > 0) { 
     modelType = "mixedLWR"
-    varsStationary = statVars # which variables are stationary?
-    numStationary = length(varsStationary) # how many of them are there?
-    varsNonstationary = nonstatVars # which variables are non-stationary?
-    numNonstationary = length(varsNonstationary) # how many of them are there?
     
     LWRbetas = matrix(NA, n, numNonstationary) # creates a matrix of all the different coefficient estimates we'll need
     
     step1 = matrix(NA, n, numStationary) # matrix for the step 1 results
-    colnames(step1) = varsStationary
+    colnames(step1) = statVars
     
     step3 = matrix(NA, nrow = n, ncol = 1) # matrix for the step 2 results
     
@@ -277,8 +278,8 @@ mixedLWR = function(depVar, statVars = NULL, nonstatVars = NULL, locVars, datafr
       dk = sort(mydists)[bandwidth+1] # grab the distance to the kth nearest observation
       dataframe$WEIGHTS = bisquare(mydists, dk) # caculate the weights for all observations
       
-      for (xa in varsStationary) { # now for each variable we want to treat as stationary...
-        RHS = paste0(varsNonstationary, collapse = "+") # start the Right Hand Side of the regression equation
+      for (xa in statVars) { # now for each variable we want to treat as stationary...
+        RHS = paste0(nonstatVars, collapse = "+") # start the Right Hand Side of the regression equation
         model2run = paste0(xa, "~", RHS, "-1") # finish the model we'll run
         temp.lm = lm(model2run, data = dataframe, weights = WEIGHTS) # run the step 1 regression
         step1[obs, xa] = temp.lm$residuals[obs] # grab the residual for this observation
@@ -294,18 +295,18 @@ mixedLWR = function(depVar, statVars = NULL, nonstatVars = NULL, locVars, datafr
     # step 4: regress the step 2 residuals on the step 1 residuals
     lmOLS = lm(step3 ~ step1 - 1)
     ahat = coef(lmOLS) # grab the estimated coefficients - these are our estimates of the stationary coefficients
-    names(ahat) = varsStationary
+    names(ahat) = statVars
     
     # step 5: subtract X*ahat from y and then use GWR (with this difference as the dependent value) 
     # to estimate the non-stationary coefficients
-    dataframe$ytemp = dataframe[, depVar] - as.matrix(dataframe[, varsStationary])%*%ahat
+    dataframe$ytemp = dataframe[, depVar] - as.matrix(dataframe[, statVars])%*%ahat
     
     for (obs in 1:n) { # for each observation in our data set
       mydists = distMatrix[, obs] # grab the distances between it and all others
       dk = sort(mydists)[bandwidth+1] # grab the distance to the kth nearest observation
       dataframe$WEIGHTS = bisquare(mydists, dk) # calculate the weights
       
-      LWRRHS = paste0(varsNonstationary, collapse = "+") # start formulating the RHS of the LWR regression
+      LWRRHS = paste0(nonstatVars, collapse = "+") # start formulating the RHS of the LWR regression
       LWRmodel = paste0("ytemp~", LWRRHS, "-1") # finish the model to be estimated
       lmreg = lm(LWRmodel, data = dataframe, weights = WEIGHTS) # run the regression
       LWRbetas[obs, ] <- coef(lmreg) # keep track of the coefficient estimate
@@ -313,12 +314,12 @@ mixedLWR = function(depVar, statVars = NULL, nonstatVars = NULL, locVars, datafr
     }
     
     # for each stationary variable, grab the value in ahat and place it in the appropriate columne for all observations
-    for (i in 1:numStationary)    coeffs[, varsStationary[i]]    = ahat[i] 
+    for (i in 1:numStationary)    coeffs[, statVars[i]]    = ahat[i] 
     # for each non-stationary variable, grab the vector of coefficients and stick it in the appropriate column
-    for (i in 1:numNonstationary) coeffs[, varsNonstationary[i]] = LWRbetas[, i]
+    for (i in 1:numNonstationary) coeffs[, nonstatVars[i]] = LWRbetas[, i]
     
     # now that we've got the coefficients, we can calculate the predicted y values 
-    fittedValues = rowSums(coeffs*dataframe[, c(varsStationary, varsNonstationary)]) 
+    fittedValues = rowSums(coeffs*dataframe[, vars]) 
     fittedValues = matrix(fittedValues, n, 1)
   }
   
@@ -329,6 +330,21 @@ mixedLWR = function(depVar, statVars = NULL, nonstatVars = NULL, locVars, datafr
   out
 }
 
-mixedLWR(depVar = "y", statVars = c("x1", "x2"), nonstatVars = "x0", 
-         locVars = c("east", "north"), dataframe = mydata, bandwidth = 50)
+output = mixedLWR(bandwidth = 80, stationary = c(FALSE, FALSE, TRUE))
+
+temp = lapply(c(20, 40, 60, 80), mixedLWR, stationary = c(FALSE, FALSE, TRUE))
+
+X0 = X1 = X2 = c("TRUE", "FALSE")
+models = as.matrix(expand.grid(x0 = X0, x1 = X1, x2 = X2))
+
+megaMaker = function(bandwidths, models, data) {
+  megaList = list()
+  megaList[[1]] = mixedLWR(50, models[1,])
+  for (i in 2:dim(models)[1]) {
+    megaList[[i]] = lapply(bandwidths, mixedLWR, stationary = models[i, ])
+  }
+  megaList
+}
+
+temp = megaMaker(c(20, 80), models = models[1:3,], data = mydata)
 
