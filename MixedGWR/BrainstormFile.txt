@@ -8,7 +8,7 @@ This function has to do (at least) three things:
 
 Notes on each task:
 
-1) This step will create a dataset.
+1) This step will create a dataset using a series of parameters (for instance, telling us which parameters are (non-)stationary and by how much).
 
 
 2)  This step takes as an input the dataset created in 1).
@@ -22,6 +22,10 @@ Notes on each task:
         predicted dependent variable values
         leverages
     What is the format of the output?
+      list... 
+        first level = model number [1...8]
+        second level = bandwidth values
+        third level = {coefficients, fitted values, leverages, etc.}
 
 3)
 
