@@ -22,5 +22,10 @@ still going... writing a lot
 
 3)
 
+AIC + GCV scores for each model in the regression (LOOCV is probably too time consuming to calculate to be worth it)
 
-Hello Aaron.  
+Beta information: MSE, 90th percentile MSE and SD of the errors (not the betas) could also be relevant.  90th percentile being the smallest 90% of the errors, which would evaluate if the model got most of them accurate even if some were way off (if we ran discontinuous intercepts this would probably be important; I'd imagine around the borders intercepts would be very off but farther away they would be more accurate).  With real datasets, some authors expressed concerns about extreme or wrongly signed coefficients (based on what theory would predict), so assuming researchers can identify and ignore outliers properly, then the 90th percentile (or some other large number) could be a more helpful metric to use.  
+
+SD of the errors would give another measure of how much they fluctuate accross the sample.  This may not be the most helpful for making statements about one model/regression alone, but it should give some insight into relative spreads of coefficient errors.  
+
+I think its probably best to store this for each of the 8 models.  Only storing them for the best model would require storing the betas for each model during the regression, so we may as well keep all of the metrics.  
