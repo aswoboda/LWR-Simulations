@@ -339,12 +339,18 @@ models = as.matrix(expand.grid(x0 = X0, x1 = X1, x2 = X2))
 
 megaMaker = function(bandwidths, models, data) {
   megaList = list()
-  megaList[[1]] = mixedLWR(50, models[1,])
-  for (i in 2:dim(models)[1]) {
-    megaList[[i]] = lapply(bandwidths, mixedLWR, stationary = models[i, ])
+  for (i in 1:dim(models)[1]) {
+    test = sum(models[i, ] == "FALSE")
+    if(test == 0) {
+      megaList[[i]] = lapply(max(bandwidths), mixedLWR, stationary = models[i, ])
+      names(megaList[[i]]) = paste0("bw", max(bandwidths))
+    } else  {
+      megaList[[i]] = lapply(bandwidths, mixedLWR, stationary = models[i, ])
+      names(megaList[[i]]) = paste0("bw", bandwidths)
+    }
   }
+  names(megaList) = paste0("model", 1:dim(models)[1])
   megaList
 }
 
-temp = megaMaker(c(20, 80), models = models[1:3,], data = mydata)
-
+temp = megaMaker(c(20, 50, 80), models = models, data = mydata)
