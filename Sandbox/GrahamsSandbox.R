@@ -20,7 +20,7 @@ GCV = function(y, yhat, levs, nonstationary = 0) {
 }
 
 #data gen
-n = 29 # number of observations in our simulation
+n = 50 # number of observations in our simulation
 east = runif(n) # create a location variable
 north = runif(n) # create another location variable
 x0 = rep(1, n) # create a vector of 1's to serve as the intercept column
@@ -63,8 +63,8 @@ for(modelNum in 1:nrow(models)){
 }
 
 bandwidthNames <- c()
-for(bwNum in 1:length(bandwidths)){
-  bandwidthNames <- c(bandwidthNames, paste0("Bandwidth ", bwNum," of ", bandwidths[bwNum], " observations"))
+for(bwNum in 1:length(ks)){
+  bandwidthNames <- c(bandwidthNames, paste0("Bandwidth ", bwNum," of ", ks[bwNum], " observations"))
 }
 
 
