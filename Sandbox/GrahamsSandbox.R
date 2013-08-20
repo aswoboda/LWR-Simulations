@@ -261,6 +261,26 @@ megaMaker = function(bandwidths, models, data) {
   megaList
 }
 
+calc.rmse <- function(trueVal, estVal){
+  rmse <- (sum((trueVal - estVal)^2)/length(estVal))^.5
+  rmse
+}
+
+input.rmse <- function(betaToEval, megaList, trueBetaVal, results){
+  modelNames <- names(megaList) #get names of models run
+  bandwidthNames <- names(megaList[[2]]) #megaList[[1]] will only have 1 bandwidth for the GGG model
+  
+  for(model in modelNames){
+    for(bandwidth in bandwidthNames){
+      estCoeff <- megaList[[model]][[bandwidth]][[2]][,(betaToEval + 1)] #requres only the number of the beta
+      rmse <- calc.rmse(trueBetaVal, estCoeff)
+      results[bandwidth, model, paste0("B", betaToEval, "RMSE")] <- rmse
+    }
+  }
+  results
+}
+
+
 temp = megaMaker(ks, models = models[1:8,], data = mydata)
 
 results <- input.rmse(0, temp, trueB0, results)
