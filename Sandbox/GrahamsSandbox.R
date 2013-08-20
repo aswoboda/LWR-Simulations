@@ -34,14 +34,44 @@ B2 = 2 # nor is this coefficient
 y = B0*x0 + B1*x1 + B2*x2 + error # generate the dependent variable values according to our 
 mydata = data.frame(y, x0, x1, x2, east, north) # put everything together into a data frame
 
+trueB0 <- B0
+trueB1 <- B1
+trueB2 <- B2
 # X0 = X1 = X2 = c("stationary", "non-stationary")
 # models = expand.grid(x0 = X0, x1 = X1, x2 = X2) # makes a data frame of all the different models we could run
+
+X0 = X1 = X2 = c("TRUE", "FALSE") #true is stationary
+models = as.matrix(expand.grid(x0 = X0, x1 = X1, x2 = X2))
 
 numk = 7 # number of bandwidths we'll use
 krat = 2/3 # rate at which bandwidths decrease (ie. 45 -> 30 -> 20, etc.)
 ks = n-1 # this is the largest value of k
 for (i in 2:numk) ks = c(round(krat*min(ks), 0), ks) # this generates the vector of bandwidths
-  
+
+################
+#generate array to store results
+metrics <- c("AIC", "GCV", "SCV", "B0RMSE", "B1RMSE", "B2RMSE")
+
+modelNames <- c()
+for(modelNum in 1:nrow(models)){
+  modelType <- ""
+  for (var in models[modelNum,]){
+    if( var) {modelType <- paste0(modelType, "G")}
+    else {modelType <- paste0(modelType, "L")}
+  }
+  modelNames <- c(modelNames, modelType)
+}
+
+bandwidthNames <- c()
+for(bwNum in 1:length(bandwidths)){
+  bandwidthNames <- c(bandwidthNames, paste0("Bandwidth ", bwNum," of ", bandwidths[bwNum], " observations"))
+}
+
+
+results <- array(NA, dim = c(length(ks), nrow(models), length(metrics)), 
+                 dimnames = list(bandwidthNames, modelNames, metrics))
+
+
 ### GOAL: write a mixedGWR function that we can use in our simulations
 
 # inputs:
@@ -185,28 +215,55 @@ mixedLWR = function(bandwidth, stationary = c("TRUE", "TRUE", "TRUE"), vars = c(
 }
 
 #output = mixedLWR(bandwidth = 80, stationary = c(FALSE, FALSE, TRUE))
-
-X0 = X1 = X2 = c("TRUE", "FALSE")
-models = as.matrix(expand.grid(x0 = X0, x1 = X1, x2 = X2))
+#this function seems to be written to require model 1 to always be GGG
 
 megaMaker = function(bandwidths, models, data) {
   megaList = list()
-  megaList[[1]] = mixedLWR(bandwidths[length(bandwidths)], models[1,])
+  noResultsGGGInput <- list(ModelType = "GGG", 
+                            Coefficients = matrix(NA, nrow = length(data$y), ncol = 3),
+                            FittedValues = matrix(NA, nrow = length(data$y), ncol = 3),
+                            Leverages = matrix(NA, nrow = length(data$y), ncol = 3))
+  megaList[[1]] <- list(noResultsGGGInput, noResultsGGGInput, noResultsGGGInput, 
+                  noResultsGGGInput, noResultsGGGInput, noResultsGGGInput, 
+                  mixedLWR(bandwidths[length(bandwidths)], models[1,]))
+
+#  megaList[[1]] = list(mixedLWR(bandwidths[length(bandwidths)], models[1,]))
   for (i in 2:dim(models)[1]) {
     megaList[[i]] = lapply(bandwidths, mixedLWR, stationary = models[i, ])
   }
   
-  modelnames <- c()
+  
+  ##these name generators can be replaced by just passing them as parameters to the function;
+  ##they have to be generated for the results matrix anyway, but calcualting them in the function
+  ##does let you run fewer than the max number of models and bandwidths
+  modelNames <- c()
   for(modelNum in 1:nrow(models)){
     modelType <- ""
     for (var in models[modelNum,]){
       if( var) {modelType <- paste0(modelType, "G")}
       else {modelType <- paste0(modelType, "L")}
-    modelnames <- c(modelType)
     }
+    modelNames <- c(modelNames, modelType)
   }
+  
+  names(megaList) <- modelNames
+  
+  bandwidthNames <- c()
+  for(bwNum in 1:length(bandwidths)){
+    bandwidthNames <- c(bandwidthNames, paste0("Bandwidth ", bwNum," of ", bandwidths[bwNum], " observations"))
+  }
+
+  
+  for(modelNum in 1:nrow(models)){
+    names(megaList[[modelNum]]) <- bandwidthNames
+  }
+  
   megaList
 }
 
-temp = megaMaker(ks, models = models[1:2,], data = mydata)
+temp = megaMaker(ks, models = models[1:8,], data = mydata)
 
+results <- input.rmse(0, temp, trueB0, results)
+results <- input.rmse(1, temp, trueB0, results)
+results <- input.rmse(2, temp, trueB0, results)
+results
