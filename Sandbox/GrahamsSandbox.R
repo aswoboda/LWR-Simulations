@@ -230,8 +230,8 @@ megaMaker = function(bandwidths, models, data) {
   #the purpose is to make later loops simpler
   noResultsGGGInput <- list(ModelType = "GGG", 
                             Coefficients = matrix(NA, nrow = length(data$y), ncol = 3),
-                            FittedValues = matrix(NA, nrow = length(data$y), ncol = 3),
-                            Leverages = matrix(NA, nrow = length(data$y), ncol = 3))
+                            FittedValues = matrix(NA, nrow = length(data$y), ncol = 1),
+                            Leverages = matrix(NA, nrow = length(data$y), ncol = 1))
   megaList[[1]] <- list(noResultsGGGInput, noResultsGGGInput, noResultsGGGInput, 
                   noResultsGGGInput, noResultsGGGInput, noResultsGGGInput, 
                   mixedLWR(max(bandwidths), models[1,]))
@@ -291,14 +291,18 @@ input.rmse <- function(betaToEval, megaList, trueBetaVal, results){ #this asks f
   #this loops through the names of each model and bandwidth
   #if models are done in an unusual order this should still input the correct results
   for(model in modelNames){
-    for(bandwidth in bandwidthNames){
+    for(bandwidth in 1:length(bandwidthNames)){
       #this collects the estimated coefficient, the indexing is a bit intense but this should get the coefficient estimates for the correct model and bandwidth
       estCoeff <- megaList[[model]][[bandwidth]][[2]][,(betaToEval + 1)] #R indexes start at 1 so to get B0 you need to add 1
+      
+      #if the names of the dimensions of megaList are not GGG, LGG, ... use the next two lines to get the model name, this will store it in the results section properly too
+      modelName <- megaList[[model]][[bandwidth]][[1]]
+      model <- modelName
       
       #calc rmse
       rmse <- calc.rmse(trueBetaVal, estCoeff)
       #and put it into the results matrix.  Again, this is done by model/BW name not number for if only a subset of models are run
-      results[bandwidth, model, paste0("B", betaToEval, "RMSE")] <- rmse #by indexing to "B0RMSE" we can add metrics fairly easily, this will still but this result in the right place
+      results[bandwidth, model, paste0("B", betaToEval, "RMSE")] <- rmse #by indexing to "B0RMSE" we can add metrics fairly easily, this will still put this result in the right place
     }
   }
   
@@ -307,10 +311,13 @@ input.rmse <- function(betaToEval, megaList, trueBetaVal, results){ #this asks f
 }
 
 
-temp = megaMaker(ks, models = models[1:8,], data = mydata) #to test the results
+#temp = megaMaker(ks, models = models[1:8,], data = mydata) #to test the results
 
 ##input all the beta coefficients, these slowly fill in all the NAs
 results <- input.rmse(0, temp, trueB0, results)
 results <- input.rmse(1, temp, trueB0, results)
 results <- input.rmse(2, temp, trueB0, results)
+
+#metric inputs
+results <- input.gcv(mydata$y, temp, results)
 results
