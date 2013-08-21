@@ -67,7 +67,89 @@ input.gcv <- function(y, megaList, results){
   results
 }
 
+#AIC
 
+calc.aic <- function(y, yhat, lev, nonStationary){
+  n <- length(y)
+  v1 = nonStationary + sum(lev)
+  errorSD <- apply(y - yhat, 2, sd)
+  aic <- 2*n*log(errorSD) + n*log(2*pi) + n*(n + v1)/(n-2-v1)
+  aic
+}
 
-input.gcv(y, temp, results)
+input.aic <- function(y, megaList, results){
+  modelNames <- names(megaList) #get names of models run
+  numBandwidths <- length(megaList[[2]]) #megaList[[1]] may only have 1 bandwidth for the GGG model, as it is now model 1 should have all bandwidths though
+  
+  #this loops through the names of each model and bandwidth
+  #if models are done in an unusual order this should still input the correct results
+  for(model in modelNames){
+    for(bandwidth in 1:numBandwidths){
+      #this collects the estimated coefficient, the indexing is a bit intense but this should get the coefficient estimates for the correct model and bandwidth
+      yhat <- megaList[[model]][[bandwidth]][[3]] #estimated ys
+      levs <- megaList[[model]][[bandwidth]][[4]] #leverages
+      
+      
+      #if the names of the dimensions of megaList are not GGG, LGG, ... use the next two lines to get the model name, this will store it in the results section properly too
+      #modelName <- megaList[[model]][[bandwidth]][[1]]
+      #model <- modelName
+      
+      #now to extract the number of non-stationary variables
+      splitModel <- strsplit(model, "") #this splits the model into a list of length 3, so it needs to be indexed to 1 in the next step 
+      numNonstationary <- sum(splitModel[[1]] == "L")     
+      
+      #calc gcv
+      aic <- calc.aic(y, yhat, levs, numNonstationary)
+      #and put it into the results matrix.  Again, this is done by model/BW name not number for if only a subset of models are run
+      results[bandwidth, model, "AIC"] <- aic #by indexing to "AIC" we can add metrics fairly easily, this will still put this result in the right place
+    }
+  }
+  
+  #returns the modified results input
+  results
+}
+
+#SCV
+
+calc.scv <- function(y, yhatWithout){
+  numer <- length(y)
+  v1 = nonStationary + sum(lev)
+  errorSD <- apply(y - yhat, 2, sd)
+  aic <- 2*n*log(errorSD) + n*log(2*pi) + n*(n + v1)/(n-2-v1)
+  aic
+}
+
+input.aic <- function(y, megaList, results){
+  modelNames <- names(megaList) #get names of models run
+  numBandwidths <- length(megaList[[2]]) #megaList[[1]] may only have 1 bandwidth for the GGG model, as it is now model 1 should have all bandwidths though
+  
+  #this loops through the names of each model and bandwidth
+  #if models are done in an unusual order this should still input the correct results
+  for(model in modelNames){
+    for(bandwidth in 1:numBandwidths){
+      #this collects the estimated coefficient, the indexing is a bit intense but this should get the coefficient estimates for the correct model and bandwidth
+      yhat <- megaList[[model]][[bandwidth]][[3]] #estimated ys
+      levs <- megaList[[model]][[bandwidth]][[4]] #leverages
+      
+      
+      #if the names of the dimensions of megaList are not GGG, LGG, ... use the next two lines to get the model name, this will store it in the results section properly too
+      #modelName <- megaList[[model]][[bandwidth]][[1]]
+      #model <- modelName
+      
+      #now to extract the number of non-stationary variables
+      splitModel <- strsplit(model, "") #this splits the model into a list of length 3, so it needs to be indexed to 1 in the next step 
+      numNonstationary <- sum(splitModel[[1]] == "L")     
+      
+      #calc gcv
+      aic <- calc.aic(y, yhat, levs, numNonstationary)
+      #and put it into the results matrix.  Again, this is done by model/BW name not number for if only a subset of models are run
+      results[bandwidth, model, "AIC"] <- aic #by indexing to "AIC" we can add metrics fairly easily, this will still put this result in the right place
+    }
+  }
+  
+  #returns the modified results input
+  results
+}
+
+input.aic(y, temp, results)
 
