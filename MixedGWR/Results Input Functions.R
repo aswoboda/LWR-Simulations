@@ -149,19 +149,34 @@ input.scv <- function(y, megaList, results){
   results
 }
 
+#adding ranks, the metrics are ranked accross ALL models and bandwidths from lowest to highest
+#so if bandwidth 7, model 2, GCV Rank = 8, then model 2 using bandwidth 7 has the 8th lowest GCV score of all models and bandwidths
+rank.results <- function(results, metrics){
+  for(metric in metrics){
+    metricVals <- results[,,metric] #pulls out the metrics
+    sortedMetrics <- sort(metricVals, na.last = T) #sort ranks the metrics from smallest to largest and returns them as a vector
+    metricRank <- results[,,metric] #this coppies the NA locations which are dropped in the sort
+    for(rank in 1:length(sortedMetrics)){
+      index <- which(metricVals == sortedMetrics[rank]) #pulls out the cell number in metricVals that is the rank lowest
+      metricRank[index] <- rank #replaces that cell with its appropriate ranking
+    }
+    results[,,paste0(metric, " Rank")] <- metricRank #puts the new matrix into results
+  }
+  results #and spits out the output
+}
 
-resultsToKeep.gen <- function(results, trueModelNumber, metrics){
-  uberOutput <- matrix(NA, nrow = 12, ncol = 8)
-  colnames(uberOutput) <- c("Model Number", "Bandwidth", "AIC", "GCV", "SCV", "B0RMSE", "B1RMSE", "B2RMSE")
+resultsToKeep.gen <- function(results, trueModelNumber, metrics, metricRanks){
+  uberOutput <- matrix(NA, nrow = 12, ncol = 2 + length(metrics) + length(metricRanks)) #generate the output
+  colnames(uberOutput) <- c("Model Number", "Bandwidth", metrics, metricRanks) #puts the column names in place, the last are where the rankings for each metric will be stored
   rownames(uberOutput) <- c("True Model AIC", "True Model GCV", "True Model SCV", "True Model B0RMSE", "True Model B1RMSE", "True Model B2RMSE", "AIC", "GCV", "SCV", "B0RMSE", "B1RMSE", "B2RMSE")
   
   #input the true data
   for(metric in metrics){
-    minMetricTrue <- min(results[,trueModelNumber, metric], na.rm = T)
+    minMetricTrue <- min(results[,trueModelNumber, metric], na.rm = T) #find the smallest value of the metric for the true model
     minMetricTrueBW <- which(minMetricTrue == results, arr.ind = T)[1] #this picks out the bandwidth number
-    uberOutput[paste0("True Model ", metric), "Model Number"] <- trueModelNumber
-    uberOutput[paste0("True Model ", metric), "Bandwidth"] <- minMetricTrueBW #this just returns the bandwidth number (1 through 7)
-    uberOutput[paste0("True Model ", metric), 3:8] <- results[minMetricTrueBW, trueModelNumber, ]
+    uberOutput[paste0("True Model ", metric), "Model Number"] <- trueModelNumber #put true model into the output
+    uberOutput[paste0("True Model ", metric), "Bandwidth"] <- minMetricTrueBW #and its bandwidth
+    uberOutput[paste0("True Model ", metric), 3:14] <- results[minMetricTrueBW, trueModelNumber, ] #and filling in every thing else
   } 
   
   #now the unrestricted minimization
@@ -171,9 +186,7 @@ resultsToKeep.gen <- function(results, trueModelNumber, metrics){
     minMetricModel <- which(minMetric == results, arr.ind = T)[2] #and the model number
     uberOutput[metric, "Model Number"] <- minMetricModel
     uberOutput[metric, "Bandwidth"] <- minMetricBW #this just returns the bandwidth number (1 through 7)
-    uberOutput[metric, 3:8] <- results[minMetricBW, minMetricModel, ]
+    uberOutput[metric, 3:14] <- results[minMetricBW, minMetricModel, ]
   } 
   uberOutput
 }
-
-resultsToKeep.gen(results, 2, metrics)

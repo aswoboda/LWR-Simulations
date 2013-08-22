@@ -20,7 +20,7 @@ GCV = function(y, yhat, levs, nonstationary = 0) {
 }
 
 #data gen
-n = 50 # number of observations in our simulation
+n = 29 # number of observations in our simulation
 east = runif(n) # create a location variable
 north = runif(n) # create another location variable
 x0 = rep(1, n) # create a vector of 1's to serve as the intercept column
@@ -55,6 +55,8 @@ for (i in 2:numk) ks = c(round(krat*min(ks), 0), ks) # this generates the vector
 ##generate array to store results
 #First, I generate the names for all the variables 
 metrics <- c("AIC", "GCV", "SCV", "B0RMSE", "B1RMSE", "B2RMSE")
+metricRanks <- c("AIC Rank", "GCV Rank","SCV Rank", "B0RMSE Rank", "B1RMSE Rank", "B2RMSE Rank")
+
 
 #the model names are GGG, LGG, ...
 modelNames <- c()
@@ -74,8 +76,8 @@ for(bwNum in 1:length(ks)){
 }
 
 #and finally, the actual results array
-results <- array(NA, dim = c(length(ks), nrow(models), length(metrics)), 
-                 dimnames = list(bandwidthNames, modelNames, metrics))
+results <- array(NA, dim = c(length(ks), nrow(models), length(metrics) + length(metricRanks)), 
+                 dimnames = list(bandwidthNames, modelNames, c(metrics, metricRanks)))
 
 
 ### GOAL: write a mixedGWR function that we can use in our simulations
@@ -280,9 +282,12 @@ megaMaker = function(bandwidths, models, data) {
 }
 
 
+start <- Sys.time()
+temp = megaMaker(ks, models = models[1:8,], data = mydata) #to test the results
+end <- Sys.time()
 
+round(difftime(end, start, units = "m"), 2)
 
-#temp = megaMaker(ks, models = models[1:8,], data = mydata) #to test the results
 
 ##input all the beta coefficients, these slowly fill in all the NAs
 results <- input.rmse(0, temp, trueB0, results)
@@ -293,3 +298,18 @@ results <- input.rmse(2, temp, trueB0, results)
 results <- input.gcv(mydata$y, temp, results)
 results <- input.aic(mydata$y, temp, results)
 results
+
+#generate rankings
+results <- rank.results(results, metrics)
+
+#pull out the results we care about
+uberResults <- resultsToKeep.gen(results, trueModelNumber, metrics, metricRanks) #metrics and metricRanks are separate to make the loop in the function simpler; see that code
+
+
+#this part is probably not necessary
+#write.csv(uberResults, file = "UberResults.csv")
+
+end <- Sys.time()
+print(round(difftime(end, start, units = "m"), 2)) #prints out the time difference; could add more to print statement depdning on how we run repeated uber functions
+
+uberResults
