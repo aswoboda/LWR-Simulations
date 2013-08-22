@@ -1,8 +1,14 @@
 testmat <- matrix(1:16, nrow = 4, ncol = 4)
 testmat
 
+testmat2 <- matrix(1:16, nrow = 4, ncol = 4)
+cbind(testmat, testmat2)
+
+
 #returns the index of the minimum.  You can find any value by replacing min with that value too.
 which(min(testmat) == testmat, arr.ind = T)
+
+
 
 #################################################################
 bisquare = function(d, dk) { # takes a vector of distances and a threshold distance

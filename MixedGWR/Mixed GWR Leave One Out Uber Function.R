@@ -437,10 +437,9 @@ resultsToKeep.gen <- function(results, trueModelNumber, metrics, metricRanks){
 
 ##### the uber function (generates data for megaMaker, runs everything) #########
 
-uberFunction <- function(sampleSize, errorSD){
+uberFunction <- function(sampleSize, errorSD, trueModelNumber){
   
   start <- Sys.time() #to time the function
-  trueModelNumber <- 2 #B0 is local, the others are global. This should be made into a parameter to pass to uberFunction, but I'm not sure how to best do that
   
   #data gen
   n = sampleSize # number of observations in our simulation
@@ -451,9 +450,75 @@ uberFunction <- function(sampleSize, errorSD){
   x2 = runif(n) # create a vector for x2 values
   error = rnorm(n, 0, errorSD) # create an error term
   
-  B0 = 2*east + north # we're going to say that the intercept is a function of location
-  B1 = 1 # but this one is not
-  B2 = 2 # nor is this coefficient
+  ############################## Beta generators; this is the ineligant part, we have to enter each combination we want
+  #global, global, global
+  if(trueModelNumber == 1){
+    B0 = 3 
+    B1 = 2 
+    B2 = 2 
+    
+  } else if(trueModelNumber ==2){
+    
+    #local, global, global
+    
+    B0 = 3*east + 3*north 
+    B1 = 2 
+    B2 = 2 
+    
+  } else if(trueModelNumber ==3){
+    
+    #global, local, global
+    
+    B0 = 3 
+    B1 = 4*east - 2*north 
+    B2 = 2 
+    
+  } else if(trueModelNumber ==4){
+    
+    #local, local, global
+    
+    B0 = 3*east  
+    B1 = - 2*north
+    B2 = 2 
+    
+  } else if(trueModelNumber ==5){
+    
+    #global, global, local
+    B0 = 3 
+    B1 = 2
+    B2 = 4*east - 2*north
+    
+    
+  } else if(trueModelNumber ==6){
+    
+    #local, global, local
+    B0 = 3*east 
+    B1 = 2 
+    B2 = -2*north  
+    
+  } else if(trueModelNumber ==7){
+    
+    #global, local, local
+    
+    B0 = 3 
+    B1 = - 2*north  
+    B2 = 3*east
+    
+  } else if(trueModelNumber ==8){ #these ARE correlated 
+    
+    #local, local, local
+    
+    B0 <- 3*east + 3*north
+    B1 <- 4*east - 2*north
+    B2 <- -2*east + 4*north
+    
+  } else {
+    
+    print("Your model number is out of range")
+  }
+  
+  
+  
   y = B0*x0 + B1*x1 + B2*x2 + error # generate the dependent variable values according to our 
   mydata = data.frame(y, x0, x1, x2, east, north) # put everything together into a data frame
   
@@ -523,6 +588,10 @@ uberFunction <- function(sampleSize, errorSD){
   #pull out the results we care about
   uberResults <- resultsToKeep.gen(results, trueModelNumber, metrics, metricRanks) #metrics and metricRanks are separate to make the loop in the function simpler; see that code
   
+  #add the parameter values for this uber run
+  params <- matrix(c(sampleSize, errorSD, trueModelNumber), nrow = nrow(uberResults), ncol = 3, byrow = T)
+  colnames(params) <- c("Sample Size", "Error", "True Model")
+  uberResults <- cbind(uberResults, params) #adds sample size and error to each row
   
   #this part is probably not necessary, but I wanted to keep track of them
   write.csv(uberResults, file = "UberResults.csv")
@@ -538,5 +607,17 @@ uberFunction <- function(sampleSize, errorSD){
 
 ###### running uber ######
 
-x <- uberFunction(sampleSize = 100, 1.5)
+x <- uberFunction(sampleSize = 29, 1.5, 3)
 x
+
+#### combine results of an lapply ####
+
+combine.lapply <- function(lapplyUber){ #this takes a list of uberFunction outputs (like from an lapply) and combines them all into one matrix
+  finalOutput <- matrix(NA, ncol = ncol(lapplyUber[[1]])) #need a matrix with the right number of columns for adding rows 
+  
+  for(matrix in 1:length(lapplyUber)){ #go through all the outputs
+    finalOutput <- rbind(finalOutput, lapplyUber[[matrix]]) #and stick them on the bottom of the output
+  }
+  finalOutput <- finalOutput[-1,] #removes the first row that was just NAs
+  finalOutput
+}
