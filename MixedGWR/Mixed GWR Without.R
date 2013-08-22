@@ -54,7 +54,12 @@ for (i in 2:numk) ks = c(round(krat*min(ks), 0), ks) # this generates the vector
 ################
 ##generate array to store results
 #First, I generate the names for all the variables 
+
 metrics <- c("AIC", "GCV", "SCV", "B0RMSE", "B1RMSE", "B2RMSE")
+
+#to work in later: ranks
+# metrics <- c("AIC", "GCV", "SCV", "B0RMSE", "B1RMSE", "B2RMSE",
+#              "AIC Rank", "GCV Rank", "B0RMSE Rank", "B1RMSE Rank", "B2RMSE Rank")
 
 #the model names are GGG, LGG, ...
 modelNames <- c()
@@ -114,7 +119,9 @@ mixedLWR = function(bandwidth, stationary = c("TRUE", "TRUE", "TRUE"), vars = c(
   numStationary = length(statVars) # how many of them are there?
   numNonstationary = length(nonstatVars) # how many of them are there?
   coeffs = matrix(NA, n, totalVars)
+  coeffsWithout = matrix(NA, n, totalVars) #this won't be in the output but is necessary to calculate the fitted values without
   colnames(coeffs) = vars
+  colnames(coeffsWithout) = vars
   fittedValues = matrix(NA, n, 1)
   leverages = matrix(NA, n, 1)
   fittedValuesWithout = matrix(NA, n, 1)
@@ -163,6 +170,7 @@ mixedLWR = function(bandwidth, stationary = c("TRUE", "TRUE", "TRUE"), vars = c(
     
     
     LWRbetas = matrix(NA, n, numNonstationary) # creates a matrix of all the different coefficient estimates we'll need
+    LWRbetasWithout <- matrix(NA, n, numNonstationary) # these won't be outputted, but are necessary to calculate the fitted values without
     
     step1 = matrix(NA, n, numStationary) # matrix for the step 1 results
     step1Without = matrix(NA, n, numStationary) #matrix for step 1 resutls without the current observation
@@ -226,21 +234,29 @@ mixedLWR = function(bandwidth, stationary = c("TRUE", "TRUE", "TRUE"), vars = c(
       LWRmodelWithout <- paste0("ytempWithout~", LWRRHS, "-1") # finish the model to be estimated without
       
       lmreg = lm(LWRmodel, data = dataframe, weights = WEIGHTS) # run the regression
-      lmregWithout = lm(LWRmodel, data = dataframe, weights = weightsWithout) # run the regression without the current obs
-      fittedValuesWithout
+      lmregWithout = lm(LWRmodelWithout, data = dataframe, weights = weightsWithout) # run the regression without the current obs
       
       LWRbetas[obs, ] <- coef(lmreg) # keep track of the coefficient estimate
+      LWRbetasWithout[obs, ] <- coef(lmregWithout) # get the betas without the current observations; don't need the leverages
       leverages[obs, ] <- lm.influence(lmreg, do.coef = FALSE)$hat[as.character(obs)] # keep track of the leverage values
     }
     
     # for each stationary variable, grab the value in ahat and place it in the appropriate columne for all observations
-    for (i in 1:numStationary)    coeffs[, statVars[i]]    = ahat[i] 
+    for (i in 1:numStationary){
+      coeffs[, statVars[i]]    = ahat[i] 
+      coeffsWithout[, statVars[i]] <- ahatWithout[i]
+    }
     # for each non-stationary variable, grab the vector of coefficients and stick it in the appropriate column
-    for (i in 1:numNonstationary) coeffs[, nonstatVars[i]] = LWRbetas[, i]
+    for (i in 1:numNonstationary) {
+      coeffs[, nonstatVars[i]] = LWRbetas[, i]
+      coeffsWithout[, nonstatVars[i]] <- LWRbetasWithout[,i]
+    }
     
     # now that we've got the coefficients, we can calculate the predicted y values 
     fittedValues = rowSums(coeffs*dataframe[, vars]) 
+    fittedValuesWithout = rowSums(coeffsWithout*dataframe[,vars])
     fittedValues = matrix(fittedValues, n, 1)
+    fittedValuesWithout <- matrix(fittedValuesWithout, n, 1)
   }
   
   out = list(ModelType = modelType, 
@@ -251,6 +267,7 @@ mixedLWR = function(bandwidth, stationary = c("TRUE", "TRUE", "TRUE"), vars = c(
   out
 }
 
+mixedLWR(4, stationary = c(F, T, T))
 #this function is written to require model 1 to always be GGG, but that should be how we are running it
 
 megaMaker = function(bandwidths, models, data) {
@@ -311,7 +328,7 @@ megaMaker = function(bandwidths, models, data) {
 
 
 
-#temp = megaMaker(ks, models = models[1:8,], data = mydata) #to test the results
+temp = megaMaker(ks, models = models[1:8,], data = mydata) #to test the results
 
 ##input all the beta coefficients, these slowly fill in all the NAs
 results <- input.rmse(0, temp, trueB0, results)
@@ -321,4 +338,5 @@ results <- input.rmse(2, temp, trueB0, results)
 #metric inputs
 results <- input.gcv(mydata$y, temp, results)
 results <- input.aic(mydata$y, temp, results)
+results <- input.scv(mydata$y, temp, results)
 results

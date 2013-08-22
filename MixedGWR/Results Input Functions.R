@@ -121,28 +121,59 @@ calc.scv <- function(dep.var, yhats.without) {
 input.scv <- function(y, megaList, results){
   modelNames <- names(megaList) #get names of models run
   numBandwidths <- length(megaList[[2]]) #megaList[[1]] may only have 1 bandwidth for the GGG model, as it is now model 1 should have all bandwidths though
-  
+  n <- length(y)
   #this loops through the names of each model and bandwidth
   #if models are done in an unusual order this should still input the correct results
-  for(model in modelNames){
+  
+  #first, we need to loop through everything and extract the fitted values without 
+  for(model in modelNames[-1]){ #this ignores the first model, which I assusme is GGG
+    fittedValuesWithoutMat <- matrix(NA, n, numBandwidths) #this matrix should make calculating the SCV easier; it wil be filled with the fitted values without the current observation (the row number)
     for(bandwidth in 1:numBandwidths){
       #this collects the estimated coefficient, the indexing is a bit intense but this should get the coefficient estimates for the correct model and bandwidth
-      yhat <- megaList[[model]][[bandwidth]][[3]] #estimated ys      
-      
+      yhatWithout <- megaList[[model]][[bandwidth]][[5]] #estimated ys without obs
+      fittedValuesWithoutMat[,bandwidth] <- yhatWithout #putting them in the column
+    }
+    
       #if the names of the dimensions of megaList are not GGG, LGG, ... use the next two lines to get the model name, this will store it in the results section properly too
       #modelName <- megaList[[model]][[bandwidth]][[1]]
       #model <- modelName
             
-      #calc aic
-      aic <- calc.aic(y, yhatWithout)
+      #calc scv
+      scv <- calc.scv(y, fittedValuesWithoutMat)
       #and put it into the results matrix.  Again, this is done by model/BW name not number for if only a subset of models are run
-      results[bandwidth, model, "SCV"] <- scv #by indexing to "scv" we can add metrics fairly easily, this will still put this result in the right place
-    }
+      results[, model, "SCV"] <- scv #by indexing to "scv" we can add metrics fairly easily, this will still put this result in the right place
+    
   }
   
   #returns the modified results input
   results
 }
 
-input.aic(y, temp, results)
 
+resultsToKeep.gen <- function(results, trueModelNumber, metrics){
+  uberOutput <- matrix(NA, nrow = 12, ncol = 8)
+  colnames(uberOutput) <- c("Model Number", "Bandwidth", "AIC", "GCV", "SCV", "B0RMSE", "B1RMSE", "B2RMSE")
+  rownames(uberOutput) <- c("True Model AIC", "True Model GCV", "True Model SCV", "True Model B0RMSE", "True Model B1RMSE", "True Model B2RMSE", "AIC", "GCV", "SCV", "B0RMSE", "B1RMSE", "B2RMSE")
+  
+  #input the true data
+  for(metric in metrics){
+    minMetricTrue <- min(results[,trueModelNumber, metric], na.rm = T)
+    minMetricTrueBW <- which(minMetricTrue == results, arr.ind = T)[1] #this picks out the bandwidth number
+    uberOutput[paste0("True Model ", metric), "Model Number"] <- trueModelNumber
+    uberOutput[paste0("True Model ", metric), "Bandwidth"] <- minMetricTrueBW #this just returns the bandwidth number (1 through 7)
+    uberOutput[paste0("True Model ", metric), 3:8] <- results[minMetricTrueBW, trueModelNumber, ]
+  } 
+  
+  #now the unrestricted minimization
+  for(metric in metrics){
+    minMetric <- min(results[,, metric], na.rm = T)
+    minMetricBW <- which(minMetric == results, arr.ind = T)[1] #this picks out the bandwidth number
+    minMetricModel <- which(minMetric == results, arr.ind = T)[2] #and the model number
+    uberOutput[metric, "Model Number"] <- minMetricModel
+    uberOutput[metric, "Bandwidth"] <- minMetricBW #this just returns the bandwidth number (1 through 7)
+    uberOutput[metric, 3:8] <- results[minMetricBW, minMetricModel, ]
+  } 
+  uberOutput
+}
+
+resultsToKeep.gen(results, 2, metrics)
