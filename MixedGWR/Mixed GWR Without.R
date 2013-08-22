@@ -117,6 +117,7 @@ mixedLWR = function(bandwidth, stationary = c("TRUE", "TRUE", "TRUE"), vars = c(
   colnames(coeffs) = vars
   fittedValues = matrix(NA, n, 1)
   leverages = matrix(NA, n, 1)
+  fittedValuesWithout = matrix(NA, n, 1)
   
   distMatrix = as.matrix(dist(dataframe[, locVars]))
   
@@ -146,6 +147,10 @@ mixedLWR = function(bandwidth, stationary = c("TRUE", "TRUE", "TRUE"), vars = c(
       coeffs[obs, ] = coef(lmreg) # grab the fitted y-value
       leverages[obs, ] = lm.influence(lmreg, do.coef = FALSE)$hat[as.character(obs)] # grab the leverage value
       
+      #get fitted values without current observation
+      dataframe$WEIGHTS[obs] <- 0 #remove the current observation
+      lmreg = lm(model2run, data = dataframe, weights = WEIGHTS) # run the GWR
+      fittedValuesWithout[obs,] <- lmreg$fitted.values[obs]
     }
   }
   
@@ -160,47 +165,70 @@ mixedLWR = function(bandwidth, stationary = c("TRUE", "TRUE", "TRUE"), vars = c(
     LWRbetas = matrix(NA, n, numNonstationary) # creates a matrix of all the different coefficient estimates we'll need
     
     step1 = matrix(NA, n, numStationary) # matrix for the step 1 results
+    step1Without = matrix(NA, n, numStationary) #matrix for step 1 resutls without the current observation
     colnames(step1) = statVars
+    colnames(step1Without) = statVars
     
     step3 = matrix(NA, nrow = n, ncol = 1) # matrix for the step 2 results
+    step3Without = matrix(NA, nrow = n, ncol = 1) # matrix for the step 2 results without current obs
     
     for (obs in 1:n) { # now, for each observation in the dataset...
       mydists = distMatrix[, obs] # grab the distances between this observation and all others
       dk = sort(mydists)[bandwidth+1] # grab the distance to the kth nearest observation
       dataframe$WEIGHTS = bisquare(mydists, dk) # caculate the weights for all observations
-      weights
+      
+      weightsWithout <- dataframe$WEIGHTS #dupliate the weights
+      weightsWithout[obs] <- 0 #remove current observation
       
       for (xa in statVars) { # now for each variable we want to treat as stationary...
         RHS = paste0(nonstatVars, collapse = "+") # start the Right Hand Side of the regression equation
         model2run = paste0(xa, "~", RHS, "-1") # finish the model we'll run
         temp.lm = lm(model2run, data = dataframe, weights = WEIGHTS) # run the step 1 regression
         step1[obs, xa] = temp.lm$residuals[obs] # grab the residual for this observation
+      
+        temp.lm.without <- lm(model2run, data = dataframe, weights = weightsWithout)
+        step1Without[obs, xa] <- temp.lm$residuals[obs]
       }
       
       step2model = paste0(depVar, "~", RHS, "-1") # create the model to run for step 2
       temp.lm = lm(step2model, data = dataframe, weights = WEIGHTS) # run the regression for step 2
       
+      temp.lm.without <- lm(step2model, data = dataframe, weights = weightsWithout) #run regression for step 2 without current obs
       # step 3
       step3[obs, 1] = temp.lm$residuals[obs] # grab the residual from step 2 
+      step3Without[obs, 1] = temp.lm.without$residuals[obs] #grab residual from step 2 without the current observation
     }
     
     # step 4: regress the step 2 residuals on the step 1 residuals
     lmOLS = lm(step3 ~ step1 - 1)
+    lmOLSWithout = lm(step3Without ~ step1Without - 1)
+    
     ahat = coef(lmOLS) # grab the estimated coefficients - these are our estimates of the stationary coefficients
+    ahatWithout = coef(lmOLSWithout)
+    
     names(ahat) = statVars
+    names(ahatWithout) = statVars
     
     # step 5: subtract X*ahat from y and then use GWR (with this difference as the dependent value) 
     # to estimate the non-stationary coefficients
     dataframe$ytemp = dataframe[, depVar] - as.matrix(dataframe[, statVars])%*%ahat
+    dataframe$ytempWithout = dataframe[, depVar] - as.matrix(dataframe[, statVars])%*%ahatWithout
     
     for (obs in 1:n) { # for each observation in our data set
       mydists = distMatrix[, obs] # grab the distances between it and all others
       dk = sort(mydists)[bandwidth+1] # grab the distance to the kth nearest observation
       dataframe$WEIGHTS = bisquare(mydists, dk) # calculate the weights
+      dataframe$weightsWithout <- dataframe$WEIGHTS #duplicate weights
+      dataframe$weightsWithout[obs] <- 0 #and remove the current observation
       
       LWRRHS = paste0(nonstatVars, collapse = "+") # start formulating the RHS of the LWR regression
       LWRmodel = paste0("ytemp~", LWRRHS, "-1") # finish the model to be estimated
+      LWRmodelWithout <- paste0("ytempWithout~", LWRRHS, "-1") # finish the model to be estimated without
+      
       lmreg = lm(LWRmodel, data = dataframe, weights = WEIGHTS) # run the regression
+      lmregWithout = lm(LWRmodel, data = dataframe, weights = weightsWithout) # run the regression without the current obs
+      fittedValuesWithout
+      
       LWRbetas[obs, ] <- coef(lmreg) # keep track of the coefficient estimate
       leverages[obs, ] <- lm.influence(lmreg, do.coef = FALSE)$hat[as.character(obs)] # keep track of the leverage values
     }
@@ -218,7 +246,8 @@ mixedLWR = function(bandwidth, stationary = c("TRUE", "TRUE", "TRUE"), vars = c(
   out = list(ModelType = modelType, 
              Coefficients = coeffs,
              FittedValues = fittedValues,
-             Leverages = leverages)
+             Leverages = leverages,
+             FittedValuesWithout = fittedValuesWithout)
   out
 }
 
@@ -235,8 +264,8 @@ megaMaker = function(bandwidths, models, data) {
                             FittedValues = matrix(NA, nrow = length(data$y), ncol = 1),
                             Leverages = matrix(NA, nrow = length(data$y), ncol = 1))
   megaList[[1]] <- list(noResultsGGGInput, noResultsGGGInput, noResultsGGGInput, 
-                  noResultsGGGInput, noResultsGGGInput, noResultsGGGInput, 
-                  mixedLWR(max(bandwidths), models[1,]))
+                        noResultsGGGInput, noResultsGGGInput, noResultsGGGInput, 
+                        mixedLWR(max(bandwidths), models[1,]))
   #now the first item in megaList is a bunch of NAs, then model 1 at the appropriate bandwidth
   #without the NAs, for each metric we would need to do a special case for model 1 and input it directly
   #this should make those loops easier
@@ -270,7 +299,7 @@ megaMaker = function(bandwidths, models, data) {
   for(bwNum in 1:length(bandwidths)){
     bandwidthNames <- c(bandwidthNames, paste0("Bandwidth ", bwNum," of ", bandwidths[bwNum], " observations"))
   }
-
+  
   #adding the bandwidths to each model
   for(modelNum in 1:nrow(models)){
     names(megaList[[modelNum]]) <- bandwidthNames

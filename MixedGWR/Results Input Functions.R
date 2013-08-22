@@ -111,8 +111,11 @@ input.aic <- function(y, megaList, results){
 
 #SCV
 
-calc.scv <- function(y, yhatWithout){
-
+calc.scv <- function(dep.var, yhats.without) {
+  numer = ((dep.var - yhats.without)^2)
+  denom = rowSums(numer) 
+  stan.CV.values = colSums(numer/denom)
+  stan.CV.values
 }
 
 input.scv <- function(y, megaList, results){
@@ -124,9 +127,7 @@ input.scv <- function(y, megaList, results){
   for(model in modelNames){
     for(bandwidth in 1:numBandwidths){
       #this collects the estimated coefficient, the indexing is a bit intense but this should get the coefficient estimates for the correct model and bandwidth
-      yhat <- megaList[[model]][[bandwidth]][[3]] #estimated ys
-      levs <- megaList[[model]][[bandwidth]][[4]] #leverages
-      
+      yhat <- megaList[[model]][[bandwidth]][[3]] #estimated ys      
       
       #if the names of the dimensions of megaList are not GGG, LGG, ... use the next two lines to get the model name, this will store it in the results section properly too
       #modelName <- megaList[[model]][[bandwidth]][[1]]
@@ -135,7 +136,7 @@ input.scv <- function(y, megaList, results){
       #calc aic
       aic <- calc.aic(y, yhatWithout)
       #and put it into the results matrix.  Again, this is done by model/BW name not number for if only a subset of models are run
-      results[bandwidth, model, "SCV"] <- scv #by indexing to "AIC" we can add metrics fairly easily, this will still put this result in the right place
+      results[bandwidth, model, "SCV"] <- scv #by indexing to "scv" we can add metrics fairly easily, this will still put this result in the right place
     }
   }
   
