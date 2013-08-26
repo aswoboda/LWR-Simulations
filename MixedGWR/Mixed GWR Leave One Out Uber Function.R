@@ -666,6 +666,8 @@ combine.list <- function(lapplyUber){ #this takes a list of uberFunction outputs
 combine.list2 <- function(lapplyUber){ #does the same as the previous function, but for the second items in the list (for the )
   finalOutput <- matrix(NA, ncol = ncol(lapplyUber[[1]][[1]])) #need a matrix with the right number of columns for adding rows 
   
+#  finalOutputArray <- array(c(length(lapplyUber), ))
+  
   for(rep in 1:length(lapplyUber)){ #go through all the repetitions
     for(matrix in 1:length(lapplyUber[[1]])){
       finalOutput <- rbind(finalOutput, lapplyUber[[rep]][[matrix]]) #and stick them on the bottom of the output
@@ -681,7 +683,7 @@ combine.list2 <- function(lapplyUber){ #does the same as the previous function, 
 
 #### running repetitions ####
 
-### this one doesn't work with the combine function; its adapted from the SimFunctions.R file
+### this is adapted from the SimFunctions.R file; the next function works better I think though
 gwrSimulationReplicator = function(N = 2, sampleSize, errorSD, trueModelNumber, MC = FALSE){
   
   if(MC == TRUE) {
@@ -722,15 +724,93 @@ mcMultParamRuns <- function(numRepeats, sampleSizes, errors, trueModels, MC = FA
   uberListMatrix
 }
 
-sampleSizes <- c(29)
-trueModels <- 2
-errors <- c(.5)
+##### mc results interpretation #######
 
-x <- multParamRuns(1, sampleSizes, errors, trueModels)
-x
 
-successRate.gen <- function(multParamRuns){
+#this makes the output from the mclapply interpretable; the array returned gives the proportion of times each model metric selected the true model (or the one with the best beta coefficients)
+#this NEEDS to have sample sizes strictly greater than 50 passed to it and NEEDS multiple runs in uberList passed to it (at least 2 of SS, errors, true models, or repeats).  If not, the indexing gets thrown off.  
+#the options for successMeasure are "True Model", "Betas", or "Both" which are picking the true model, picking the lowest RMSE for the betas, and doing both at once
+#success rank is the range the ranking of the beta RMSEs that are a success, meaning changing it to 2 calls having a beta RMSE rank of 1 or 2 a success
+successRate.gen <- function(multParamRuns, successMeasure = "True Model", nrowPerRun = 14, successRank = 1){ #default success is picking the true model; nrowPerRun will change if we add another metric
+  #these pull all the inputs into multParamRuns out
   errors <- unique(multParamRuns[,"Error"])
   sampleSizes <- unique(multParamRuns[,"Sample Size"])
   trueModels <- unique(multParamRuns[,"True Model"])
+  metrics <- colnames(multParamRuns)[3:6] #as of 8/26, these have all the metric names (metric being JUST the CV/AIC methods)
+  
+  
+  #Now I turn the inputted matrix into an array to make picking out the relevant results easier (used later, this requires the number of rows per run)
+  rownames <- rownames(multParamRuns[1:nrowPerRun,])
+  colnames <- colnames(multParamRuns)
+  numRuns <- nrow(multParamRuns)/nrowPerRun
+  multParamArray <- array(NA, c(length(rownames), length(colnames), numRuns), 
+                          dimnames = list(rownames, colnames, c(paste0("Run ", 1:numRuns))))
+  #this puts all the matrixes into the array where dim3 is the number of runs
+  for(run in 1:numRuns){
+    multParamArray[,,run] <- multParamRuns[((run - 1)*nrowPerRun + 1):(run*nrowPerRun),]
+  }
+  
+  #below is the array that will eventaully be returned
+  if(successMeasure == "True Model"){ #if picking the true model is the success measure, there is only one value per true model/metric, so this array is sufficient 
+    successRate <- array(NA, c(length(metrics), length(trueModels), length(errors), length(sampleSizes)), 
+                         dimnames = list(metrics, paste0("True Model ", trueModels), paste0("Error of ",errors), paste0("Sample Size of ", sampleSizes)))
+  } 
+  if(successMeasure == "Betas" | successMeasure == "Both"){ #if picking the best betas is the success measure, there are three values per true model/metric, so an extra dimension is necessary
+    successRate <- array(NA, c(length(metrics), 4, length(trueModels), length(errors), length(sampleSizes)), 
+                         dimnames = list(metrics, c(paste0("B", 0:2), "All Three"), paste0("True Model ", trueModels), paste0("Error of ",errors), paste0("Sample Size of ", sampleSizes)))   
+  }
+  
+  for(error in errors){
+    for(sampleSize in sampleSizes){
+      for(trueModel in trueModels){
+        #this is all we need to know to pick out the relevent runs for this combination of parameters, which is just the number of repeats from mcMultParamRun
+        relevantRuns <- unique(which(multParamArray[,"Sample Size",] == sampleSize & multParamArray[,"Error",] == error & multParamArray[,"True Model",] == trueModel, arr.ind = T)[,2])
+        for(metric in metrics){#now go through the metrics and fill in successRate
+          if(successMeasure == "True Model"){ #default success measure, if minimizing the metric picks out the true model
+            successProp <- sum(multParamArray[metric, "Model Number",relevantRuns] == trueModel)/length(relevantRuns) #proportion of times true model was sellected
+            successRate[paste(metric), paste("True Model", trueModel), paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
+          }
+          if(successMeasure == "Betas"){ #success proportions for picking the model + bandwidth with the lowest beta RMSE
+            betaSuccesses <- matrix(NA, nrow = 3, ncol = length(relevantRuns))
+            for(beta in 0:2){ 
+              betaSuccesses[beta + 1, ] <- multParamArray[metric, paste0("B", beta, "RMSE Rank"),relevantRuns] <= successRank
+              successProp <- sum(betaSuccesses[beta + 1, ])/length(relevantRuns) 
+              successRate[paste(metric), paste0("B", beta), paste("True Model", trueModel), paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
+              } 
+            #now for picking the minimum for all three at once, could be modified by chaning == 2 for getting excactly (or at least two)
+            numSuccessPerRun <- colSums(betaSuccesses) #if the sum is 3, then all were a success on that run
+            successProp <- sum(numSuccessPerRun == 3)/length(relevantRuns) #calculates that proportion
+            successRate[paste(metric), "All Three", paste("True Model", trueModel), paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
+          }
+          if(successMeasure == "Both"){ #success measure is picking both true model and lowest RMSE
+            betaSuccesses <- matrix(NA, nrow = 3, ncol = length(relevantRuns))
+            for(beta in 0:2){ 
+              betaSuccesses[beta + 1, ] <- multParamArray[metric, paste0("B", beta, "RMSE Rank"),relevantRuns] <= successRank
+              modelSuccesses <- multParamArray[metric, "Model Number",relevantRuns] == trueModel
+              numBothSucceed <- sum(betaSuccesses[beta + 1,] == modelSuccesses &  modelSuccesses == TRUE)
+              successProp <- numBothSucceed/length(relevantRuns)
+              successRate[paste(metric), paste0("B", beta), paste("True Model", trueModel), paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
+            } 
+            #now for picking the minimum for all three at once, could be modified by chaning == 2 for getting excactly (or at least two)
+            numSuccessPerRun <- colSums(betaSuccesses) #if the sum is 3, then all were a success on that run
+            modelSuccesses <- multParamArray[metric, "Model Number",relevantRuns] == trueModel #runs where the true model was picked
+            
+            successProp <- sum(numSuccessPerRun == 3 & modelSuccesses == T)/length(relevantRuns) #calculates that proportion of runs where both events occured
+            successRate[paste(metric), "All Three", paste("True Model", trueModel), paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
+          }
+        }
+      }
+    }
+  }
+  successRate
 }
+
+sampleSizes <- c(100)
+trueModels <- 2
+errors <- c(.5, 1)
+
+x <- mcMultParamRuns(1, sampleSizes, errors, trueModels)
+
+successRate.gen(x)
+successRate.gen(x, successMeasure = "Betas")
+successRate.gen(x, successMeasure = "Both")
