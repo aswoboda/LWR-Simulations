@@ -344,7 +344,7 @@ input.aic <- function(y, megaList, results){
       #if the names of the dimensions of megaList are not GGG, LGG, ... use the next two lines to get the model name, this will store it in the results section properly too
       #modelName <- megaList[[model]][[bandwidth]][[1]]
       #model <- modelName
-      
+       
       #now to extract the number of non-stationary variables
       splitModel <- strsplit(model, "") #this splits the model into a list of length 3, so it needs to be indexed to 1 in the next step 
       numNonstationary <- sum(splitModel[[1]] == "L")     
@@ -617,8 +617,8 @@ uberFunction <- function(repetition, sampleSize, errorSD, trueModelNumber, B0.Sp
   
   ##input all the beta coefficients, these slowly fill in all the NAs
   results <- input.rmse(0, temp, trueB0, results)
-  results <- input.rmse(1, temp, trueB0, results)
-  results <- input.rmse(2, temp, trueB0, results)
+  results <- input.rmse(1, temp, trueB1, results)
+  results <- input.rmse(2, temp, trueB2, results)
   
   #metric inputs
   results <- input.gcv(mydata$y, temp, results)
@@ -756,8 +756,8 @@ successRate.gen <- function(multParamRuns, successMeasure = "True Model", nrowPe
                          dimnames = list(metrics, paste0("True Model ", trueModels), paste0("Error of ",errors), paste0("Sample Size of ", sampleSizes)))
   } 
   if(successMeasure == "Betas" | successMeasure == "Both"){ #if picking the best betas is the success measure, there are three values per true model/metric, so an extra dimension is necessary
-    successRate <- array(NA, c(length(metrics), 4, length(trueModels), length(errors), length(sampleSizes)), 
-                         dimnames = list(metrics, c(paste0("B", 0:2), "All Three"), paste0("True Model ", trueModels), paste0("Error of ",errors), paste0("Sample Size of ", sampleSizes)))   
+    successRate <- array(NA, c(length(metrics), length(trueModels), 4, length(errors), length(sampleSizes)), 
+                         dimnames = list(metrics, paste0("True Model ", trueModels), c(paste0("B", 0:2), "All Three"), paste0("Error of ",errors), paste0("Sample Size of ", sampleSizes)))   
   }
   
   for(error in errors){
@@ -775,12 +775,12 @@ successRate.gen <- function(multParamRuns, successMeasure = "True Model", nrowPe
             for(beta in 0:2){ 
               betaSuccesses[beta + 1, ] <- multParamArray[metric, paste0("B", beta, "RMSE Rank"),relevantRuns] <= successRank
               successProp <- sum(betaSuccesses[beta + 1, ])/length(relevantRuns) 
-              successRate[paste(metric), paste0("B", beta), paste("True Model", trueModel), paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
+              successRate[paste(metric), paste("True Model", trueModel), paste0("B", beta), paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
               } 
             #now for picking the minimum for all three at once, could be modified by chaning == 2 for getting excactly (or at least two)
             numSuccessPerRun <- colSums(betaSuccesses) #if the sum is 3, then all were a success on that run
             successProp <- sum(numSuccessPerRun == 3)/length(relevantRuns) #calculates that proportion
-            successRate[paste(metric), "All Three", paste("True Model", trueModel), paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
+            successRate[paste(metric),  paste("True Model", trueModel), "All Three", paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
           }
           if(successMeasure == "Both"){ #success measure is picking both true model and lowest RMSE
             betaSuccesses <- matrix(NA, nrow = 3, ncol = length(relevantRuns))
@@ -789,14 +789,14 @@ successRate.gen <- function(multParamRuns, successMeasure = "True Model", nrowPe
               modelSuccesses <- multParamArray[metric, "Model Number",relevantRuns] == trueModel
               numBothSucceed <- sum(betaSuccesses[beta + 1,] == modelSuccesses &  modelSuccesses == TRUE)
               successProp <- numBothSucceed/length(relevantRuns)
-              successRate[paste(metric), paste0("B", beta), paste("True Model", trueModel), paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
+              successRate[paste(metric), paste("True Model", trueModel), paste0("B", beta), paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
             } 
             #now for picking the minimum for all three at once, could be modified by chaning == 2 for getting excactly (or at least two)
             numSuccessPerRun <- colSums(betaSuccesses) #if the sum is 3, then all were a success on that run
             modelSuccesses <- multParamArray[metric, "Model Number",relevantRuns] == trueModel #runs where the true model was picked
             
             successProp <- sum(numSuccessPerRun == 3 & modelSuccesses == T)/length(relevantRuns) #calculates that proportion of runs where both events occured
-            successRate[paste(metric), "All Three", paste("True Model", trueModel), paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
+            successRate[paste(metric),  paste("True Model", trueModel), "All Three", paste("Error of", error), paste("Sample Size of", sampleSize)] <- successProp
           }
         }
       }
@@ -805,12 +805,12 @@ successRate.gen <- function(multParamRuns, successMeasure = "True Model", nrowPe
   successRate
 }
 
-sampleSizes <- c(100)
+sampleSizes <- c(51)
 trueModels <- 2
-errors <- c(.5, 1)
+errors <- c(.005)
 
-x <- mcMultParamRuns(1, sampleSizes, errors, trueModels)
+x <- mcMultParamRuns(2, sampleSizes, errors, trueModels)
 
 successRate.gen(x)
-successRate.gen(x, successMeasure = "Betas")
+successRate.gen(x, successMeasure = "Betas", successRank = 5)
 successRate.gen(x, successMeasure = "Both")
