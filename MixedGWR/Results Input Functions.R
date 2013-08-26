@@ -149,6 +149,39 @@ input.scv <- function(y, megaList, results){
   results
 }
 
+calc.loocv <- function(y, yhatsWithout){
+  sum((y - yhatsWithout)^2)
+}
+
+input.loocv <- function(y, megaList, results){
+  modelNames <- names(megaList) #get names of models run
+  numBandwidths <- length(megaList[[2]]) #megaList[[1]] may only have 1 bandwidth for the GGG model, as it is now model 1 should have all bandwidths though
+  n <- length(y)
+  #this loops through the names of each model and bandwidth
+  #if models are done in an unusual order this should still input the correct results  
+  
+  #first, we need to loop through everything and extract the fitted values without 
+  for(model in modelNames){ 
+    for(bandwidth in 1:numBandwidths){
+      #this collects the estimated coefficient, the indexing is a bit intense but this should get the coefficient estimates for the correct model and bandwidth
+      yhatWithout <- megaList[[model]][[bandwidth]][[5]] #estimated ys without obs
+      loocv <- calc.loocv(y, yhatWithout)
+    
+    
+      #if the names of the dimensions of megaList are not GGG, LGG, ... use the next two lines to get the model name, this will store it in the results section properly too
+      #modelName <- megaList[[model]][[bandwidth]][[1]]
+      #model <- modelName
+      
+      #calc scv
+      #and put it into the results matrix.  Again, this is done by model/BW name not number for if only a subset of models are run
+      results[bandwidth, model, "LOOCV"] <- loocv #by indexing to "loocv" we can add metrics fairly easily, this will still put this result in the right place
+      
+    }
+  }
+  #returns the modified results input
+  results
+}
+
 #adding ranks, the metrics are ranked accross ALL models and bandwidths from lowest to highest
 #so if bandwidth 7, model 2, GCV Rank = 8, then model 2 using bandwidth 7 has the 8th lowest GCV score of all models and bandwidths
 rank.results <- function(results, metrics){

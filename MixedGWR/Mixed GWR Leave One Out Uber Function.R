@@ -43,6 +43,13 @@ mixedLWR = function(bandwidth, stationary = c("TRUE", "TRUE", "TRUE"), vars = c(
     for (i in 1:length(statVars)) coeffs[, i] = coef(lm.out)[i]
     fittedValues[, 1] = lm.out$fitted.values
     leverages[, 1] = lm.influence(lm.out, do.coef=FALSE)$hat
+    
+    for(obs in 1:n){ #to add the fitted values without
+      dataframe$weightsWithout <- 1 #puts a vector of 1s
+      dataframe$weightsWithout[obs] <- 0 #and removest he current observation
+      lm.out.without = lm(model2run, data = dataframe)   
+      fittedValuesWithout[obs, 1] <- lm.out.without$fitted.values[obs]
+    }
   }
   
   if (length(statVars) == 0) { 
@@ -188,10 +195,13 @@ megaMaker = function(bandwidths, models, data) {
   #this is a list of NAs of the same size as all the other lists 
   #I think there should be an easier way to make this list, but I wasn't able to find one
   #the purpose is to make later loops simpler
+  
+  
   noResultsGGGInput <- list(ModelType = "GGG", 
                             Coefficients = matrix(NA, nrow = length(data$y), ncol = 3),
                             FittedValues = matrix(NA, nrow = length(data$y), ncol = 1),
-                            Leverages = matrix(NA, nrow = length(data$y), ncol = 1))
+                            Leverages = matrix(NA, nrow = length(data$y), ncol = 1),
+                            FittedValuesWithout = matrix(NA, nrow = length(data$y), ncol = 1))
   megaList[[1]] <- list(noResultsGGGInput, noResultsGGGInput, noResultsGGGInput, 
                         noResultsGGGInput, noResultsGGGInput, noResultsGGGInput, 
                         mixedLWR(max(bandwidths), models[1,], data = data))
@@ -390,6 +400,39 @@ input.scv <- function(y, megaList, results){
   results
 }
 
+calc.loocv <- function(y, yhatsWithout){
+  sum((y - yhatsWithout)^2)
+}
+
+input.loocv <- function(y, megaList, results){
+  modelNames <- names(megaList) #get names of models run
+  numBandwidths <- length(megaList[[2]]) #megaList[[1]] may only have 1 bandwidth for the GGG model, as it is now model 1 should have all bandwidths though
+  n <- length(y)
+  #this loops through the names of each model and bandwidth
+  #if models are done in an unusual order this should still input the correct results  
+  
+  #first, we need to loop through everything and extract the fitted values without 
+  for(model in modelNames){ 
+    for(bandwidth in 1:numBandwidths){
+      #this collects the estimated coefficient, the indexing is a bit intense but this should get the coefficient estimates for the correct model and bandwidth
+      yhatWithout <- megaList[[model]][[bandwidth]][[5]] #estimated ys without obs
+      loocv <- calc.loocv(y, yhatWithout)
+      
+      
+      #if the names of the dimensions of megaList are not GGG, LGG, ... use the next two lines to get the model name, this will store it in the results section properly too
+      #modelName <- megaList[[model]][[bandwidth]][[1]]
+      #model <- modelName
+      
+      #calc scv
+      #and put it into the results matrix.  Again, this is done by model/BW name not number for if only a subset of models are run
+      results[bandwidth, model, "LOOCV"] <- loocv #by indexing to "loocv" we can add metrics fairly easily, this will still put this result in the right place
+      
+    }
+  }
+  #returns the modified results input
+  results
+}
+
 #adding ranks, the metrics are ranked accross ALL models and bandwidths from lowest to highest
 #so if bandwidth 7, model 2, GCV Rank = 8, then model 2 using bandwidth 7 has the 8th lowest GCV score of all models and bandwidths
 rank.results <- function(results, metrics){
@@ -409,9 +452,9 @@ rank.results <- function(results, metrics){
 ###### Uber output generator (turns results (from megaMaker) into the final product) #####
 
 resultsToKeep.gen <- function(results, trueModelNumber, metrics, metricRanks){
-  uberOutput <- matrix(NA, nrow = 12, ncol = 2 + length(metrics) + length(metricRanks)) #generate the output
+  uberOutput <- matrix(NA, nrow = 2*length(metrics), ncol = 2 + length(metrics) + length(metricRanks)) #generate the output
   colnames(uberOutput) <- c("Model Number", "Bandwidth", metrics, metricRanks) #puts the column names in place, the last are where the rankings for each metric will be stored
-  rownames(uberOutput) <- c("True Model AIC", "True Model GCV", "True Model SCV", "True Model B0RMSE", "True Model B1RMSE", "True Model B2RMSE", "AIC", "GCV", "SCV", "B0RMSE", "B1RMSE", "B2RMSE")
+  rownames(uberOutput) <- c(paste0("True Model ", metrics), metrics)
   
   #input the true data
   for(metric in metrics){
@@ -419,7 +462,7 @@ resultsToKeep.gen <- function(results, trueModelNumber, metrics, metricRanks){
     minMetricTrueBW <- which(minMetricTrue == results, arr.ind = T)[1] #this picks out the bandwidth number
     uberOutput[paste0("True Model ", metric), "Model Number"] <- trueModelNumber #put true model into the output
     uberOutput[paste0("True Model ", metric), "Bandwidth"] <- minMetricTrueBW #and its bandwidth
-    uberOutput[paste0("True Model ", metric), 3:14] <- results[minMetricTrueBW, trueModelNumber, ] #and filling in every thing else
+    uberOutput[paste0("True Model ", metric), 3:ncol(uberOutput)] <- results[minMetricTrueBW, trueModelNumber, ] #and filling in every thing else
   } 
   
   #now the unrestricted minimization
@@ -429,7 +472,7 @@ resultsToKeep.gen <- function(results, trueModelNumber, metrics, metricRanks){
     minMetricModel <- which(minMetric == results, arr.ind = T)[2] #and the model number
     uberOutput[metric, "Model Number"] <- minMetricModel
     uberOutput[metric, "Bandwidth"] <- minMetricBW #this just returns the bandwidth number (1 through 7)
-    uberOutput[metric, 3:14] <- results[minMetricBW, minMetricModel, ]
+    uberOutput[metric, 3:ncol(uberOutput)] <- results[minMetricBW, minMetricModel, ]
   } 
   uberOutput
 }
@@ -437,7 +480,7 @@ resultsToKeep.gen <- function(results, trueModelNumber, metrics, metricRanks){
 
 ##### the uber function (generates data for megaMaker, runs everything) #########
 
-uberFunction <- function(sampleSize, errorSD, trueModelNumber){
+uberFunction <- function(repetition, sampleSize, errorSD, trueModelNumber, B0.SpVar, B1.SpVar, B2.SpVar){
   
   start <- Sys.time() #to time the function
   
@@ -450,7 +493,7 @@ uberFunction <- function(sampleSize, errorSD, trueModelNumber){
   x2 = runif(n) # create a vector for x2 values
   error = rnorm(n, 0, errorSD) # create an error term
   
-  ############################## Beta generators; this is the ineligant part, we have to enter each combination we want
+  ########################### Beta generators; this is the ineligant part, we have to enter each combination we want
   #global, global, global
   if(trueModelNumber == 1){
     B0 = 3 
@@ -543,8 +586,8 @@ uberFunction <- function(sampleSize, errorSD, trueModelNumber){
   ##generate array to store results
   #First, I generate the names for all the variables 
   
-  metrics <- c("AIC", "GCV", "SCV", "B0RMSE", "B1RMSE", "B2RMSE")
-  metricRanks <- c("AIC Rank", "GCV Rank","SCV Rank", "B0RMSE Rank", "B1RMSE Rank", "B2RMSE Rank")
+  metrics <- c("AIC", "GCV", "SCV", "LOOCV", "B0RMSE", "B1RMSE", "B2RMSE")
+  metricRanks <- c("AIC Rank", "GCV Rank","SCV Rank","LOOCV Rank", "B0RMSE Rank", "B1RMSE Rank", "B2RMSE Rank")
   
   #the model names are GGG, LGG, ...
   modelNames <- c()
@@ -581,6 +624,7 @@ uberFunction <- function(sampleSize, errorSD, trueModelNumber){
   results <- input.gcv(mydata$y, temp, results)
   results <- input.aic(mydata$y, temp, results)
   results <- input.scv(mydata$y, temp, results)
+  results <- input.loocv(mydata$y, temp, results)
   
   #generate rankings
   results <- rank.results(results, metrics)
@@ -593,9 +637,6 @@ uberFunction <- function(sampleSize, errorSD, trueModelNumber){
   colnames(params) <- c("Sample Size", "Error", "True Model")
   uberResults <- cbind(uberResults, params) #adds sample size and error to each row
   
-  #this part is probably not necessary, but I wanted to keep track of them
-  write.csv(uberResults, file = "UberResults.csv")
-  
   end <- Sys.time()
   print(round(difftime(end, start, units = "m"), 2)) #prints out the time difference; could add more to print statement depdning on how we run repeated uber functions
   
@@ -607,12 +648,12 @@ uberFunction <- function(sampleSize, errorSD, trueModelNumber){
 
 ###### running uber ######
 
-x <- uberFunction(sampleSize = 29, 1.5, 3)
-x
+# x <- uberFunction(1, sampleSize = 29, 1.5, 3)
+# x
 
 #### combine results of an lapply ####
 
-combine.lapply <- function(lapplyUber){ #this takes a list of uberFunction outputs (like from an lapply) and combines them all into one matrix
+combine.list <- function(lapplyUber){ #this takes a list of uberFunction outputs (like from an lapply) and combines them all into one matrix
   finalOutput <- matrix(NA, ncol = ncol(lapplyUber[[1]])) #need a matrix with the right number of columns for adding rows 
   
   for(matrix in 1:length(lapplyUber)){ #go through all the outputs
@@ -620,4 +661,76 @@ combine.lapply <- function(lapplyUber){ #this takes a list of uberFunction outpu
   }
   finalOutput <- finalOutput[-1,] #removes the first row that was just NAs
   finalOutput
+}
+
+combine.list2 <- function(lapplyUber){ #does the same as the previous function, but for the second items in the list (for the )
+  finalOutput <- matrix(NA, ncol = ncol(lapplyUber[[1]][[1]])) #need a matrix with the right number of columns for adding rows 
+  
+  for(rep in 1:length(lapplyUber)){ #go through all the repetitions
+    for(matrix in 1:length(lapplyUber[[1]])){
+      finalOutput <- rbind(finalOutput, lapplyUber[[rep]][[matrix]]) #and stick them on the bottom of the output
+    }
+  }
+  finalOutput <- finalOutput[-1,] #removes the first row that was just NAs
+  finalOutput
+}
+
+
+
+
+
+#### running repetitions ####
+
+### this one doesn't work with the combine function; its adapted from the SimFunctions.R file
+gwrSimulationReplicator = function(N = 2, sampleSize, errorSD, trueModelNumber, MC = FALSE){
+  
+  if(MC == TRUE) {
+    require(multicore, quietly = TRUE)
+    temp = mclapply(1:N, uberFunction, sampleSize, errorSD, trueModelNumber)
+  }
+  else temp = lapply(1:N, uberFunction, sampleSize, errorSD, trueModelNumber)
+  temp
+}
+#x <-gwrSimulationReplicator(2, 29, .5, 2)
+###
+
+
+
+mcMultParamRuns <- function(numRepeats, sampleSizes, errors, trueModels, MC = FALSE){ #runs data on a list of true models for a list of sample sizes and error terms
+  
+  uberListNum <- 1 #this puts each repeat in a new spot in the list
+  uberList <- list() #empty list for the results
+    #loops through all of the inputs
+    for(ss in sampleSizes){
+      for(error in errors){
+        for(trueModel in trueModels){
+          if (MC){
+            require(multicore, quietly = TRUE)
+            tempUberOutput <- mclapply(1:numRepeats, uberFunction, ss, error, trueModelNumber = trueModel) #runs gwr
+            uberList[[uberListNum]] <- tempUberOutput #puts it into the output
+            uberListNum <- uberListNum + 1 #so the next run goes into the next spot on the list
+          } else{
+            tempUberOutput <- lapply(1:numRepeats, uberFunction, ss, error, trueModelNumber = trueModel) #runs gwr
+            uberList[[uberListNum]] <- tempUberOutput #puts it into the output
+            uberListNum <- uberListNum + 1 #so the next run goes into the next spot on the list
+          }
+        }
+      }
+    }
+  uberListMatrix <- combine.list2(uberList) #convert everything into a matrix
+  write.csv(uberListMatrix, file = paste0("Uber Output Large Test for Model ", trueModel, ".csv"))
+  uberListMatrix
+}
+
+sampleSizes <- c(29)
+trueModels <- 2
+errors <- c(.5)
+
+x <- multParamRuns(1, sampleSizes, errors, trueModels)
+x
+
+successRate.gen <- function(multParamRuns){
+  errors <- unique(multParamRuns[,"Error"])
+  sampleSizes <- unique(multParamRuns[,"Sample Size"])
+  trueModels <- unique(multParamRuns[,"True Model"])
 }
