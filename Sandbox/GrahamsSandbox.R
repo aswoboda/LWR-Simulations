@@ -713,9 +713,14 @@ mcMultParams <- function(dataGenParameters, MC = FALSE){ #runs data on a list of
       print(paste0("On parameter set ", model, " of ", numModels, "total sets"))
       
     } else{
+      start <- Sys.time()
       tempUberOutput <- lapply(1:repNum, uberFunction, ss, error, B0.SpVar, B1.SpVar, B2.SpVar) #runs gwr
       uberList[[uberListNum]] <- tempUberOutput #puts it into the output
       uberListNum <- uberListNum + 1 #so the next run goes into the next spot on the list
+      end <- Sys.time()
+      print(difftime(end,start, units = "m"))
+      print(paste0("On parameter set ", model, " of ", numModels, " total sets"))
+      
     }
     
   }
@@ -824,17 +829,24 @@ successRate.gen <- function(multParamRuns, successMeasure = "True Model", nrowPe
   successRate
 }
 
-sampleSizes <- c(60)
-B0.SpVar <- c(3, 0)
+sampleSizes <- c(50)
+B0.SpVar <- c(0)
 B1.SpVar <- c(1)
-B2.SpVar <- c(0)
+B2.SpVar <- c(2)
 errors <- c(.5)
-numRepeats <- 1
+numRepeats <- 3
 
 testParams <- expand.grid(numRepeats = numRepeats, sampleSizes = sampleSizes, B0SpatialVar = B0.SpVar, B1SpatialVar = B1.SpVar, B2SpatialVar = B2.SpVar, errorSD = errors)
 
-x <- mcMultParams(testParams)
+z <- mcMultParams(testParams, MC = F)
+a <- mcMultParams(testParams, MC = T)
 
-successRate.gen(x)
-successRate.gen(x, successMeasure = "Betas", successRank = 10)
-successRate.gen(x, successMeasure = "Both")
+
+successRate.gen(z)
+#successRate.gen(x, successMeasure = "Betas", successRank = 10)
+#successRate.gen(x, successMeasure = "Both")
+
+
+successRate.gen(a)
+#successRate.gen(x, successMeasure = "Betas", successRank = 10)
+#successRate.gen(x, successMeasure = "Both")
