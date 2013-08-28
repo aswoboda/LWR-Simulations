@@ -480,9 +480,26 @@ resultsToKeep.gen <- function(results, trueModelNumber, metrics, metricRanks){
 
 ##### the uber function (generates data for megaMaker, runs everything) #########
 
-uberFunction <- function(repetition, sampleSize, errorSD, trueModelNumber, B0.SpVar, B1.SpVar, B2.SpVar){
+uberFunction <- function(repetition, sampleSize, errorSD, trueModelNumber){
   
   start <- Sys.time() #to time the function
+  #calculate true model number
+  modelStat <- c(NA, NA, NA)
+  if(B0.SpVar == 0) {modelStat[1] <- TRUE
+  }else modelNumbers[1] <- FALSE
+  
+  if(B1.SpVar == 0) {modelNumbers[2] <- TRUE
+  } else modelStat[2] <- FALSE
+  
+  if(B2.SpVar == 0) {modelNumbers[3] <- TRUE
+  } else modelStat[3] <- FALSE
+  
+  #generate the possible models ...
+  X0 = X1 = X2 = c("TRUE", "FALSE") #true is stationary
+  models = as.matrix(expand.grid(x0 = X0, x1 = X1, x2 = X2))
+  
+  #and find the true model number
+  trueModelNumberTest <- which(modelStat[1] == models[,1] & modelStat[2] == models[,2] & modelStat[3] == models[,3]) #returns the row number where all the variables match
   
   #data gen
   n = sampleSize # number of observations in our simulation
@@ -494,6 +511,34 @@ uberFunction <- function(repetition, sampleSize, errorSD, trueModelNumber, B0.Sp
   error = rnorm(n, 0, errorSD) # create an error term
   
   ########################### Beta generators; this is the ineligant part, we have to enter each combination we want
+  
+  
+  
+#   B1 <- B1.SpVar*north + 2
+#   B2 <- B2.SpVar*east - 3
+#   
+#   if(B0.SpVar == 0){
+#     B0 <- 2
+#   } else{
+#     #there is negative correlation between B0 and B1,B2
+#     B0 <- -B0.SpVar*(east + north) + 2
+#     
+    #here there is not 
+#     B0 <- rep(NA, n)
+#     numBoxes <- B0.SpVar^2
+#     increment <- 1/B0.SpVar
+#     stops <- rep(increment, B0.SpVar)
+#     stops <- c(0, cumsum(stops))
+#     
+#     for(eastLower in stops){
+#       for(northLower in stops){
+#         B0[eastLower <= east & east < (eastLower + increment) &  northLower <= north & north < (northLower + increment) ] <- sample(c(-2:2), size = 1 )
+#       }
+#     }
+#  }
+  
+  
+  
   #global, global, global
   if(trueModelNumber == 1){
     B0 = 3 
@@ -550,10 +595,25 @@ uberFunction <- function(repetition, sampleSize, errorSD, trueModelNumber, B0.Sp
   } else if(trueModelNumber ==8){ #these ARE correlated 
     
     #local, local, local
+    east <- runif(100)
+    north <- runif(100)
     
-    B0 <- 3*east + 3*north
-    B1 <- 4*east - 2*north
-    B2 <- -2*east + 4*north
+    B0 <- rep(NA, 100)
+    numBoxes <- B0.SpVar^2
+    increment <- 1/B0.SpVar
+    stops <- rep(increment, B0.SpVar)
+    stops <- c(0, cumsum(stops))
+    
+    for(eastLower in stops){
+      for(northLower in stops){
+        B0[eastLower <= east & east < (eastLower + increment) &  northLower <= north & north < (northLower + increment) ] <- sample(c(-3:3), size = 1 )
+      }
+    }
+    B1 <- 4*east 
+    B2 <- 4*north
+    
+    cor(B0, B1)
+    cor(B0, B2)
     
   } else {
     
@@ -574,8 +634,6 @@ uberFunction <- function(repetition, sampleSize, errorSD, trueModelNumber, B0.Sp
   # X0 = X1 = X2 = c("stationary", "non-stationary")
   # models = expand.grid(x0 = X0, x1 = X1, x2 = X2) # makes a data frame of all the different models we could run
   
-  X0 = X1 = X2 = c("TRUE", "FALSE") #true is stationary
-  models = as.matrix(expand.grid(x0 = X0, x1 = X1, x2 = X2))
   
   numk = 7 # number of bandwidths we'll use
   krat = 2/3 # rate at which bandwidths decrease (ie. 45 -> 30 -> 20, etc.)
@@ -805,9 +863,9 @@ successRate.gen <- function(multParamRuns, successMeasure = "True Model", nrowPe
   successRate
 }
 
-sampleSizes <- c(51)
+sampleSizes <- c(100)
 trueModels <- 2
-errors <- c(.005)
+errors <- c(.5)
 
 x <- mcMultParamRuns(2, sampleSizes, errors, trueModels)
 
