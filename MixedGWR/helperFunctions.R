@@ -129,7 +129,7 @@ uberFunction <- function(repetition, sampleSize, errorSD, B0.SpVar, B1.SpVar, B2
   #they will ALWAYS have an expectation of 2 and have an expected correlation of 0.  
   B1 <- 2 - .5*B1.SpVar + east*B1.SpVar
   B2 <- 2 - .5*B2.SpVar + north*B2.SpVar
-  B0 <- 2 + .5*B0.SpVar - 2*B0.SpVar*abs(east - .5)
+  B0 <- 2 + B0.SpVar*(.387452 + cos(2*pi*sqrt((east - .5)^2 + (north- .5)^2)/sqrt(.5)))
   
   
   #finally the y values
