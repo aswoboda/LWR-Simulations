@@ -161,17 +161,81 @@ successRate.gen <- function(multParamRuns, successMeasure = "True Model", nrowPe
   successRate
 }
 
-sampleSizes <- c(29, 30)
-B0.SpVar <- c(0, 1)
-B1.SpVar <- c(1, 0)
-B2.SpVar <- c(2, 0)
-errors <- c(.5, 1)
-numRepeats <- 2
+mcMultParamsTimeTest <- function(dataGenParameters, MC = FALSE){ #runs data on a list of true models for a list of sample sizes and error terms
+  
+  numModels <- nrow(dataGenParameters) #each row is a set of data parameters
+  
+  colNames <- colnames(dataGenParameters)
+  colNames[1] <- "Avg Time"
+  timeTables <- matrix(NA, nrow = numModels, ncol = ncol(dataGenParameters))
+  colnames(timeTables) <- colNames
+  
+  uberList <- list()
+  uberListNum <- 1 #this will be used to put each repeat in a new spot in the list
+  rowNum <- 1
+  #loops through all of the inputs
+  for(model in 1:numModels){
+    
+    repNum <- dataGenParameters[model, "numRepeats"]
+    ss <- dataGenParameters[model, "sampleSizes"]
+    error <- dataGenParameters[model, "errorSD"]
+    B0.SpVar <- dataGenParameters[model, "B0SpatialVar"]
+    B1.SpVar <- dataGenParameters[model, "B1SpatialVar"]
+    B2.SpVar <- dataGenParameters[model, "B2SpatialVar"]
+    
+    if (MC){
+      require(multicore, quietly = TRUE)
+      start <- Sys.time()
+      tempUberOutput <- mclapply(1:repNum, uberFunction, ss, error, B0.SpVar, B1.SpVar, B2.SpVar) #runs gwr
+      uberListNum <- uberListNum + 1 #so the next run goes into the next spot on the list
+      end <- Sys.time()
+      print(difftime(end,start, units = "m"))
+      print(paste0("On parameter set ", model, " of ", numModels, " total sets. Total remaining: ", numModels - model))
+      print(paste0("This models parameters were: SS: ", ss, ", error: ", error, ", B0, B1, B2 spatial variations of ", B0.SpVar,", ", B1.SpVar, ", and ", B2.SpVar))
+      
+      
+      saveRDS(listToArray(uberList), file = "mcOutput.rds") #saveRDS lets you rename an object when reloading it into the environment, x <- readRDS("mcOutput.rds") assigns x as the name for the R data
+      
+    } else{
+      start <- Sys.time()
+      tempUberOutput <- lapply(1:repNum, uberFunction, ss, error, B0.SpVar, B1.SpVar, B2.SpVar) #runs gwr
+      uberList[[uberListNum]] <- tempUberOutput #puts it into the output
+      uberListNum <- uberListNum + 1 #so the next run goes into the next spot on the list
+      saveRDS(listToArray(uberList), file = "mcOutput.rds") #see above in MC part for reason to use saveRDS
+      
+      end <- Sys.time()
+      print(difftime(end,start, units = "m"))
+      print(paste0("On parameter set ", model, " of ", numModels, " total sets. Total remaining: ", numModels - model))
+      print(paste0("This models parameters were: SS: ", ss, ", error: ", error, ", B0, B1, B2 spatial variations of ", B0.SpVar,", ", B1.SpVar, ", and ", B2.SpVar))
+      
+      timeTables[rowNum, ] <- c(difftime(end,start, units = "m")/repNum, ss, B0.SpVar, B1.SpVar, B2.SpVar, error)
+      timeTables[rowNum,]
+      rowNum <- rowNum + 1
+      
+    }
+    
+  }
+  
+  timeTables
+}
 
-testParams <- expand.grid(numRepeats = numRepeats, sampleSizes = sampleSizes, B0SpatialVar = B0.SpVar, B1SpatialVar = B1.SpVar, B2SpatialVar = B2.SpVar, errorSD = errors)
+mcRunTimeEst(sampleSizes, numRepeats){
+  
+}
 
-z <- mcMultParams(testParams, MC = F)
-a <- mcMultParams(testParams, MC = T)
+
+sampleSizes <- c(100, 500, 700, 1000) #c(50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000)
+B0.SpVar <- c(0, 2)
+B1.SpVar <- c(0, 2)
+B2.SpVar <- c(0, 2)
+errors <- c( 1, 2)
+numRepeats <- 5
+
+testParams <- expand.grid(numRepeats = numRepeats, B0SpatialVar = B0.SpVar, B1SpatialVar = B1.SpVar, B2SpatialVar = B2.SpVar, errorSD = errors, sampleSizes = sampleSizes)
+
+z <- mcMultParamsTimeTest(testParams, MC = F)
+
+x <- mcMultParams(testParams, MC = T)
 
 
 successRate.gen(x)

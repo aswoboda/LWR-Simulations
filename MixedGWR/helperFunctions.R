@@ -1,5 +1,5 @@
 
-### running multiple parameters
+ ### running multiple parameters
 ## This function runs multiple sets of parameters for sample size, error size, number of repetions, and spatial variation in B0, B1, and B2.  
 ## It needs to be passed a matrix where each row is a set of parametrers.  
 ## the columns of the matrix need to be named the same as they are called in lines 15 through 20, but the order does not matter
@@ -30,8 +30,9 @@ mcMultParams <- function(dataGenParameters, MC = FALSE){ #runs data on a list of
       uberListNum <- uberListNum + 1 #so the next run goes into the next spot on the list
       end <- Sys.time()
       print(difftime(end,start, units = "m"))
-      print(paste0("On parameter set ", model, " of ", numModels, "total sets"))
-      
+      print(paste0("On parameter set ", model, " of ", numModels, " total sets. Total remaining: ", numModels - model))
+      print(paste0("This models parameters were: SS: ", ss, ", error: ", error, ", B0, B1, B2 spatial variations of ", B0.SpVar,", ", B1.SpVar, ", and ", B2.SpVar))
+
       saveRDS(listToArray(uberList), file = "mcOutput.rds") #saveRDS lets you rename an object when reloading it into the environment, x <- readRDS("mcOutput.rds") assigns x as the name for the R data
                       
     } else{
@@ -41,8 +42,9 @@ mcMultParams <- function(dataGenParameters, MC = FALSE){ #runs data on a list of
       uberListNum <- uberListNum + 1 #so the next run goes into the next spot on the list
       end <- Sys.time()
       print(difftime(end,start, units = "m"))
-      print(paste0("On parameter set ", model, " of ", numModels, " total sets"))
-      
+      print(paste0("On parameter set ", model, " of ", numModels, " total sets. Total remaining: ", numModels - model))
+      print(paste0("This models parameters were: SS: ", ss, ", error: ", error, ", B0, B1, B2 spatial variations of ", B0.SpVar,", ", B1.SpVar, ", and ", B2.SpVar))
+
       saveRDS(listToArray(uberList), file = "mcOutput.rds") #see above in MC part for reason to use saveRDS
     }
     
