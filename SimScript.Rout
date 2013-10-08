@@ -1,0 +1,1012 @@
+
+R version 2.15.2 (2012-10-26) -- "Trick or Treat"
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> 
+> source("MixedGWR/helperFunctions.R")
+> 
+> sampleSizes <- c(100, 300, 600, 1000) 
+> B0.SpVar <- c(0, 1, 3) # 0, 1, 3
+> B1.SpVar <- c(0, 1, 3) # 0, 1, 3
+> B2.SpVar <- c(0, 1, 3) # 0, 1, 3
+> errors <- c(0.5, 1, 2) # 0.5, 1, 2
+> numRepeats <- 200
+> 
+> testParams <- expand.grid(numRepeats = numRepeats, B0SpatialVar = B0.SpVar, B1SpatialVar = B1.SpVar, B2SpatialVar = B2.SpVar, errorSD = errors, sampleSizes = sampleSizes)
+> 
+> x <- mcMultParams(testParams, MC = T)
+Time difference of 14.8754 mins
+[1] "On parameter set 1 of 324 total sets. Total remaining: 323"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 14.78422 mins
+[1] "On parameter set 2 of 324 total sets. Total remaining: 322"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 14.70765 mins
+[1] "On parameter set 3 of 324 total sets. Total remaining: 321"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 14.87799 mins
+[1] "On parameter set 4 of 324 total sets. Total remaining: 320"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 14.70362 mins
+[1] "On parameter set 5 of 324 total sets. Total remaining: 319"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 14.76343 mins
+[1] "On parameter set 6 of 324 total sets. Total remaining: 318"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 14.78186 mins
+[1] "On parameter set 7 of 324 total sets. Total remaining: 317"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 14.72157 mins
+[1] "On parameter set 8 of 324 total sets. Total remaining: 316"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 18.48128 mins
+[1] "On parameter set 9 of 324 total sets. Total remaining: 315"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 19.47407 mins
+[1] "On parameter set 10 of 324 total sets. Total remaining: 314"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 14.78379 mins
+[1] "On parameter set 11 of 324 total sets. Total remaining: 313"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 18.01832 mins
+[1] "On parameter set 12 of 324 total sets. Total remaining: 312"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 14.73671 mins
+[1] "On parameter set 13 of 324 total sets. Total remaining: 311"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 16.40997 mins
+[1] "On parameter set 14 of 324 total sets. Total remaining: 310"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 16.18705 mins
+[1] "On parameter set 15 of 324 total sets. Total remaining: 309"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 14.89628 mins
+[1] "On parameter set 16 of 324 total sets. Total remaining: 308"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 19.7929 mins
+[1] "On parameter set 17 of 324 total sets. Total remaining: 307"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 18.47604 mins
+[1] "On parameter set 18 of 324 total sets. Total remaining: 306"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 19.70424 mins
+[1] "On parameter set 19 of 324 total sets. Total remaining: 305"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 14.86125 mins
+[1] "On parameter set 20 of 324 total sets. Total remaining: 304"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 20.08838 mins
+[1] "On parameter set 21 of 324 total sets. Total remaining: 303"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 19.31437 mins
+[1] "On parameter set 22 of 324 total sets. Total remaining: 302"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 14.90671 mins
+[1] "On parameter set 23 of 324 total sets. Total remaining: 301"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 14.96786 mins
+[1] "On parameter set 24 of 324 total sets. Total remaining: 300"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 15.26496 mins
+[1] "On parameter set 25 of 324 total sets. Total remaining: 299"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 19.90539 mins
+[1] "On parameter set 26 of 324 total sets. Total remaining: 298"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 14.912 mins
+[1] "On parameter set 27 of 324 total sets. Total remaining: 297"
+[1] "This models parameters were: SS: 100, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 3"
+Time difference of 15.10762 mins
+[1] "On parameter set 28 of 324 total sets. Total remaining: 296"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 14.94199 mins
+[1] "On parameter set 29 of 324 total sets. Total remaining: 295"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 17.18626 mins
+[1] "On parameter set 30 of 324 total sets. Total remaining: 294"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 19.78783 mins
+[1] "On parameter set 31 of 324 total sets. Total remaining: 293"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 14.98735 mins
+[1] "On parameter set 32 of 324 total sets. Total remaining: 292"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 19.59128 mins
+[1] "On parameter set 33 of 324 total sets. Total remaining: 291"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 18.95679 mins
+[1] "On parameter set 34 of 324 total sets. Total remaining: 290"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 14.78021 mins
+[1] "On parameter set 35 of 324 total sets. Total remaining: 289"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 16.86372 mins
+[1] "On parameter set 36 of 324 total sets. Total remaining: 288"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 15.36399 mins
+[1] "On parameter set 37 of 324 total sets. Total remaining: 287"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 14.86641 mins
+[1] "On parameter set 38 of 324 total sets. Total remaining: 286"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 19.91065 mins
+[1] "On parameter set 39 of 324 total sets. Total remaining: 285"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 15.16947 mins
+[1] "On parameter set 40 of 324 total sets. Total remaining: 284"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 14.79992 mins
+[1] "On parameter set 41 of 324 total sets. Total remaining: 283"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 14.96842 mins
+[1] "On parameter set 42 of 324 total sets. Total remaining: 282"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 19.59598 mins
+[1] "On parameter set 43 of 324 total sets. Total remaining: 281"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 17.04077 mins
+[1] "On parameter set 44 of 324 total sets. Total remaining: 280"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 14.84596 mins
+[1] "On parameter set 45 of 324 total sets. Total remaining: 279"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 20.15331 mins
+[1] "On parameter set 46 of 324 total sets. Total remaining: 278"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 15.5197 mins
+[1] "On parameter set 47 of 324 total sets. Total remaining: 277"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 17.30507 mins
+[1] "On parameter set 48 of 324 total sets. Total remaining: 276"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 15.00352 mins
+[1] "On parameter set 49 of 324 total sets. Total remaining: 275"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 16.16218 mins
+[1] "On parameter set 50 of 324 total sets. Total remaining: 274"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 14.95198 mins
+[1] "On parameter set 51 of 324 total sets. Total remaining: 273"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 19.53249 mins
+[1] "On parameter set 52 of 324 total sets. Total remaining: 272"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 20.29557 mins
+[1] "On parameter set 53 of 324 total sets. Total remaining: 271"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 20.30862 mins
+[1] "On parameter set 54 of 324 total sets. Total remaining: 270"
+[1] "This models parameters were: SS: 100, error: 1, B0, B1, B2 spatial variations of 3, 3, and 3"
+Time difference of 20.02461 mins
+[1] "On parameter set 55 of 324 total sets. Total remaining: 269"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 20.38533 mins
+[1] "On parameter set 56 of 324 total sets. Total remaining: 268"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 15.05539 mins
+[1] "On parameter set 57 of 324 total sets. Total remaining: 267"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 15.21873 mins
+[1] "On parameter set 58 of 324 total sets. Total remaining: 266"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 20.47565 mins
+[1] "On parameter set 59 of 324 total sets. Total remaining: 265"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 15.16238 mins
+[1] "On parameter set 60 of 324 total sets. Total remaining: 264"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 20.26648 mins
+[1] "On parameter set 61 of 324 total sets. Total remaining: 263"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 20.05733 mins
+[1] "On parameter set 62 of 324 total sets. Total remaining: 262"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 14.93493 mins
+[1] "On parameter set 63 of 324 total sets. Total remaining: 261"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 19.91964 mins
+[1] "On parameter set 64 of 324 total sets. Total remaining: 260"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 19.3202 mins
+[1] "On parameter set 65 of 324 total sets. Total remaining: 259"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 19.87465 mins
+[1] "On parameter set 66 of 324 total sets. Total remaining: 258"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 20.16438 mins
+[1] "On parameter set 67 of 324 total sets. Total remaining: 257"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 18.4767 mins
+[1] "On parameter set 68 of 324 total sets. Total remaining: 256"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 15.62978 mins
+[1] "On parameter set 69 of 324 total sets. Total remaining: 255"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 14.95256 mins
+[1] "On parameter set 70 of 324 total sets. Total remaining: 254"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 18.17856 mins
+[1] "On parameter set 71 of 324 total sets. Total remaining: 253"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 17.91473 mins
+[1] "On parameter set 72 of 324 total sets. Total remaining: 252"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 16.6494 mins
+[1] "On parameter set 73 of 324 total sets. Total remaining: 251"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 15.09242 mins
+[1] "On parameter set 74 of 324 total sets. Total remaining: 250"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 19.20373 mins
+[1] "On parameter set 75 of 324 total sets. Total remaining: 249"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 15.10022 mins
+[1] "On parameter set 76 of 324 total sets. Total remaining: 248"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 15.03166 mins
+[1] "On parameter set 77 of 324 total sets. Total remaining: 247"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 19.17747 mins
+[1] "On parameter set 78 of 324 total sets. Total remaining: 246"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 17.68464 mins
+[1] "On parameter set 79 of 324 total sets. Total remaining: 245"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 19.78325 mins
+[1] "On parameter set 80 of 324 total sets. Total remaining: 244"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 20.31623 mins
+[1] "On parameter set 81 of 324 total sets. Total remaining: 243"
+[1] "This models parameters were: SS: 100, error: 2, B0, B1, B2 spatial variations of 3, 3, and 3"
+Time difference of 50.67093 mins
+[1] "On parameter set 82 of 324 total sets. Total remaining: 242"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 50.89758 mins
+[1] "On parameter set 83 of 324 total sets. Total remaining: 241"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 51.48054 mins
+[1] "On parameter set 84 of 324 total sets. Total remaining: 240"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 50.91832 mins
+[1] "On parameter set 85 of 324 total sets. Total remaining: 239"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 53.89196 mins
+[1] "On parameter set 86 of 324 total sets. Total remaining: 238"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 51.28399 mins
+[1] "On parameter set 87 of 324 total sets. Total remaining: 237"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 50.6295 mins
+[1] "On parameter set 88 of 324 total sets. Total remaining: 236"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 51.32803 mins
+[1] "On parameter set 89 of 324 total sets. Total remaining: 235"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 58.53457 mins
+[1] "On parameter set 90 of 324 total sets. Total remaining: 234"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 51.43499 mins
+[1] "On parameter set 91 of 324 total sets. Total remaining: 233"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 51.04402 mins
+[1] "On parameter set 92 of 324 total sets. Total remaining: 232"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 51.30612 mins
+[1] "On parameter set 93 of 324 total sets. Total remaining: 231"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 51.17439 mins
+[1] "On parameter set 94 of 324 total sets. Total remaining: 230"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 64.09012 mins
+[1] "On parameter set 95 of 324 total sets. Total remaining: 229"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 62.59185 mins
+[1] "On parameter set 96 of 324 total sets. Total remaining: 228"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 50.60416 mins
+[1] "On parameter set 97 of 324 total sets. Total remaining: 227"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 50.91352 mins
+[1] "On parameter set 98 of 324 total sets. Total remaining: 226"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 61.73405 mins
+[1] "On parameter set 99 of 324 total sets. Total remaining: 225"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 50.88798 mins
+[1] "On parameter set 100 of 324 total sets. Total remaining: 224"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 63.66551 mins
+[1] "On parameter set 101 of 324 total sets. Total remaining: 223"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 50.85773 mins
+[1] "On parameter set 102 of 324 total sets. Total remaining: 222"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 51.58303 mins
+[1] "On parameter set 103 of 324 total sets. Total remaining: 221"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 50.48466 mins
+[1] "On parameter set 104 of 324 total sets. Total remaining: 220"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 58.72797 mins
+[1] "On parameter set 105 of 324 total sets. Total remaining: 219"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 51.08533 mins
+[1] "On parameter set 106 of 324 total sets. Total remaining: 218"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 64.66258 mins
+[1] "On parameter set 107 of 324 total sets. Total remaining: 217"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 51.10862 mins
+[1] "On parameter set 108 of 324 total sets. Total remaining: 216"
+[1] "This models parameters were: SS: 300, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 3"
+Time difference of 51.00109 mins
+[1] "On parameter set 109 of 324 total sets. Total remaining: 215"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 50.79223 mins
+[1] "On parameter set 110 of 324 total sets. Total remaining: 214"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 50.95091 mins
+[1] "On parameter set 111 of 324 total sets. Total remaining: 213"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 61.95723 mins
+[1] "On parameter set 112 of 324 total sets. Total remaining: 212"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 51.2435 mins
+[1] "On parameter set 113 of 324 total sets. Total remaining: 211"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 64.02529 mins
+[1] "On parameter set 114 of 324 total sets. Total remaining: 210"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 50.5635 mins
+[1] "On parameter set 115 of 324 total sets. Total remaining: 209"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 50.93733 mins
+[1] "On parameter set 116 of 324 total sets. Total remaining: 208"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 62.74824 mins
+[1] "On parameter set 117 of 324 total sets. Total remaining: 207"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 64.59193 mins
+[1] "On parameter set 118 of 324 total sets. Total remaining: 206"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 67.11213 mins
+[1] "On parameter set 119 of 324 total sets. Total remaining: 205"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 63.90968 mins
+[1] "On parameter set 120 of 324 total sets. Total remaining: 204"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 51.16709 mins
+[1] "On parameter set 121 of 324 total sets. Total remaining: 203"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 64.99976 mins
+[1] "On parameter set 122 of 324 total sets. Total remaining: 202"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 63.15347 mins
+[1] "On parameter set 123 of 324 total sets. Total remaining: 201"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 65.11736 mins
+[1] "On parameter set 124 of 324 total sets. Total remaining: 200"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 67.21513 mins
+[1] "On parameter set 125 of 324 total sets. Total remaining: 199"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 66.67177 mins
+[1] "On parameter set 126 of 324 total sets. Total remaining: 198"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 61.88075 mins
+[1] "On parameter set 127 of 324 total sets. Total remaining: 197"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 50.55825 mins
+[1] "On parameter set 128 of 324 total sets. Total remaining: 196"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 62.7621 mins
+[1] "On parameter set 129 of 324 total sets. Total remaining: 195"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 50.53515 mins
+[1] "On parameter set 130 of 324 total sets. Total remaining: 194"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 50.61186 mins
+[1] "On parameter set 131 of 324 total sets. Total remaining: 193"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 66.98483 mins
+[1] "On parameter set 132 of 324 total sets. Total remaining: 192"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 67.55975 mins
+[1] "On parameter set 133 of 324 total sets. Total remaining: 191"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 63.39966 mins
+[1] "On parameter set 134 of 324 total sets. Total remaining: 190"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 51.60544 mins
+[1] "On parameter set 135 of 324 total sets. Total remaining: 189"
+[1] "This models parameters were: SS: 300, error: 1, B0, B1, B2 spatial variations of 3, 3, and 3"
+Time difference of 52.84654 mins
+[1] "On parameter set 136 of 324 total sets. Total remaining: 188"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 67.0756 mins
+[1] "On parameter set 137 of 324 total sets. Total remaining: 187"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 50.6382 mins
+[1] "On parameter set 138 of 324 total sets. Total remaining: 186"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 63.85101 mins
+[1] "On parameter set 139 of 324 total sets. Total remaining: 185"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 67.79791 mins
+[1] "On parameter set 140 of 324 total sets. Total remaining: 184"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 55.14381 mins
+[1] "On parameter set 141 of 324 total sets. Total remaining: 183"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 51.17738 mins
+[1] "On parameter set 142 of 324 total sets. Total remaining: 182"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 54.12189 mins
+[1] "On parameter set 143 of 324 total sets. Total remaining: 181"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 56.89053 mins
+[1] "On parameter set 144 of 324 total sets. Total remaining: 180"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 51.03723 mins
+[1] "On parameter set 145 of 324 total sets. Total remaining: 179"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 64.52088 mins
+[1] "On parameter set 146 of 324 total sets. Total remaining: 178"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 64.69783 mins
+[1] "On parameter set 147 of 324 total sets. Total remaining: 177"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 53.91262 mins
+[1] "On parameter set 148 of 324 total sets. Total remaining: 176"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 60.86485 mins
+[1] "On parameter set 149 of 324 total sets. Total remaining: 175"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 51.05347 mins
+[1] "On parameter set 150 of 324 total sets. Total remaining: 174"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 67.08094 mins
+[1] "On parameter set 151 of 324 total sets. Total remaining: 173"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 57.18803 mins
+[1] "On parameter set 152 of 324 total sets. Total remaining: 172"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 51.42948 mins
+[1] "On parameter set 153 of 324 total sets. Total remaining: 171"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 58.75646 mins
+[1] "On parameter set 154 of 324 total sets. Total remaining: 170"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 51.33315 mins
+[1] "On parameter set 155 of 324 total sets. Total remaining: 169"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 51.34829 mins
+[1] "On parameter set 156 of 324 total sets. Total remaining: 168"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 67.96907 mins
+[1] "On parameter set 157 of 324 total sets. Total remaining: 167"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 50.70349 mins
+[1] "On parameter set 158 of 324 total sets. Total remaining: 166"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 50.80638 mins
+[1] "On parameter set 159 of 324 total sets. Total remaining: 165"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 50.44514 mins
+[1] "On parameter set 160 of 324 total sets. Total remaining: 164"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 67.60479 mins
+[1] "On parameter set 161 of 324 total sets. Total remaining: 163"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 50.77263 mins
+[1] "On parameter set 162 of 324 total sets. Total remaining: 162"
+[1] "This models parameters were: SS: 300, error: 2, B0, B1, B2 spatial variations of 3, 3, and 3"
+Time difference of 118.0679 mins
+[1] "On parameter set 163 of 324 total sets. Total remaining: 161"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 118.4454 mins
+[1] "On parameter set 164 of 324 total sets. Total remaining: 160"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 146.887 mins
+[1] "On parameter set 165 of 324 total sets. Total remaining: 159"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 123.1119 mins
+[1] "On parameter set 166 of 324 total sets. Total remaining: 158"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 138.5005 mins
+[1] "On parameter set 167 of 324 total sets. Total remaining: 157"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 119.8099 mins
+[1] "On parameter set 168 of 324 total sets. Total remaining: 156"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 118.0579 mins
+[1] "On parameter set 169 of 324 total sets. Total remaining: 155"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 124.1719 mins
+[1] "On parameter set 170 of 324 total sets. Total remaining: 154"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 155.233 mins
+[1] "On parameter set 171 of 324 total sets. Total remaining: 153"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 117.8386 mins
+[1] "On parameter set 172 of 324 total sets. Total remaining: 152"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 117.7338 mins
+[1] "On parameter set 173 of 324 total sets. Total remaining: 151"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 118.9306 mins
+[1] "On parameter set 174 of 324 total sets. Total remaining: 150"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 156.127 mins
+[1] "On parameter set 175 of 324 total sets. Total remaining: 149"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 155.8841 mins
+[1] "On parameter set 176 of 324 total sets. Total remaining: 148"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 148.0203 mins
+[1] "On parameter set 177 of 324 total sets. Total remaining: 147"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 118.5841 mins
+[1] "On parameter set 178 of 324 total sets. Total remaining: 146"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 153.3175 mins
+[1] "On parameter set 179 of 324 total sets. Total remaining: 145"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 142.9213 mins
+[1] "On parameter set 180 of 324 total sets. Total remaining: 144"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 119.7425 mins
+[1] "On parameter set 181 of 324 total sets. Total remaining: 143"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 156.3234 mins
+[1] "On parameter set 182 of 324 total sets. Total remaining: 142"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 118.7899 mins
+[1] "On parameter set 183 of 324 total sets. Total remaining: 141"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 143.5402 mins
+[1] "On parameter set 184 of 324 total sets. Total remaining: 140"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 119.1063 mins
+[1] "On parameter set 185 of 324 total sets. Total remaining: 139"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 119.2231 mins
+[1] "On parameter set 186 of 324 total sets. Total remaining: 138"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 119.3144 mins
+[1] "On parameter set 187 of 324 total sets. Total remaining: 137"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 145.5135 mins
+[1] "On parameter set 188 of 324 total sets. Total remaining: 136"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 142.3123 mins
+[1] "On parameter set 189 of 324 total sets. Total remaining: 135"
+[1] "This models parameters were: SS: 600, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 3"
+Time difference of 122.0389 mins
+[1] "On parameter set 190 of 324 total sets. Total remaining: 134"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 119.3446 mins
+[1] "On parameter set 191 of 324 total sets. Total remaining: 133"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 116.8305 mins
+[1] "On parameter set 192 of 324 total sets. Total remaining: 132"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 117.3931 mins
+[1] "On parameter set 193 of 324 total sets. Total remaining: 131"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 117.4878 mins
+[1] "On parameter set 194 of 324 total sets. Total remaining: 130"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 117.9486 mins
+[1] "On parameter set 195 of 324 total sets. Total remaining: 129"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 133.158 mins
+[1] "On parameter set 196 of 324 total sets. Total remaining: 128"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 118.5236 mins
+[1] "On parameter set 197 of 324 total sets. Total remaining: 127"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 153.2731 mins
+[1] "On parameter set 198 of 324 total sets. Total remaining: 126"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 118.6442 mins
+[1] "On parameter set 199 of 324 total sets. Total remaining: 125"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 118.6658 mins
+[1] "On parameter set 200 of 324 total sets. Total remaining: 124"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 118.8236 mins
+[1] "On parameter set 201 of 324 total sets. Total remaining: 123"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 118.6386 mins
+[1] "On parameter set 202 of 324 total sets. Total remaining: 122"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 118.502 mins
+[1] "On parameter set 203 of 324 total sets. Total remaining: 121"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 143.1734 mins
+[1] "On parameter set 204 of 324 total sets. Total remaining: 120"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 118.2951 mins
+[1] "On parameter set 205 of 324 total sets. Total remaining: 119"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 118.8077 mins
+[1] "On parameter set 206 of 324 total sets. Total remaining: 118"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 152.4263 mins
+[1] "On parameter set 207 of 324 total sets. Total remaining: 117"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 120.7218 mins
+[1] "On parameter set 208 of 324 total sets. Total remaining: 116"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 157.5012 mins
+[1] "On parameter set 209 of 324 total sets. Total remaining: 115"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 135.5365 mins
+[1] "On parameter set 210 of 324 total sets. Total remaining: 114"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 144.3079 mins
+[1] "On parameter set 211 of 324 total sets. Total remaining: 113"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 155.7669 mins
+[1] "On parameter set 212 of 324 total sets. Total remaining: 112"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 118.8229 mins
+[1] "On parameter set 213 of 324 total sets. Total remaining: 111"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 118.8039 mins
+[1] "On parameter set 214 of 324 total sets. Total remaining: 110"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 151.5588 mins
+[1] "On parameter set 215 of 324 total sets. Total remaining: 109"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 123.577 mins
+[1] "On parameter set 216 of 324 total sets. Total remaining: 108"
+[1] "This models parameters were: SS: 600, error: 1, B0, B1, B2 spatial variations of 3, 3, and 3"
+Time difference of 118.5369 mins
+[1] "On parameter set 217 of 324 total sets. Total remaining: 107"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 139.0726 mins
+[1] "On parameter set 218 of 324 total sets. Total remaining: 106"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 119.8479 mins
+[1] "On parameter set 219 of 324 total sets. Total remaining: 105"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 157.4965 mins
+[1] "On parameter set 220 of 324 total sets. Total remaining: 104"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 144.1354 mins
+[1] "On parameter set 221 of 324 total sets. Total remaining: 103"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 118.3993 mins
+[1] "On parameter set 222 of 324 total sets. Total remaining: 102"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 123.5348 mins
+[1] "On parameter set 223 of 324 total sets. Total remaining: 101"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 117.6542 mins
+[1] "On parameter set 224 of 324 total sets. Total remaining: 100"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 120.9734 mins
+[1] "On parameter set 225 of 324 total sets. Total remaining: 99"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 132.4859 mins
+[1] "On parameter set 226 of 324 total sets. Total remaining: 98"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 118.4912 mins
+[1] "On parameter set 227 of 324 total sets. Total remaining: 97"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 155.5531 mins
+[1] "On parameter set 228 of 324 total sets. Total remaining: 96"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 132.1576 mins
+[1] "On parameter set 229 of 324 total sets. Total remaining: 95"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 118.6586 mins
+[1] "On parameter set 230 of 324 total sets. Total remaining: 94"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 118.5195 mins
+[1] "On parameter set 231 of 324 total sets. Total remaining: 93"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 117.9917 mins
+[1] "On parameter set 232 of 324 total sets. Total remaining: 92"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 143.4615 mins
+[1] "On parameter set 233 of 324 total sets. Total remaining: 91"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 117.9987 mins
+[1] "On parameter set 234 of 324 total sets. Total remaining: 90"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 118.3733 mins
+[1] "On parameter set 235 of 324 total sets. Total remaining: 89"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 118.8472 mins
+[1] "On parameter set 236 of 324 total sets. Total remaining: 88"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 121.244 mins
+[1] "On parameter set 237 of 324 total sets. Total remaining: 87"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 135.6038 mins
+[1] "On parameter set 238 of 324 total sets. Total remaining: 86"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 122.1647 mins
+[1] "On parameter set 239 of 324 total sets. Total remaining: 85"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 117.8074 mins
+[1] "On parameter set 240 of 324 total sets. Total remaining: 84"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 126.7427 mins
+[1] "On parameter set 241 of 324 total sets. Total remaining: 83"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 120.8791 mins
+[1] "On parameter set 242 of 324 total sets. Total remaining: 82"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 150.2034 mins
+[1] "On parameter set 243 of 324 total sets. Total remaining: 81"
+[1] "This models parameters were: SS: 600, error: 2, B0, B1, B2 spatial variations of 3, 3, and 3"
+Time difference of 232.7423 mins
+[1] "On parameter set 244 of 324 total sets. Total remaining: 80"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 303.7836 mins
+[1] "On parameter set 245 of 324 total sets. Total remaining: 79"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 252.0601 mins
+[1] "On parameter set 246 of 324 total sets. Total remaining: 78"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 254.8277 mins
+[1] "On parameter set 247 of 324 total sets. Total remaining: 77"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 236.3679 mins
+[1] "On parameter set 248 of 324 total sets. Total remaining: 76"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 234.1529 mins
+[1] "On parameter set 249 of 324 total sets. Total remaining: 75"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 233.638 mins
+[1] "On parameter set 250 of 324 total sets. Total remaining: 74"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 234.1544 mins
+[1] "On parameter set 251 of 324 total sets. Total remaining: 73"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 237.8545 mins
+[1] "On parameter set 252 of 324 total sets. Total remaining: 72"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 236.2393 mins
+[1] "On parameter set 253 of 324 total sets. Total remaining: 71"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 239.8605 mins
+[1] "On parameter set 254 of 324 total sets. Total remaining: 70"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 238.1686 mins
+[1] "On parameter set 255 of 324 total sets. Total remaining: 69"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 233.8059 mins
+[1] "On parameter set 256 of 324 total sets. Total remaining: 68"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 234.2429 mins
+[1] "On parameter set 257 of 324 total sets. Total remaining: 67"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 234.1077 mins
+[1] "On parameter set 258 of 324 total sets. Total remaining: 66"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 234.1104 mins
+[1] "On parameter set 259 of 324 total sets. Total remaining: 65"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 267.3539 mins
+[1] "On parameter set 260 of 324 total sets. Total remaining: 64"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 301.6076 mins
+[1] "On parameter set 261 of 324 total sets. Total remaining: 63"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 303.5059 mins
+[1] "On parameter set 262 of 324 total sets. Total remaining: 62"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 234.8112 mins
+[1] "On parameter set 263 of 324 total sets. Total remaining: 61"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 244.9042 mins
+[1] "On parameter set 264 of 324 total sets. Total remaining: 60"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 251.7305 mins
+[1] "On parameter set 265 of 324 total sets. Total remaining: 59"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 245.2991 mins
+[1] "On parameter set 266 of 324 total sets. Total remaining: 58"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 256.1424 mins
+[1] "On parameter set 267 of 324 total sets. Total remaining: 57"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 293.0751 mins
+[1] "On parameter set 268 of 324 total sets. Total remaining: 56"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 235.5885 mins
+[1] "On parameter set 269 of 324 total sets. Total remaining: 55"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 234.7297 mins
+[1] "On parameter set 270 of 324 total sets. Total remaining: 54"
+[1] "This models parameters were: SS: 1000, error: 0.5, B0, B1, B2 spatial variations of 3, 3, and 3"
+Time difference of 286.2506 mins
+[1] "On parameter set 271 of 324 total sets. Total remaining: 53"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 233.8569 mins
+[1] "On parameter set 272 of 324 total sets. Total remaining: 52"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 234.5346 mins
+[1] "On parameter set 273 of 324 total sets. Total remaining: 51"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 235.458 mins
+[1] "On parameter set 274 of 324 total sets. Total remaining: 50"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 237.063 mins
+[1] "On parameter set 275 of 324 total sets. Total remaining: 49"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 232.6002 mins
+[1] "On parameter set 276 of 324 total sets. Total remaining: 48"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 266.6907 mins
+[1] "On parameter set 277 of 324 total sets. Total remaining: 47"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 289.8744 mins
+[1] "On parameter set 278 of 324 total sets. Total remaining: 46"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 237.6185 mins
+[1] "On parameter set 279 of 324 total sets. Total remaining: 45"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 278.598 mins
+[1] "On parameter set 280 of 324 total sets. Total remaining: 44"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 290.4236 mins
+[1] "On parameter set 281 of 324 total sets. Total remaining: 43"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 239.6815 mins
+[1] "On parameter set 282 of 324 total sets. Total remaining: 42"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 236.218 mins
+[1] "On parameter set 283 of 324 total sets. Total remaining: 41"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 274.6525 mins
+[1] "On parameter set 284 of 324 total sets. Total remaining: 40"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 234.5192 mins
+[1] "On parameter set 285 of 324 total sets. Total remaining: 39"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 233.2987 mins
+[1] "On parameter set 286 of 324 total sets. Total remaining: 38"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 233.9146 mins
+[1] "On parameter set 287 of 324 total sets. Total remaining: 37"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 234.7813 mins
+[1] "On parameter set 288 of 324 total sets. Total remaining: 36"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 234.8416 mins
+[1] "On parameter set 289 of 324 total sets. Total remaining: 35"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 301.8555 mins
+[1] "On parameter set 290 of 324 total sets. Total remaining: 34"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 237.3288 mins
+[1] "On parameter set 291 of 324 total sets. Total remaining: 33"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 235.2951 mins
+[1] "On parameter set 292 of 324 total sets. Total remaining: 32"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 234.8063 mins
+[1] "On parameter set 293 of 324 total sets. Total remaining: 31"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 280.6527 mins
+[1] "On parameter set 294 of 324 total sets. Total remaining: 30"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 261.831 mins
+[1] "On parameter set 295 of 324 total sets. Total remaining: 29"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 238.4946 mins
+[1] "On parameter set 296 of 324 total sets. Total remaining: 28"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 235.0144 mins
+[1] "On parameter set 297 of 324 total sets. Total remaining: 27"
+[1] "This models parameters were: SS: 1000, error: 1, B0, B1, B2 spatial variations of 3, 3, and 3"
+Time difference of 255.4904 mins
+[1] "On parameter set 298 of 324 total sets. Total remaining: 26"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 0, 0, and 0"
+Time difference of 234.551 mins
+[1] "On parameter set 299 of 324 total sets. Total remaining: 25"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 1, 0, and 0"
+Time difference of 272.6235 mins
+[1] "On parameter set 300 of 324 total sets. Total remaining: 24"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 3, 0, and 0"
+Time difference of 249.8056 mins
+[1] "On parameter set 301 of 324 total sets. Total remaining: 23"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 0, 1, and 0"
+Time difference of 238.5266 mins
+[1] "On parameter set 302 of 324 total sets. Total remaining: 22"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 1, 1, and 0"
+Time difference of 298.7231 mins
+[1] "On parameter set 303 of 324 total sets. Total remaining: 21"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 3, 1, and 0"
+Time difference of 236.1058 mins
+[1] "On parameter set 304 of 324 total sets. Total remaining: 20"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 0, 3, and 0"
+Time difference of 233.2264 mins
+[1] "On parameter set 305 of 324 total sets. Total remaining: 19"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 1, 3, and 0"
+Time difference of 306.2281 mins
+[1] "On parameter set 306 of 324 total sets. Total remaining: 18"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 3, 3, and 0"
+Time difference of 235.2982 mins
+[1] "On parameter set 307 of 324 total sets. Total remaining: 17"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 0, 0, and 1"
+Time difference of 233.5138 mins
+[1] "On parameter set 308 of 324 total sets. Total remaining: 16"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 1, 0, and 1"
+Time difference of 289.7231 mins
+[1] "On parameter set 309 of 324 total sets. Total remaining: 15"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 3, 0, and 1"
+Time difference of 238.9463 mins
+[1] "On parameter set 310 of 324 total sets. Total remaining: 14"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 0, 1, and 1"
+Time difference of 234.4002 mins
+[1] "On parameter set 311 of 324 total sets. Total remaining: 13"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 1, 1, and 1"
+Time difference of 233.9234 mins
+[1] "On parameter set 312 of 324 total sets. Total remaining: 12"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 3, 1, and 1"
+Time difference of 240.0753 mins
+[1] "On parameter set 313 of 324 total sets. Total remaining: 11"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 0, 3, and 1"
+Time difference of 276.8254 mins
+[1] "On parameter set 314 of 324 total sets. Total remaining: 10"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 1, 3, and 1"
+Time difference of 307.0802 mins
+[1] "On parameter set 315 of 324 total sets. Total remaining: 9"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 3, 3, and 1"
+Time difference of 286.8948 mins
+[1] "On parameter set 316 of 324 total sets. Total remaining: 8"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 0, 0, and 3"
+Time difference of 278.3345 mins
+[1] "On parameter set 317 of 324 total sets. Total remaining: 7"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 1, 0, and 3"
+Time difference of 272.6436 mins
+[1] "On parameter set 318 of 324 total sets. Total remaining: 6"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 3, 0, and 3"
+Time difference of 294.2827 mins
+[1] "On parameter set 319 of 324 total sets. Total remaining: 5"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 0, 1, and 3"
+Time difference of 293.0204 mins
+[1] "On parameter set 320 of 324 total sets. Total remaining: 4"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 1, 1, and 3"
+Time difference of 264.0691 mins
+[1] "On parameter set 321 of 324 total sets. Total remaining: 3"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 3, 1, and 3"
+Time difference of 278.7506 mins
+[1] "On parameter set 322 of 324 total sets. Total remaining: 2"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 0, 3, and 3"
+Time difference of 295.145 mins
+[1] "On parameter set 323 of 324 total sets. Total remaining: 1"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 1, 3, and 3"
+Time difference of 295.4964 mins
+[1] "On parameter set 324 of 324 total sets. Total remaining: 0"
+[1] "This models parameters were: SS: 1000, error: 2, B0, B1, B2 spatial variations of 3, 3, and 3"
+> # saves output as "mcOutputFinal.rds" and ultimately "mcOutputFinal.rds"
+> 
+> proc.time()
+        user       system      elapsed 
+31720003.632     2197.976  2230235.915 
