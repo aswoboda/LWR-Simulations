@@ -233,7 +233,6 @@ numRepeats <- 5
 
 testParams <- expand.grid(numRepeats = numRepeats, B0SpatialVar = B0.SpVar, B1SpatialVar = B1.SpVar, B2SpatialVar = B2.SpVar, errorSD = errors, sampleSizes = sampleSizes)
 
-z <- mcMultParamsTimeTest(testParams, MC = F)
 
 x <- mcMultParams(testParams, MC = T)
 
@@ -246,3 +245,7 @@ successRate.gen(x, successMeasure = "Both")
 successRate.gen(a)
 #successRate.gen(x, successMeasure = "Betas", successRank = 10)
 #successRate.gen(x, successMeasure = "Both")
+
+modelParams <- c("Sample Size", "Error", "B0 SpVar", "B1 SpVar", "B2 SpVar")
+desired <- c(100, 1, 0, 0, 0)
+which(x[1,modelParams,] == desired)
