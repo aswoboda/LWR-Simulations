@@ -1,0 +1,107 @@
+\documentclass{article}
+\title{Mixed GWR Simulation Write-up}
+\author{Aaron Swoboda}
+
+
+\begin{document}
+\maketitle
+
+What are our research questions? Basically:
+\begin{enumerate}
+\item Can we find the ``true'' model among the eight different possibilities with three model parameters?
+\item Are there differences in the results based on the metric used?
+\item What happens as we change the sample size and amount of error in the model?
+\item How much does it really matter if we are concerned with coefficient estimates?
+\item What happens when we use other decision tools to help with model selection? (Monte Carlo simulations and test statistics)
+\end{enumerate}
+
+
+<<loadData, cache=TRUE, echo = FALSE>>=
+#setwd("MixedGWR/Writeup/")
+mcOutput = readRDS("../SimulationOutput/mcOutputFinal201309.rds")
+options(digits = 2)
+
+@
+
+\section{Methodology}
+
+Imagine a simple linear model with two explanatory variables,
+\begin{equation}
+Y = \beta _0 + \beta _1 *X_1 + \beta _2 * X_2 + \epsilon
+\end{equation}
+Now imagine that each of our $N$ individual observations in this model occur at geographical locations on a Cartesian plane. Thus our data consists of an $N x 5$ matrix, where $Y$ may be house prices, $X_1$ and $X_2$ could be the living space and lot size associated with each house, and the final two columns determine the location of the observations (for instance, latitude and longitude, or distances north and east from a prescribed point serving as the origin).
+
+The above simple model exemplifies spatial stationarity in the parameters. The $\beta$ coefficients are constant over space. Instead, the coefficients could exhibit spatial non-stationarity, in which case one, two, or all three of the $\beta$ coefficients are a function of location. This has a natural interpretation in the current real estate example. Location matters. Location can matter in different ways. For instance, if the value of land varies over space, then we would expect the coefficient on lot size to vary over space, while it is also possible that the intercept varies over space to reflect variation in prices of similar houses in different locations. 
+
+While it is possible to parameterize the variation in coefficients, for instance researchers often (CITATION?) include a variable measuring the distance from an observation to an important amenity such as the Central Business District and then this distance variable could be interacted with variables whose value are predicted to vary over space. However, it is not implausible to believe that the variation in coefficients might not be easily parameterized (for instance, if land values are a non-monotonic function of distance). Researchers may instead interact variables with fixed effects for cities or census tracts. However, such strategies require the analyst to make assumptions that severely limit the type and degree of variation in the parameters. For instance, interaction terms with geographic boundaries assume discrete differences in the value of parameters across the boundaries, while instead the parameters may instead be a continuous function of location.
+
+\subsection{Local Regression to the Rescue?}
+
+
+\subsection{Experimental Design}
+
+We generate data in the following format:
+\begin{equation}
+Y = \beta _0(location) + \beta _1(location) *X_1 + \beta _2(location) * X_2 + \epsilon ,
+\end{equation}
+where sometimes the coefficient is in fact stationary, $\beta _i(location) = \beta$, and other times it is non-stationary. With three coefficients each having the possibility of being stationary or not, there are eight different possible combinations, ranging from (stationary, stationary, stationary) to (non-stationary, non-stationary, non-stationary).
+
+We generate data using all eight different combinations and then estimate all eight possible LWR models (assuming non-stationarity or not for each variable). We then calculate different Cross-Validation metrics and compare their values across models and bandwidths. 
+
+We have three different values for each coefficient in our DGP, no variation, some variation, and more variation.
+
+We also change the sample size of our data as well as the variance of the model error term.
+
+\section{Simulation Results}
+
+We have seven different ways to pick the ``best'' model (the AIC, GCV, SCV, LOOCV, and RMSEs for the three different coefficients). Here are tables showing the relative frequency (in percentage) that each model number was selected by optimizing a given metric. Note that the columns in the following tables may not sum exactly to 100 due to rounding.
+<<models, echo=FALSE>>=
+NY = c("no", "yes")
+models = expand.grid(beta0 = NY, beta1 = NY, beta2 = NY)
+@
+
+
+<<ModelSelectionTabulations, cache = TRUE>>=
+for (i in 1:8) {
+  temp2 = which(mcOutput[,"True Model" ,] == i, arr.ind = TRUE)
+  temp3 = mcOutput[8:14, "Model Number", unique(temp2[, 2])]
+  temp4 = factor(temp3)
+  
+  newdata = data.frame(ModelNum = temp4, Metric = factor(rownames(temp3), levels = rownames(temp3)))
+  cat(paste("\n true model =", i, "\n"))
+  cat("spatial variation...\n")
+  print(models[i, ])
+  print(round(table(newdata)*100*7/sum(table(newdata)), 0))
+}
+@
+
+The results of the previous tables must be taken with a grain of salt, as there are frequently times when a ``true'' model may include variation in a coefficient, but the degree of non-stationarity in the coefficient may be small. In such cases, choosing an incorrect model (such as one that keeps such a coefficient constant) may not be such a big problem. 
+
+Some patterns clearly emerge. 
+\begin{itemize}
+\item The AIC and GCV metrics \emph{never} select Model 1, even when it is the actual model.
+\item There are several occasions where the model/bandwidth combination with the smallest RMSE is not the ``correct'' model.
+\end{itemize}
+
+\subsection{Coefficient Formulation}
+
+Even if an incorrect model is chosen, the model may yield accurate estimates of the coefficients. In each run of the simulation we estimated 50 different model/bandwidth combinations (seven different bandwidths for each of the seven models with at least one coefficient varying over space, plus the standard OLS model). We calculate the Root Mean Squared Error for each model and can rank these values. For instance, it is possible, and often the case, that the ``wrong'' model yields the most accurate estimates of a coefficient.
+
+<<BetaRankTabulations, cache = TRUE>>=
+#for (i in 1:8) {
+  i = 1
+  temp2 = which(mcOutput[1, "True Model", ] == i)
+  inputMetrics = c("AIC", "GCV", "SCV", "LOOCV")
+  inputStats = c("B0RMSE Rank", "B1RMSE Rank", "B2RMSE Rank")
+  par(mfrow = c(4, 3))
+  for (j in 1:4) {
+    for (k in 1:3) {
+      temp3 = mcOutput[inputMetrics[j], inputStats[k], temp2]
+      #summary(temp3)
+      hist(temp3, xlim = c(0, 50), breaks = 5*(0:10), col = "grey85",
+       axes = F, ylab = "rel freq", xlab = "rank", main = "")
+    }
+  }
+#}
+@
+\end{document}
