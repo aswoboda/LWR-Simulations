@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  11 OCT 2013 13:21
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  17 OCT 2013 12:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -73,7 +73,87 @@ File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 130.
 )
-(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/upquote.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/framed/framed.sty
+Package: framed 2007/10/04 v 0.95: framed or shaded text with page breaks
+\fb@frw=\dimen105
+\fb@frh=\dimen106
+\FrameRule=\dimen107
+\FrameSep=\dimen108
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/alltt.sty
+Package: alltt 1997/06/16 v2.0g defines alltt environment
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/animate/animate.sty
+Package: animate 2010/09/28 PDF animations from files and inline graphics
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/oberdiek/ifdraft.sty
+Package: ifdraft 2008/08/11 v1.3 Switch for option draft (HO)
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count88
+\calc@Bcount=\count89
+\calc@Adimen=\dimen109
+\calc@Bdimen=\dimen110
+\calc@Askip=\skip43
+\calc@Bskip=\skip44
+LaTeX Info: Redefining \setlength on input line 76.
+LaTeX Info: Redefining \addtolength on input line 77.
+\calc@Ccount=\count90
+\calc@Cskip=\skip45
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/animate/animfp.sty
+Package: animfp 2009/07/23 fixed point addition for animate.sty
+\afp@xs=\count91
+\afp@xia=\count92
+\afp@xib=\count93
+\afp@xfa=\count94
+\afp@xfb=\count95
+\afp@rega=\count96
+\afp@regb=\count97
+\afp@regs=\count98
+)
+(/usr/local/texlive/2011/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count99
+\scratchdimen=\dimen111
+\scratchbox=\box26
+\nofMPsegments=\count100
+\nofMParguments=\count101
+\everyMPshowfont=\toks15
+\MPscratchCnt=\count102
+\MPscratchDim=\dimen112
+\MPnumerator=\count103
+\makeMPintoPDFobject=\count104
+\everyMPtoPDFconversion=\toks16
+)
+\@anim@@fields=\count105
+\@anim@@ocgs=\count106
+\@anim@@posterocgs=\count107
+\@anim@box=\box27
+\@anim@tmpdima=\dimen113
+\@anim@tmpdimb=\dimen114
+\@anim@num=\count108
+\@anim@curframe=\count109
+\@anim@curframe@zb=\count110
+\@anim@resize=\count111
+\@anim@skipfram=\count112
+\@anim@mulframecnt=\count113
+\@anim@@tmlnfile=\read1
+\@anim@tmpcnt=\count114
+\c@@anim@tmpcnt=\count115
+\@anim@curlayer=\count116
+\@anim@lineno=\count117
+\@anim@begin=\toks17
+\@anim@end=\toks18
+) (/usr/local/texlive/2011/texmf-dist/tex/latex/upquote/upquote.sty
 Package: upquote 2003/08/11 v1.1 Covington's upright-quote modification to verb
 atim and verb
 
@@ -144,62 +224,35 @@ Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 324.
 Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 325.
 Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 326.
 ))
-(/usr/local/texlive/2011/texmf-dist/tex/latex/framed/framed.sty
-Package: framed 2007/10/04 v 0.95: framed or shaded text with page breaks
-\fb@frw=\dimen105
-\fb@frh=\dimen106
-\FrameRule=\dimen107
-\FrameSep=\dimen108
-)
-(/usr/local/texlive/2011/texmf-dist/tex/latex/base/alltt.sty
-Package: alltt 1997/06/16 v2.0g defines alltt environment
-)
 (./MixedGWRDraft.aux)
 \openout1 = `MixedGWRDraft.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 61.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 61.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 57.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 57.
 
 (/usr/local/texlive/2011/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    ... okay on input line 57.
 
-(/usr/local/texlive/2011/texmf-dist/tex/context/base/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count88
-\scratchdimen=\dimen109
-\scratchbox=\box26
-\nofMPsegments=\count89
-\nofMParguments=\count90
-\everyMPshowfont=\toks15
-\MPscratchCnt=\count91
-\MPscratchDim=\dimen110
-\MPnumerator=\count92
-\makeMPintoPDFobject=\count93
-\everyMPtoPDFconversion=\toks16
-) (/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/04/22 v0.16 Utilities of pdfTeX for LuaTeX (HO)
 
 (/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/ifluatex.sty
 Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
-)
-(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
-Package ifpdf Info: pdfTeX in PDF mode is detected.
 )
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
@@ -238,44 +291,42 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 62.
+(Font)              <12> on input line 58.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 62.
+(Font)              <8> on input line 58.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 62.
+(Font)              <6> on input line 58.
+Package color Info: Redefining color shadecolor on input line 71.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 80.
+(Font)              <7> on input line 81.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 80.
+(Font)              <5> on input line 81.
 
 [1
 
 {/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Package color Info: Redefining color shadecolor on input line 114.
-LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 116.
-LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 116
-.
+Package color Info: Redefining color shadecolor on input line 115.
 
-(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/omscmtt.fd
+[2]
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 117.
+LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 117
+.
+ (/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/omscmtt.fd
 File: omscmtt.fd 
 )
 LaTeX Font Info:    Font shape `OMS/cmtt/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 116.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 117.
 
-Overfull \hbox (1.49698pt too wide) in paragraph at lines 117--117
-[]    \OT1/cmtt/m/n/10 temp2 = []which[](mcOutput[, []"True Model"[], ] == i, a
-rr.ind = TRUE)[] 
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 118--118
+[]    []\OT1/cmtt/m/n/10 temp2[] []=[] []which[][](mcOutput[,[] []"True Model"[
+][], ][] []==[] []i,[] []arr.ind[] []=[] []TRUE[][])[][] 
  []
 
 
 Overfull \hbox (48.74657pt too wide) in paragraph at lines 121--121
-[]    \OT1/cmtt/m/n/10 newdata = []data.frame[](ModelNum = temp4, Metric = []fa
-ctor[]([]rownames[](temp3),[] 
- []
-
-[2]
-Overfull \vbox (2.16667pt too high) detected at line 251
+[]    []\OT1/cmtt/m/n/10 newdata[] []=[] []data.frame[][]([][]ModelNum[] []= te
+mp4,[] []Metric[] []=[] []factor[][]([][]rownames[][](temp3),[][] 
  []
 
 [3]
@@ -289,49 +340,211 @@ Underfull \vbox (badness 10000) detected at line 251
 [4] [5]
 Package color Info: Redefining color shadecolor on input line 268.
 
-Overfull \hbox (90.7462pt too wide) in paragraph at lines 280--280
-[]        []\OT1/cmtt/m/n/10 hist[](temp3, xlim = []c[](0, 50), breaks = 5 * (0
-:10), col = []"grey85"[], axes = F,[] 
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 282--282
+[]            []\OT1/cmtt/m/n/10 temp3[] []=[] []mcOutput[inputMetrics[j], inpu
+tStats[k], temp2][][] 
  []
 
-<figure/BetaRankTabulations.pdf, id=27, 505.89pt x 505.89pt>
-File: figure/BetaRankTabulations.pdf Graphic file (type pdf)
 
-<use figure/BetaRankTabulations.pdf>
-Package pdftex.def Info: figure/BetaRankTabulations.pdf used on input line 285.
-
-(pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-
-Overfull \hbox (15.0pt too wide) in paragraph at lines 285--285
-[][] 
+Overfull \hbox (95.99615pt too wide) in paragraph at lines 284--284
+[]            []\OT1/cmtt/m/n/10 hist[][](temp3,[] []xlim[] []=[] []c[][]([][]0
+[][],[] []50[][]),[] []breaks[] []=[] []5[] []*[] []([][]0[][]:[][]10[][]),[] [
+]col[] []=[] []ifelse[][](colMat[i,[][] 
  []
 
-[6] [7 <./figure/BetaRankTabulations.pdf>] (./MixedGWRDraft.aux) ) 
+
+Overfull \hbox (48.74657pt too wide) in paragraph at lines 285--285
+[]                []\OT1/cmtt/m/n/10 k][] []==[] []"red"[][],[] []"red"[][],[] 
+[]"grey85"[][]),[] []axes[] []= F,[] []ylab[] []=[] []"rel freq"[][],[][] 
+ []
+
+
+Overfull \hbox (43.49661pt too wide) in paragraph at lines 289--289
+[]    []\OT1/cmtt/m/n/10 mtext[][]([][]text[] []=[] []paste0[][]([][]"Model #"[
+][], i),[] []side[] []=[] []3[][],[] []outer[] []=[] []TRUE[][],[] []line[] []=
+[] []1.8[][])[][] 
+ []
+
+
+Overfull \hbox (95.99615pt too wide) in paragraph at lines 290--290
+[]    []\OT1/cmtt/m/n/10 mtext[][](inputMetrics,[] []at[] []=[] []seq[][]([][]0
+.875[][],[] []0.125[][],[] []length.out[] []=[] []4[][]),[] []side[] []=[] []2[
+][],[] []outer[] []= T)[][] 
+ []
+
+
+Overfull \hbox (48.74657pt too wide) in paragraph at lines 291--291
+[]    []\OT1/cmtt/m/n/10 mtext[][]([][]paste0[][]([][]"B"[][],[] []0[][]:[][]2[
+][]),[] []at[] []=[] []seq[][]([][]0.17[][],[] []0.83[][],[] []length.out[] []=
+[] []3[][]),[] []side[] []=[] []3[][],[][] 
+ []
+
+ <./figure/BetaRankTabulations1.pdf> <./figure/BetaRankTabulations2.pdf> <./fig
+ure/BetaRankTabulations3.pdf> <./figure/BetaRankTabulations4.pdf> <./figure/Bet
+aRankTabulations5.pdf> <./figure/BetaRankTabulations6.pdf> <./figure/BetaRankTa
+bulations7.pdf> <./figure/BetaRankTabulations8.pdf> [6] [7]
+Package color Info: Redefining color shadecolor on input line 313.
+
+Overfull \hbox (69.74638pt too wide) in paragraph at lines 319--319
+[][]\OT1/cmtt/m/n/10 myVars[] []=[] []c[][]([][]"B0RMSE Rank"[][],[] []"B1RMSE 
+Rank"[][],[] []"B2RMSE Rank"[][],[] []"Sample Size"[][],[] []"Error"[][],[][] 
+ []
+
+
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 383--383
+[]\OT1/cmtt/m/n/10 ##  Min.   :0.00   Length:259200      Min.   :0.020   Min.  
+ :0.020[] 
+ []
+
+
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 383--383
+[]\OT1/cmtt/m/n/10 ##  1st Qu.:0.00   Class :character   1st Qu.:0.020   1st Qu
+.:0.120[] 
+ []
+
+
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 383--383
+[]\OT1/cmtt/m/n/10 ##  Median :1.00   Mode  :character   Median :0.120   Median
+ :0.300[] 
+ []
+
+
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 383--383
+[]\OT1/cmtt/m/n/10 ##  Mean   :1.33                      Mean   :0.239   Mean  
+ :0.348[] 
+ []
+
+
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 383--383
+[]\OT1/cmtt/m/n/10 ##  3rd Qu.:3.00                      3rd Qu.:0.380   3rd Qu
+.:0.520[] 
+ []
+
+
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 383--383
+[]\OT1/cmtt/m/n/10 ##  Max.   :3.00                      Max.   :1.000   Max.  
+ :1.000[] 
+ []
+
+
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 383--383
+[]\OT1/cmtt/m/n/10 ##      B2rank        samplesize   error         truemodel  
+   B0sv[] 
+ []
+
+
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 383--383
+[]\OT1/cmtt/m/n/10 ##  Min.   :0.020   Min.   : 100   0.5:86400   8      :76800
+   0:86400[] 
+ []
+
+
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 383--383
+[]\OT1/cmtt/m/n/10 ##  1st Qu.:0.120   1st Qu.: 250   1  :86400   4      :38400
+   1:86400[] 
+ []
+
+
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 383--383
+[]\OT1/cmtt/m/n/10 ##  Median :0.300   Median : 450   2  :86400   6      :38400
+   3:86400[] 
+ []
+
+[8]
+Package color Info: Redefining color shadecolor on input line 390.
+
+Overfull \hbox (64.49643pt too wide) in paragraph at lines 392--392
+[][]\OT1/cmtt/m/n/10 mylogit[] []<-[] []glm[][]([][]cbind[][](B0rank,[] []1[] [
+]-[] []B0rank)[] []~[] []samplesize[] []+[] []metric[] []+[] []B0sv[] []+[] []B
+1sv[] []+[][] 
+ []
+
+
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 435--435
+[]\OT1/cmtt/m/n/10 ## glm(formula = cbind(B0rank, 1 - B0rank) ~ samplesize + me
+tric +[] 
+ []
+
+
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 435--435
+[]\OT1/cmtt/m/n/10 ##     B0sv + B1sv + B2sv + error, family = "binomial", data
+ = rankData)[] 
+ []
+
+LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 435
+.
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/ts1cmtt.fd
+File: ts1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+) [9]
+Package color Info: Redefining color shadecolor on input line 442.
+
+Overfull \hbox (64.49643pt too wide) in paragraph at lines 444--444
+[][]\OT1/cmtt/m/n/10 mylogit[] []<-[] []glm[][]([][]cbind[][](B1rank,[] []1[] [
+]-[] []B1rank)[] []~[] []samplesize[] []+[] []metric[] []+[] []B0sv[] []+[] []B
+1sv[] []+[][] 
+ []
+
+
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 487--487
+[]\OT1/cmtt/m/n/10 ## glm(formula = cbind(B1rank, 1 - B1rank) ~ samplesize + me
+tric +[] 
+ []
+
+
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 487--487
+[]\OT1/cmtt/m/n/10 ##     B0sv + B1sv + B2sv + error, family = "binomial", data
+ = rankData)[] 
+ []
+
+[10]
+Package color Info: Redefining color shadecolor on input line 494.
+
+Overfull \hbox (64.49643pt too wide) in paragraph at lines 496--496
+[][]\OT1/cmtt/m/n/10 mylogit[] []<-[] []glm[][]([][]cbind[][](B2rank,[] []1[] [
+]-[] []B2rank)[] []~[] []samplesize[] []+[] []metric[] []+[] []B0sv[] []+[] []B
+1sv[] []+[][] 
+ []
+
+
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 539--539
+[]\OT1/cmtt/m/n/10 ## glm(formula = cbind(B2rank, 1 - B2rank) ~ samplesize + me
+tric +[] 
+ []
+
+
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 539--539
+[]\OT1/cmtt/m/n/10 ##     B0sv + B1sv + B2sv + error, family = "binomial", data
+ = rankData)[] 
+ []
+
+[11] [12] (./MixedGWRDraft.aux) ) 
 Here is how much of TeX's memory you used:
- 2057 strings out of 493633
- 30599 string characters out of 3143378
- 112050 words of memory out of 3000000
- 5335 multiletter control sequences out of 15000+200000
- 8436 words of font info for 30 fonts, out of 3000000 for 9000
+ 2658 strings out of 493633
+ 40358 string characters out of 3143378
+ 134324 words of memory out of 3000000
+ 5905 multiletter control sequences out of 15000+200000
+ 8901 words of font info for 32 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 38i,6n,23p,995b,261s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/local/t
-exlive/2011/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/local/te
-xlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/tex
-live/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texl
-ive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texliv
-e/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/
-2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/20
-11/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2011
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2011/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2011/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2011/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2011/texmf
--dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on MixedGWRDraft.pdf (7 pages, 137286 bytes).
+ 38i,6n,23p,1010b,275s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/local/texlive/2011/texmf-dist/fonts/enc/
+dvips/cm-super/cm-super-ts1.enc}</usr/local/texlive/2011/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmitt10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmr10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr12.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmr17.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmr7.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmsy10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmti10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmtt10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/cm-super
+/sfrm1000.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/cm-super/s
+ftt1000.pfb>
+Output written on MixedGWRDraft.pdf (12 pages, 208658 bytes).
 PDF statistics:
- 79 PDF objects out of 1000 (max. 8388607)
- 56 compressed objects within 1 object stream
+ 190 PDF objects out of 1000 (max. 8388607)
+ 128 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 153 words of extra memory for PDF output out of 10000 (max. 10000000)
 

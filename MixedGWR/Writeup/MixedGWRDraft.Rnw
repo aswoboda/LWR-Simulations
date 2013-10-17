@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage{animate}
 \title{Mixed GWR Simulation Write-up}
 \author{Aaron Swoboda}
 
@@ -20,7 +21,7 @@ What are our research questions? Basically:
 #setwd("MixedGWR/Writeup/")
 mcOutput = readRDS("../SimulationOutput/mcOutputFinal201309.rds")
 options(digits = 2)
-
+require(animation)
 @
 
 \section{Methodology}
@@ -87,21 +88,91 @@ Some patterns clearly emerge.
 
 Even if an incorrect model is chosen, the model may yield accurate estimates of the coefficients. In each run of the simulation we estimated 50 different model/bandwidth combinations (seven different bandwidths for each of the seven models with at least one coefficient varying over space, plus the standard OLS model). We calculate the Root Mean Squared Error for each model and can rank these values. For instance, it is possible, and often the case, that the ``wrong'' model yields the most accurate estimates of a coefficient.
 
-<<BetaRankTabulations, cache = TRUE>>=
-#for (i in 1:8) {
-  i = 1
+<<BetaRankTabulations, fig.width=4, fig.height=7, fig.show='animate', aniopts='autoplay,loop', interval=2>>=
+colMat = matrix("black", 8, 3)
+colMat[as.matrix(models)=="yes"] = "red"
+par(oma = c(0, 2, 3, 0))
+par(mar = rep(1, 4))
+for (i in 1:8) {
+  #i = 1
+  layout(matrix(1:12, 4, 3, byrow=T))
   temp2 = which(mcOutput[1, "True Model", ] == i)
   inputMetrics = c("AIC", "GCV", "SCV", "LOOCV")
   inputStats = c("B0RMSE Rank", "B1RMSE Rank", "B2RMSE Rank")
-  par(mfrow = c(4, 3))
   for (j in 1:4) {
     for (k in 1:3) {
       temp3 = mcOutput[inputMetrics[j], inputStats[k], temp2]
       #summary(temp3)
-      hist(temp3, xlim = c(0, 50), breaks = 5*(0:10), col = "grey85",
+      hist(temp3, xlim = c(0, 50), breaks = 5*(0:10), 
+           col = ifelse(colMat[i, k]=="red", "red", "grey85"),
        axes = F, ylab = "rel freq", xlab = "rank", main = "")
     }
   }
-#}
+  mtext(text=paste0("Model #", i), side=3, outer=TRUE, line = 1.8)
+  mtext(inputMetrics, at = seq(.875, .125, length.out=4), side = 2, outer = T)
+  mtext(paste0("B", 0:2), at = seq(.17,.83, length.out=3), 
+        side = 3, outer = T, line = 0, col = colMat[i, ])
+}
+
+@
+
+\section{Predicting Beta RMSE Rank}
+
+Let's convert ranks into a proportion and then use a logistic regression to look for patterns in rank vs.\ other variables like the metric and degree of spatial variation, etc.
+
+<<makeData>>=
+  temp2 = which(mcOutput[1, "True Model", ] == i)
+  inputMetrics = c("AIC", "GCV", "SCV", "LOOCV")
+  inputStats = c("B0RMSE Rank", "B1RMSE Rank", "B2RMSE Rank")
+      temp3 = mcOutput[inputMetrics[j], inputStats[k], temp2]
+myVars = c("B0RMSE Rank",  "B1RMSE Rank",  "B2RMSE Rank", "Sample Size",  "Error", "True Model",
+           "B0 SpVar", "B1 SpVar", "B2 SpVar")
+rankData1 = as.data.frame(t(mcOutput["AIC", myVars, ]))
+rankData1$Metric = "AIC"
+
+rankData2 = as.data.frame(t(mcOutput["GCV", myVars, ]))
+rankData2$Metric = "GCV"
+
+rankData3 = as.data.frame(t(mcOutput["SCV", myVars, ]))
+rankData3$Metric = "SCV"
+
+rankData4 = as.data.frame(t(mcOutput["LOOCV", myVars, ]))
+rankData4$Metric = "LOOCV"
+
+rankData = rbind(rankData1, rankData2, rankData3, rankData4)
+
+rankData$B0rank = rankData[, "B0RMSE Rank"]/50
+rankData$B1rank = rankData[, "B1RMSE Rank"]/50
+rankData$B2rank = rankData[, "B2RMSE Rank"]/50
+rankData$samplesize = rankData[, "Sample Size"]
+rankData$error = as.factor(rankData$Error)
+rankData$truemodel = as.factor(rankData[, "True Model"])
+rankData$B0sv = as.factor(rankData[, "B0 SpVar"])
+rankData$B1sv = as.factor(rankData[, "B1 SpVar"])
+rankData$B2sv = as.factor(rankData[, "B2 SpVar"])
+rankData$metric = as.factor(rankData$Metric)
+
+summary(rankData)
+@
+
+How are the various parameters related to the results of the $\beta _0$ ranking?
+<<regression0>>=
+mylogit <- glm(cbind(B0rank, 1-B0rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
+               data = rankData, family = "binomial")
+summary(mylogit)
+@
+
+How are the various parameters related to the results of the $\beta _1$ ranking?
+<<regression1>>=
+mylogit <- glm(cbind(B1rank, 1-B1rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
+               data = rankData, family = "binomial")
+summary(mylogit)
+@
+
+How are the various parameters related to the results of the $\beta _2$ ranking?
+<<regression2>>=
+mylogit <- glm(cbind(B2rank, 1-B2rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
+               data = rankData, family = "binomial")
+summary(mylogit)
 @
 \end{document}
