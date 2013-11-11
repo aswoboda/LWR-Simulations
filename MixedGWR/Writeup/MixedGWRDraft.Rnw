@@ -13,15 +13,22 @@ What are our research questions? Basically:
 \item Are there differences in the results based on the metric used?
 \item What happens as we change the sample size and amount of error in the model?
 \item How much does it really matter if we are concerned with coefficient estimates?
+  \begin{itemize}
+  \item How well does our selected model perform as measured by beta RMSE?
+  \item Does our model perform better when we select the correct model?
+  \item Can we control for whether we selected a model with the correct spatial variation for a given parameter?
+  \end{itemize}
+\item What about using bandwidth size as a dependent variable?
 \item What happens when we use other decision tools to help with model selection? (Monte Carlo simulations and test statistics)
 \end{enumerate}
 
 
-<<loadData, cache=TRUE, echo = FALSE>>=
+<<loadData, cache=TRUE, echo = FALSE, results='hide'>>=
 #setwd("MixedGWR/Writeup/")
 mcOutput = readRDS("../SimulationOutput/mcOutputFinal201309.rds")
 options(digits = 2)
-require(animation)
+require(animation, quietly = TRUE)
+opts_chunk$set(cache=TRUE)
 @
 
 \section{Methodology}
@@ -62,13 +69,14 @@ models = expand.grid(beta0 = NY, beta1 = NY, beta2 = NY)
 @
 
 
-<<ModelSelectionTabulations, cache = TRUE>>=
+<<ModelSelectionTabulations>>=
 for (i in 1:8) {
   temp2 = which(mcOutput[,"True Model" ,] == i, arr.ind = TRUE)
   temp3 = mcOutput[8:14, "Model Number", unique(temp2[, 2])]
   temp4 = factor(temp3)
   
-  newdata = data.frame(ModelNum = temp4, Metric = factor(rownames(temp3), levels = rownames(temp3)))
+  newdata = data.frame(ModelNum = temp4, 
+                       Metric = factor(rownames(temp3), levels = rownames(temp3)))
   cat(paste("\n true model =", i, "\n"))
   cat("spatial variation...\n")
   print(models[i, ])
@@ -86,9 +94,10 @@ Some patterns clearly emerge.
 
 \subsection{Coefficient Formulation}
 
-Even if an incorrect model is chosen, the model may yield accurate estimates of the coefficients. In each run of the simulation we estimated 50 different model/bandwidth combinations (seven different bandwidths for each of the seven models with at least one coefficient varying over space, plus the standard OLS model). We calculate the Root Mean Squared Error for each model and can rank these values. For instance, it is possible, and often the case, that the ``wrong'' model yields the most accurate estimates of a coefficient.
+Even if an incorrect model is chosen, the model may yield accurate estimates of the coefficients. In each run of the simulation we estimated 50 different model/bandwidth combinations (seven different bandwidths for each of the seven models with at least one coefficient varying over space, plus the standard OLS model). We calculate the Root Mean Squared Error for each model and can rank these values. For instance, it is possible, and often the case, that the ``wrong'' model yields the most accurate estimates of a coefficient among all of the models implemented.
 
-<<BetaRankTabulations, fig.width=4, fig.height=7, fig.show='animate', aniopts='autoplay,loop', interval=2>>=
+
+<<BetaRankTabulations, fig.width=4, fig.height=6, fig.show='animate', aniopts='autoplay,loop,controls', interval=2>>=
 colMat = matrix("black", 8, 3)
 colMat[as.matrix(models)=="yes"] = "red"
 par(oma = c(0, 2, 3, 0))
@@ -108,7 +117,8 @@ for (i in 1:8) {
        axes = F, ylab = "rel freq", xlab = "rank", main = "")
     }
   }
-  mtext(text=paste0("Model #", i), side=3, outer=TRUE, line = 1.8)
+  mtext(text=paste0("Model #", i, "(non-stationary parameters in red"), 
+        side=3, outer=TRUE, line = 1.8)
   mtext(inputMetrics, at = seq(.875, .125, length.out=4), side = 2, outer = T)
   mtext(paste0("B", 0:2), at = seq(.17,.83, length.out=3), 
         side = 3, outer = T, line = 0, col = colMat[i, ])
@@ -116,17 +126,22 @@ for (i in 1:8) {
 
 @
 
-\section{Predicting Beta RMSE Rank}
 
-Let's convert ranks into a proportion and then use a logistic regression to look for patterns in rank vs.\ other variables like the metric and degree of spatial variation, etc.
+\section{Accuracy of Beta Estimates}
+
+During the experiment we calculated the Root Mean Squared Error the estimated coefficients for all models. We then ranked each model from smallest to largest RMSEs and collected the RMSE values and ranks for all models that minimized one of the model selection criteria and the model with the smallest RMSE for this coefficient. 
+
+Let's see if there is a relationship between the RMSE values/ranks and the parameters we modified in the experiment.
 
 <<makeData>>=
-  temp2 = which(mcOutput[1, "True Model", ] == i)
-  inputMetrics = c("AIC", "GCV", "SCV", "LOOCV")
-  inputStats = c("B0RMSE Rank", "B1RMSE Rank", "B2RMSE Rank")
-      temp3 = mcOutput[inputMetrics[j], inputStats[k], temp2]
-myVars = c("B0RMSE Rank",  "B1RMSE Rank",  "B2RMSE Rank", "Sample Size",  "Error", "True Model",
-           "B0 SpVar", "B1 SpVar", "B2 SpVar")
+#   temp2 = which(mcOutput[1, "True Model", ] == i)
+#   inputMetrics = c("AIC", "GCV", "SCV", "LOOCV")
+#   inputStats = c("B0RMSE Rank", "B1RMSE Rank", "B2RMSE Rank")
+# temp3 = mcOutput[inputMetrics[j], inputStats[k], temp2]
+myVars = c("B0RMSE",     "B1RMSE",     "B2RMSE",
+           "B0RMSE Rank",  "B1RMSE Rank",  "B2RMSE Rank", 
+           "Sample Size",  "Error", "True Model",
+           "B0 SpVar", "B1 SpVar", "B2 SpVar", "Model Number")
 rankData1 = as.data.frame(t(mcOutput["AIC", myVars, ]))
 rankData1$Metric = "AIC"
 
@@ -141,9 +156,6 @@ rankData4$Metric = "LOOCV"
 
 rankData = rbind(rankData1, rankData2, rankData3, rankData4)
 
-rankData$B0rank = rankData[, "B0RMSE Rank"]/50
-rankData$B1rank = rankData[, "B1RMSE Rank"]/50
-rankData$B2rank = rankData[, "B2RMSE Rank"]/50
 rankData$samplesize = rankData[, "Sample Size"]
 rankData$error = as.factor(rankData$Error)
 rankData$truemodel = as.factor(rankData[, "True Model"])
@@ -151,28 +163,153 @@ rankData$B0sv = as.factor(rankData[, "B0 SpVar"])
 rankData$B1sv = as.factor(rankData[, "B1 SpVar"])
 rankData$B2sv = as.factor(rankData[, "B2 SpVar"])
 rankData$metric = as.factor(rankData$Metric)
+names(rankData)[which(names(rankData)=="Model Number")] = "selectedmodel"
 
-summary(rankData)
 @
+
+\subsection{RMSE Values}
+
+<<RMSEregression0>>=
+RMSEregression0 <- lm(B0RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
+               data = rankData)
+summary(RMSEregression0)
+@
+<<RMSEregression1>>=
+RMSEregression1 <- lm(B1RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
+               data = rankData)
+summary(RMSEregression1)
+@
+<<RMSEregression2>>=
+RMSEregression2 <- lm(B2RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
+               data = rankData)
+summary(RMSEregression2)
+@
+
+Now I'd like to add a variable along the lines of ``does the selected model correctly identify whether the variable is non-stationary?''
+
+<<identifySV>>=
+TrueModelBeta0sv = c(2, 4, 6, 8)
+TrueModelBeta1sv = c(3, 4, 7, 8)
+TrueModelBeta2sv = 5:8
+
+ModelBetaSV.selected.true = function(TrueModelBetasv) {
+  temp = rankData$truemodel %in% TrueModelBetasv
+  temp2 = rankData$selectedmodel %in% TrueModelBetasv
+  ModelBetaSVCorrect <- temp == temp2
+  ModelBetaSVCorrect
+}
+
+rankData$ModelBeta0svTrue = ModelBetaSV.selected.true(TrueModelBeta0sv)
+rankData$ModelBeta1svTrue = ModelBetaSV.selected.true(TrueModelBeta1sv)
+rankData$ModelBeta2svTrue = ModelBetaSV.selected.true(TrueModelBeta2sv)
+@
+
+<<RMSEregression01>>=
+RMSEregression0 <- lm(B0RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue, 
+               data = rankData)
+summary(RMSEregression0)
+@
+<<RMSEregression11>>=
+RMSEregression1 <- lm(B1RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta1svTrue, 
+               data = rankData)
+summary(RMSEregression1)
+@
+<<RMSEregression21>>=
+RMSEregression2 <- lm(B2RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta2svTrue, 
+               data = rankData)
+summary(RMSEregression2)
+@
+
+Now add all three:
+
+<<RMSEregression02>>=
+RMSEregression0 <- lm(B0RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue, 
+               data = rankData)
+summary(RMSEregression0)
+@
+<<RMSEregression12>>=
+RMSEregression1 <- lm(B1RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta1svTrue, 
+               data = rankData)
+summary(RMSEregression1)
+@
+<<RMSEregression22>>=
+RMSEregression2 <- lm(B2RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta2svTrue, 
+               data = rankData)
+summary(RMSEregression2)
+@
+
+\subsection{RMSE Rank}
+
+\subsection{RMSE Rank Proportion}
+
+Let's convert ranks into a proportion and then use a logistic regression to look for patterns in rank vs.\ other variables like the metric and degree of spatial variation, etc.
 
 How are the various parameters related to the results of the $\beta _0$ ranking?
 <<regression0>>=
+rankData$B0rank = rankData[, "B0RMSE Rank"]/50
+rankData$B1rank = rankData[, "B1RMSE Rank"]/50
+rankData$B2rank = rankData[, "B2RMSE Rank"]/50
 mylogit <- glm(cbind(B0rank, 1-B0rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
-               data = rankData, family = "binomial")
+data = rankData, family = "binomial")
 summary(mylogit)
 @
 
 How are the various parameters related to the results of the $\beta _1$ ranking?
 <<regression1>>=
 mylogit <- glm(cbind(B1rank, 1-B1rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
-               data = rankData, family = "binomial")
+data = rankData, family = "binomial")
 summary(mylogit)
 @
 
 How are the various parameters related to the results of the $\beta _2$ ranking?
 <<regression2>>=
 mylogit <- glm(cbind(B2rank, 1-B2rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
+data = rankData, family = "binomial")
+summary(mylogit)
+@
+
+
+
+<<regression01>>=
+mylogit <- glm(cbind(B0rank, 1-B0rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue, 
+data = rankData, family = "binomial")
+summary(mylogit)
+@
+
+How are the various parameters related to the results of the $\beta _1$ ranking?
+<<regression11>>=
+mylogit <- glm(cbind(B1rank, 1-B1rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta1svTrue, 
+data = rankData, family = "binomial")
+summary(mylogit)
+@
+
+How are the various parameters related to the results of the $\beta _2$ ranking?
+<<regression21>>=
+mylogit <- glm(cbind(B2rank, 1-B2rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta2svTrue, 
+data = rankData, family = "binomial")
+summary(mylogit)
+@
+
+Let's also throw in all three variables about whether the selected model has the same spatial variation as the true model for a certain beta.
+
+<<regression02>>=
+mylogit <- glm(cbind(B0rank, 1-B0rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, 
                data = rankData, family = "binomial")
 summary(mylogit)
 @
+
+How are the various parameters related to the results of the $\beta _1$ ranking?
+<<regression12>>=
+mylogit <- glm(cbind(B1rank, 1-B1rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, 
+               data = rankData, family = "binomial")
+summary(mylogit)
+@
+
+How are the various parameters related to the results of the $\beta _2$ ranking?
+<<regression22>>=
+mylogit <- glm(cbind(B2rank, 1-B2rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, 
+               data = rankData, family = "binomial")
+summary(mylogit)
+@
+
 \end{document}

@@ -63,16 +63,17 @@ What are our research questions? Basically:
 \item Are there differences in the results based on the metric used?
 \item What happens as we change the sample size and amount of error in the model?
 \item How much does it really matter if we are concerned with coefficient estimates?
+  \begin{itemize}
+  \item How well does our selected model perform as measured by beta RMSE?
+  \item Does our model perform better when we select the correct model?
+  \item Can we control for whether we selected a model with the correct spatial variation for a given parameter?
+  \end{itemize}
+\item What about using bandwidth size as a dependent variable?
 \item What happens when we use other decision tools to help with model selection? (Monte Carlo simulations and test statistics)
 \end{enumerate}
 
 
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: animation}}\end{kframe}
-\end{knitrout}
 
 
 \section{Methodology}
@@ -262,7 +263,8 @@ Some patterns clearly emerge.
 
 \subsection{Coefficient Formulation}
 
-Even if an incorrect model is chosen, the model may yield accurate estimates of the coefficients. In each run of the simulation we estimated 50 different model/bandwidth combinations (seven different bandwidths for each of the seven models with at least one coefficient varying over space, plus the standard OLS model). We calculate the Root Mean Squared Error for each model and can rank these values. For instance, it is possible, and often the case, that the ``wrong'' model yields the most accurate estimates of a coefficient.
+Even if an incorrect model is chosen, the model may yield accurate estimates of the coefficients. In each run of the simulation we estimated 50 different model/bandwidth combinations (seven different bandwidths for each of the seven models with at least one coefficient varying over space, plus the standard OLS model). We calculate the Root Mean Squared Error for each model and can rank these values. For instance, it is possible, and often the case, that the ``wrong'' model yields the most accurate estimates of a coefficient among all of the models implemented.
+
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -286,7 +288,8 @@ Even if an incorrect model is chosen, the model may yield accurate estimates of 
                 \hlkwc{xlab} \hlstd{=} \hlstr{"rank"}\hlstd{,} \hlkwc{main} \hlstd{=} \hlstr{""}\hlstd{)}
         \hlstd{\}}
     \hlstd{\}}
-    \hlkwd{mtext}\hlstd{(}\hlkwc{text} \hlstd{=} \hlkwd{paste0}\hlstd{(}\hlstr{"Model #"}\hlstd{, i),} \hlkwc{side} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{outer} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{line} \hlstd{=} \hlnum{1.8}\hlstd{)}
+    \hlkwd{mtext}\hlstd{(}\hlkwc{text} \hlstd{=} \hlkwd{paste0}\hlstd{(}\hlstr{"Model #"}\hlstd{, i,} \hlstr{"(non-stationary parameters in red"}\hlstd{),}
+        \hlkwc{side} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{outer} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{line} \hlstd{=} \hlnum{1.8}\hlstd{)}
     \hlkwd{mtext}\hlstd{(inputMetrics,} \hlkwc{at} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlnum{0.875}\hlstd{,} \hlnum{0.125}\hlstd{,} \hlkwc{length.out} \hlstd{=} \hlnum{4}\hlstd{),} \hlkwc{side} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{outer} \hlstd{= T)}
     \hlkwd{mtext}\hlstd{(}\hlkwd{paste0}\hlstd{(}\hlstr{"B"}\hlstd{,} \hlnum{0}\hlopt{:}\hlnum{2}\hlstd{),} \hlkwc{at} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlnum{0.17}\hlstd{,} \hlnum{0.83}\hlstd{,} \hlkwc{length.out} \hlstd{=} \hlnum{3}\hlstd{),} \hlkwc{side} \hlstd{=} \hlnum{3}\hlstd{,}
         \hlkwc{outer} \hlstd{= T,} \hlkwc{line} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{col} \hlstd{= colMat[i, ])}
@@ -300,24 +303,27 @@ Even if an incorrect model is chosen, the model may yield accurate estimates of 
 
 
 
-\animategraphics[,autoplay,loop]{0.5}{figure/BetaRankTabulations}{1}{8}
+\animategraphics[,autoplay,loop,controls]{0.5}{figure/BetaRankTabulations}{1}{8}
 
 \end{knitrout}
 
 
-\section{Predicting Beta RMSE Rank}
 
-Let's convert ranks into a proportion and then use a logistic regression to look for patterns in rank vs.\ other variables like the metric and degree of spatial variation, etc.
+\section{Accuracy of Beta Estimates}
+
+During the experiment we calculated the Root Mean Squared Error the estimated coefficients for all models. We then ranked each model from smallest to largest RMSEs and collected the RMSE values and ranks for all models that minimized one of the model selection criteria and the model with the smallest RMSE for this coefficient. 
+
+Let's see if there is a relationship between the RMSE values/ranks and the parameters we modified in the experiment.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{temp2} \hlkwb{=} \hlkwd{which}\hlstd{(mcOutput[}\hlnum{1}\hlstd{,} \hlstr{"True Model"}\hlstd{, ]} \hlopt{==} \hlstd{i)}
-\hlstd{inputMetrics} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlstr{"AIC"}\hlstd{,} \hlstr{"GCV"}\hlstd{,} \hlstr{"SCV"}\hlstd{,} \hlstr{"LOOCV"}\hlstd{)}
-\hlstd{inputStats} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlstr{"B0RMSE Rank"}\hlstd{,} \hlstr{"B1RMSE Rank"}\hlstd{,} \hlstr{"B2RMSE Rank"}\hlstd{)}
-\hlstd{temp3} \hlkwb{=} \hlstd{mcOutput[inputMetrics[j], inputStats[k], temp2]}
-\hlstd{myVars} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlstr{"B0RMSE Rank"}\hlstd{,} \hlstr{"B1RMSE Rank"}\hlstd{,} \hlstr{"B2RMSE Rank"}\hlstd{,} \hlstr{"Sample Size"}\hlstd{,} \hlstr{"Error"}\hlstd{,}
-    \hlstr{"True Model"}\hlstd{,} \hlstr{"B0 SpVar"}\hlstd{,} \hlstr{"B1 SpVar"}\hlstd{,} \hlstr{"B2 SpVar"}\hlstd{)}
+\hlcom{# temp2 = which(mcOutput[1, 'True Model', ] == i) inputMetrics = c('AIC',}
+\hlcom{# 'GCV', 'SCV', 'LOOCV') inputStats = c('B0RMSE Rank', 'B1RMSE Rank',}
+\hlcom{# 'B2RMSE Rank') temp3 = mcOutput[inputMetrics[j], inputStats[k], temp2]}
+\hlstd{myVars} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlstr{"B0RMSE"}\hlstd{,} \hlstr{"B1RMSE"}\hlstd{,} \hlstr{"B2RMSE"}\hlstd{,} \hlstr{"B0RMSE Rank"}\hlstd{,} \hlstr{"B1RMSE Rank"}\hlstd{,} \hlstr{"B2RMSE Rank"}\hlstd{,}
+    \hlstr{"Sample Size"}\hlstd{,} \hlstr{"Error"}\hlstd{,} \hlstr{"True Model"}\hlstd{,} \hlstr{"B0 SpVar"}\hlstd{,} \hlstr{"B1 SpVar"}\hlstd{,} \hlstr{"B2 SpVar"}\hlstd{,}
+    \hlstr{"Model Number"}\hlstd{)}
 \hlstd{rankData1} \hlkwb{=} \hlkwd{as.data.frame}\hlstd{(}\hlkwd{t}\hlstd{(mcOutput[}\hlstr{"AIC"}\hlstd{, myVars, ]))}
 \hlstd{rankData1}\hlopt{$}\hlstd{Metric} \hlkwb{=} \hlstr{"AIC"}
 \hlstd{rankData2} \hlkwb{=} \hlkwd{as.data.frame}\hlstd{(}\hlkwd{t}\hlstd{(mcOutput[}\hlstr{"GCV"}\hlstd{, myVars, ]))}
@@ -327,9 +333,6 @@ Let's convert ranks into a proportion and then use a logistic regression to look
 \hlstd{rankData4} \hlkwb{=} \hlkwd{as.data.frame}\hlstd{(}\hlkwd{t}\hlstd{(mcOutput[}\hlstr{"LOOCV"}\hlstd{, myVars, ]))}
 \hlstd{rankData4}\hlopt{$}\hlstd{Metric} \hlkwb{=} \hlstr{"LOOCV"}
 \hlstd{rankData} \hlkwb{=} \hlkwd{rbind}\hlstd{(rankData1, rankData2, rankData3, rankData4)}
-\hlstd{rankData}\hlopt{$}\hlstd{B0rank} \hlkwb{=} \hlstd{rankData[,} \hlstr{"B0RMSE Rank"}\hlstd{]}\hlopt{/}\hlnum{50}
-\hlstd{rankData}\hlopt{$}\hlstd{B1rank} \hlkwb{=} \hlstd{rankData[,} \hlstr{"B1RMSE Rank"}\hlstd{]}\hlopt{/}\hlnum{50}
-\hlstd{rankData}\hlopt{$}\hlstd{B2rank} \hlkwb{=} \hlstd{rankData[,} \hlstr{"B2RMSE Rank"}\hlstd{]}\hlopt{/}\hlnum{50}
 \hlstd{rankData}\hlopt{$}\hlstd{samplesize} \hlkwb{=} \hlstd{rankData[,} \hlstr{"Sample Size"}\hlstd{]}
 \hlstd{rankData}\hlopt{$}\hlstd{error} \hlkwb{=} \hlkwd{as.factor}\hlstd{(rankData}\hlopt{$}\hlstd{Error)}
 \hlstd{rankData}\hlopt{$}\hlstd{truemodel} \hlkwb{=} \hlkwd{as.factor}\hlstd{(rankData[,} \hlstr{"True Model"}\hlstd{])}
@@ -337,207 +340,427 @@ Let's convert ranks into a proportion and then use a logistic regression to look
 \hlstd{rankData}\hlopt{$}\hlstd{B1sv} \hlkwb{=} \hlkwd{as.factor}\hlstd{(rankData[,} \hlstr{"B1 SpVar"}\hlstd{])}
 \hlstd{rankData}\hlopt{$}\hlstd{B2sv} \hlkwb{=} \hlkwd{as.factor}\hlstd{(rankData[,} \hlstr{"B2 SpVar"}\hlstd{])}
 \hlstd{rankData}\hlopt{$}\hlstd{metric} \hlkwb{=} \hlkwd{as.factor}\hlstd{(rankData}\hlopt{$}\hlstd{Metric)}
-\hlkwd{summary}\hlstd{(rankData)}
+\hlkwd{names}\hlstd{(rankData)[}\hlkwd{which}\hlstd{(}\hlkwd{names}\hlstd{(rankData)} \hlopt{==} \hlstr{"Model Number"}\hlstd{)]} \hlkwb{=} \hlstr{"selectedmodel"}
 \end{alltt}
-\begin{verbatim}
-##   B0RMSE Rank    B1RMSE Rank    B2RMSE Rank    Sample Size  
-##  Min.   : 1.0   Min.   : 1.0   Min.   : 1.0   Min.   : 100  
-##  1st Qu.: 1.0   1st Qu.: 6.0   1st Qu.: 6.0   1st Qu.: 250  
-##  Median : 6.0   Median :15.0   Median :15.0   Median : 450  
-##  Mean   :11.9   Mean   :17.4   Mean   :17.4   Mean   : 500  
-##  3rd Qu.:19.0   3rd Qu.:26.0   3rd Qu.:26.0   3rd Qu.: 700  
-##  Max.   :50.0   Max.   :50.0   Max.   :50.0   Max.   :1000  
-##                                                             
-##      Error        True Model      B0 SpVar       B1 SpVar   
-##  Min.   :0.50   Min.   :1.00   Min.   :0.00   Min.   :0.00  
-##  1st Qu.:0.50   1st Qu.:4.00   1st Qu.:0.00   1st Qu.:0.00  
-##  Median :1.00   Median :6.00   Median :1.00   Median :1.00  
-##  Mean   :1.17   Mean   :5.67   Mean   :1.33   Mean   :1.33  
-##  3rd Qu.:2.00   3rd Qu.:8.00   3rd Qu.:3.00   3rd Qu.:3.00  
-##  Max.   :2.00   Max.   :8.00   Max.   :3.00   Max.   :3.00  
-##                                                             
-##     B2 SpVar       Metric              B0rank          B1rank     
-##  Min.   :0.00   Length:259200      Min.   :0.020   Min.   :0.020  
-##  1st Qu.:0.00   Class :character   1st Qu.:0.020   1st Qu.:0.120  
-##  Median :1.00   Mode  :character   Median :0.120   Median :0.300  
-##  Mean   :1.33                      Mean   :0.239   Mean   :0.348  
-##  3rd Qu.:3.00                      3rd Qu.:0.380   3rd Qu.:0.520  
-##  Max.   :3.00                      Max.   :1.000   Max.   :1.000  
-##                                                                   
-##      B2rank        samplesize   error         truemodel     B0sv     
-##  Min.   :0.020   Min.   : 100   0.5:86400   8      :76800   0:86400  
-##  1st Qu.:0.120   1st Qu.: 250   1  :86400   4      :38400   1:86400  
-##  Median :0.300   Median : 450   2  :86400   6      :38400   3:86400  
-##  Mean   :0.348   Mean   : 500               7      :38400            
-##  3rd Qu.:0.520   3rd Qu.: 700               2      :19200            
-##  Max.   :1.000   Max.   :1000               3      :19200            
-##                                             (Other):28800            
-##  B1sv      B2sv        metric     
-##  0:86400   0:86400   AIC  :64800  
-##  1:86400   1:86400   GCV  :64800  
-##  3:86400   3:86400   LOOCV:64800  
-##                      SCV  :64800  
-##                                   
-##                                   
-## 
-\end{verbatim}
 \end{kframe}
 \end{knitrout}
 
 
-How are the various parameters related to the results of the $\beta _0$ ranking?
+\subsection{RMSE Values}
+
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{mylogit} \hlkwb{<-} \hlkwd{glm}\hlstd{(}\hlkwd{cbind}\hlstd{(B0rank,} \hlnum{1} \hlopt{-} \hlstd{B0rank)} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+}
-    \hlstd{B2sv} \hlopt{+} \hlstd{error,} \hlkwc{data} \hlstd{= rankData,} \hlkwc{family} \hlstd{=} \hlstr{"binomial"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: non-integer counts in a binomial glm!}}\begin{alltt}
-\hlkwd{summary}\hlstd{(mylogit)}
+\hlstd{RMSEregression0} \hlkwb{<-} \hlkwd{lm}\hlstd{(B0RMSE} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+} \hlstd{B2sv} \hlopt{+} \hlstd{error,}
+    \hlkwc{data} \hlstd{= rankData)}
+\hlkwd{summary}\hlstd{(RMSEregression0)}
 \end{alltt}
 \begin{verbatim}
 ## 
 ## Call:
-## glm(formula = cbind(B0rank, 1 - B0rank) ~ samplesize + metric + 
-##     B0sv + B1sv + B2sv + error, family = "binomial", data = rankData)
+## lm(formula = B0RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + 
+##     error, data = rankData)
 ## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -1.7108  -0.3114  -0.0971   0.1461   2.5635  
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.7206 -0.1046 -0.0168  0.0750  2.6470 
 ## 
 ## Coefficients:
-##              Estimate Std. Error z value Pr(>|z|)    
-## (Intercept) -1.14e+00   1.94e-02  -58.83  < 2e-16 ***
-## samplesize  -7.64e-04   1.55e-05  -49.27  < 2e-16 ***
-## metricGCV    5.47e-02   1.55e-02    3.53  0.00042 ***
-## metricLOOCV  1.21e-01   1.54e-02    7.86  3.9e-15 ***
-## metricSCV    1.47e+00   1.43e-02  102.15  < 2e-16 ***
-## B0sv1       -6.37e-01   1.12e-02  -57.07  < 2e-16 ***
-## B0sv3       -2.31e+00   1.58e-02 -146.08  < 2e-16 ***
-## B1sv1        3.81e-02   1.26e-02    3.01  0.00258 ** 
-## B1sv3        1.49e-01   1.25e-02   11.93  < 2e-16 ***
-## B2sv1        2.80e-02   1.27e-02    2.21  0.02690 *  
-## B2sv3        1.57e-01   1.25e-02   12.56  < 2e-16 ***
-## error1       4.54e-01   1.32e-02   34.44  < 2e-16 ***
-## error2       9.30e-01   1.29e-02   72.37  < 2e-16 ***
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  1.24e-01   1.32e-03   93.81   <2e-16 ***
+## samplesize  -3.01e-04   1.04e-06 -290.47   <2e-16 ***
+## metricGCV    3.70e-03   9.95e-04    3.72    2e-04 ***
+## metricLOOCV  1.04e-02   9.95e-04   10.46   <2e-16 ***
+## metricSCV    2.01e-01   9.95e-04  201.63   <2e-16 ***
+## B0sv1        2.97e-01   8.61e-04  345.32   <2e-16 ***
+## B0sv3        6.45e-01   8.61e-04  748.50   <2e-16 ***
+## B1sv1        1.34e-02   8.61e-04   15.56   <2e-16 ***
+## B1sv3        6.31e-02   8.61e-04   73.30   <2e-16 ***
+## B2sv1        1.36e-02   8.61e-04   15.79   <2e-16 ***
+## B2sv3        6.48e-02   8.61e-04   75.24   <2e-16 ***
+## error1       1.14e-01   8.61e-04  132.67   <2e-16 ***
+## error2       3.12e-01   8.61e-04  362.13   <2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 101072  on 259199  degrees of freedom
-## Residual deviance:  50829  on 259187  degrees of freedom
-## AIC: 180384
-## 
-## Number of Fisher Scoring iterations: 5
+## Residual standard error: 0.179 on 259187 degrees of freedom
+## Multiple R-squared:  0.766,	Adjusted R-squared:  0.766 
+## F-statistic: 7.09e+04 on 12 and 259187 DF,  p-value: <2e-16
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-
-How are the various parameters related to the results of the $\beta _1$ ranking?
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{mylogit} \hlkwb{<-} \hlkwd{glm}\hlstd{(}\hlkwd{cbind}\hlstd{(B1rank,} \hlnum{1} \hlopt{-} \hlstd{B1rank)} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+}
-    \hlstd{B2sv} \hlopt{+} \hlstd{error,} \hlkwc{data} \hlstd{= rankData,} \hlkwc{family} \hlstd{=} \hlstr{"binomial"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: non-integer counts in a binomial glm!}}\begin{alltt}
-\hlkwd{summary}\hlstd{(mylogit)}
+\hlstd{RMSEregression1} \hlkwb{<-} \hlkwd{lm}\hlstd{(B1RMSE} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+} \hlstd{B2sv} \hlopt{+} \hlstd{error,}
+    \hlkwc{data} \hlstd{= rankData)}
+\hlkwd{summary}\hlstd{(RMSEregression1)}
 \end{alltt}
 \begin{verbatim}
 ## 
 ## Call:
-## glm(formula = cbind(B1rank, 1 - B1rank) ~ samplesize + metric + 
-##     B0sv + B1sv + B2sv + error, family = "binomial", data = rankData)
+## lm(formula = B1RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + 
+##     error, data = rankData)
 ## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -1.3801  -0.4638  -0.0544   0.3592   1.7640  
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -0.866 -0.166 -0.025  0.122  5.309 
 ## 
 ## Coefficients:
-##              Estimate Std. Error z value Pr(>|z|)    
-## (Intercept) -1.36e+00   1.64e-02  -82.87  < 2e-16 ***
-## samplesize  -1.99e-04   1.25e-05  -15.96  < 2e-16 ***
-## metricGCV    5.47e-02   1.22e-02    4.47  7.8e-06 ***
-## metricLOOCV  8.33e-02   1.22e-02    6.82  8.9e-12 ***
-## metricSCV    7.75e-01   1.18e-02   65.63  < 2e-16 ***
-## B0sv1        4.95e-01   1.03e-02   48.05  < 2e-16 ***
-## B0sv3        5.79e-02   1.06e-02    5.48  4.2e-08 ***
-## B1sv1        2.12e-01   1.04e-02   20.43  < 2e-16 ***
-## B1sv3        1.55e-01   1.04e-02   14.89  < 2e-16 ***
-## B2sv1        1.91e-02   1.03e-02    1.85    0.064 .  
-## B2sv3       -5.25e-02   1.04e-02   -5.06  4.1e-07 ***
-## error1       3.15e-01   1.05e-02   29.88  < 2e-16 ***
-## error2       5.18e-01   1.04e-02   49.63  < 2e-16 ***
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  1.73e-01   2.12e-03   81.83  < 2e-16 ***
+## samplesize  -4.02e-04   1.66e-06 -242.18  < 2e-16 ***
+## metricGCV    1.26e-02   1.59e-03    7.89  3.0e-15 ***
+## metricLOOCV  2.13e-02   1.59e-03   13.38  < 2e-16 ***
+## metricSCV    1.80e-01   1.59e-03  113.11  < 2e-16 ***
+## B0sv1        1.16e-01   1.38e-03   84.16  < 2e-16 ***
+## B0sv3        1.84e-01   1.38e-03  133.24  < 2e-16 ***
+## B1sv1        1.43e-01   1.38e-03  103.45  < 2e-16 ***
+## B1sv3        4.13e-01   1.38e-03  299.84  < 2e-16 ***
+## B2sv1        6.25e-03   1.38e-03    4.54  5.6e-06 ***
+## B2sv3        1.32e-02   1.38e-03    9.57  < 2e-16 ***
+## error1       1.32e-01   1.38e-03   95.95  < 2e-16 ***
+## error2       3.69e-01   1.38e-03  267.90  < 2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 80156  on 259199  degrees of freedom
-## Residual deviance: 68248  on 259187  degrees of freedom
-## AIC: 279685
-## 
-## Number of Fisher Scoring iterations: 4
+## Residual standard error: 0.286 on 259187 degrees of freedom
+## Multiple R-squared:  0.501,	Adjusted R-squared:  0.501 
+## F-statistic: 2.17e+04 on 12 and 259187 DF,  p-value: <2e-16
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-
-How are the various parameters related to the results of the $\beta _2$ ranking?
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{mylogit} \hlkwb{<-} \hlkwd{glm}\hlstd{(}\hlkwd{cbind}\hlstd{(B2rank,} \hlnum{1} \hlopt{-} \hlstd{B2rank)} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+}
-    \hlstd{B2sv} \hlopt{+} \hlstd{error,} \hlkwc{data} \hlstd{= rankData,} \hlkwc{family} \hlstd{=} \hlstr{"binomial"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: non-integer counts in a binomial glm!}}\begin{alltt}
-\hlkwd{summary}\hlstd{(mylogit)}
+\hlstd{RMSEregression2} \hlkwb{<-} \hlkwd{lm}\hlstd{(B2RMSE} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+} \hlstd{B2sv} \hlopt{+} \hlstd{error,}
+    \hlkwc{data} \hlstd{= rankData)}
+\hlkwd{summary}\hlstd{(RMSEregression2)}
 \end{alltt}
 \begin{verbatim}
 ## 
 ## Call:
-## glm(formula = cbind(B2rank, 1 - B2rank) ~ samplesize + metric + 
-##     B0sv + B1sv + B2sv + error, family = "binomial", data = rankData)
+## lm(formula = B2RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + 
+##     error, data = rankData)
 ## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -1.3731  -0.4656  -0.0568   0.3582   1.7645  
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -0.901 -0.167 -0.025  0.123  4.371 
 ## 
 ## Coefficients:
-##              Estimate Std. Error z value Pr(>|z|)    
-## (Intercept) -1.36e+00   1.64e-02  -83.12  < 2e-16 ***
-## samplesize  -2.05e-04   1.25e-05  -16.36  < 2e-16 ***
-## metricGCV    5.68e-02   1.22e-02    4.64  3.5e-06 ***
-## metricLOOCV  8.61e-02   1.22e-02    7.05  1.8e-12 ***
-## metricSCV    7.74e-01   1.18e-02   65.49  < 2e-16 ***
-## B0sv1        4.92e-01   1.03e-02   47.82  < 2e-16 ***
-## B0sv3        5.44e-02   1.06e-02    5.16  2.5e-07 ***
-## B1sv1        1.69e-02   1.03e-02    1.64      0.1    
-## B1sv3       -4.72e-02   1.04e-02   -4.55  5.3e-06 ***
-## B2sv1        1.96e-01   1.04e-02   18.91  < 2e-16 ***
-## B2sv3        1.60e-01   1.04e-02   15.41  < 2e-16 ***
-## error1       3.34e-01   1.05e-02   31.68  < 2e-16 ***
-## error2       5.29e-01   1.04e-02   50.70  < 2e-16 ***
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  1.73e-01   2.13e-03   81.35  < 2e-16 ***
+## samplesize  -4.01e-04   1.67e-06 -240.17  < 2e-16 ***
+## metricGCV    1.29e-02   1.60e-03    8.08  6.5e-16 ***
+## metricLOOCV  2.21e-02   1.60e-03   13.82  < 2e-16 ***
+## metricSCV    1.80e-01   1.60e-03  112.14  < 2e-16 ***
+## B0sv1        1.13e-01   1.39e-03   81.25  < 2e-16 ***
+## B0sv3        1.82e-01   1.39e-03  131.29  < 2e-16 ***
+## B1sv1        8.10e-03   1.39e-03    5.84  5.1e-09 ***
+## B1sv3        1.29e-02   1.39e-03    9.32  < 2e-16 ***
+## B2sv1        1.43e-01   1.39e-03  103.24  < 2e-16 ***
+## B2sv3        4.14e-01   1.39e-03  298.96  < 2e-16 ***
+## error1       1.32e-01   1.39e-03   95.41  < 2e-16 ***
+## error2       3.67e-01   1.39e-03  265.00  < 2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 80411  on 259199  degrees of freedom
-## Residual deviance: 68477  on 259187  degrees of freedom
-## AIC: 279952
-## 
-## Number of Fisher Scoring iterations: 4
+## Residual standard error: 0.288 on 259187 degrees of freedom
+## Multiple R-squared:  0.497,	Adjusted R-squared:  0.497 
+## F-statistic: 2.14e+04 on 12 and 259187 DF,  p-value: <2e-16
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
+
+Now I'd like to add a variable along the lines of ``does the selected model correctly identify whether the variable is non-stationary?''
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{TrueModelBeta0sv} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{6}\hlstd{,} \hlnum{8}\hlstd{)}
+\hlstd{TrueModelBeta1sv} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlnum{3}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{7}\hlstd{,} \hlnum{8}\hlstd{)}
+\hlstd{TrueModelBeta2sv} \hlkwb{=} \hlnum{5}\hlopt{:}\hlnum{8}
+\hlstd{ModelBetaSV.selected.true} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{TrueModelBetasv}\hlstd{) \{}
+    \hlstd{temp} \hlkwb{=} \hlstd{rankData}\hlopt{$}\hlstd{truemodel} \hlopt{%in%} \hlstd{TrueModelBetasv}
+    \hlstd{temp2} \hlkwb{=} \hlstd{rankData}\hlopt{$}\hlstd{selectedmodel} \hlopt{%in%} \hlstd{TrueModelBetasv}
+    \hlstd{ModelBetaSVCorrect} \hlkwb{<-} \hlstd{temp} \hlopt{==} \hlstd{temp2}
+    \hlstd{ModelBetaSVCorrect}
+\hlstd{\}}
+\hlstd{rankData}\hlopt{$}\hlstd{ModelBeta0svTrue} \hlkwb{=} \hlkwd{ModelBetaSV.selected.true}\hlstd{(TrueModelBeta0sv)}
+\hlstd{rankData}\hlopt{$}\hlstd{ModelBeta1svTrue} \hlkwb{=} \hlkwd{ModelBetaSV.selected.true}\hlstd{(TrueModelBeta1sv)}
+\hlstd{rankData}\hlopt{$}\hlstd{ModelBeta2svTrue} \hlkwb{=} \hlkwd{ModelBetaSV.selected.true}\hlstd{(TrueModelBeta2sv)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{RMSEregression0} \hlkwb{<-} \hlkwd{lm}\hlstd{(B0RMSE} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+} \hlstd{B2sv} \hlopt{+} \hlstd{error} \hlopt{+}
+    \hlstd{ModelBeta0svTrue,} \hlkwc{data} \hlstd{= rankData)}
+\hlkwd{summary}\hlstd{(RMSEregression0)}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = B0RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + 
+##     error + ModelBeta0svTrue, data = rankData)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.6612 -0.1027 -0.0178  0.0727  2.6565 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)           1.91e-01   1.48e-03  128.91  < 2e-16 ***
+## samplesize           -2.87e-04   1.03e-06 -278.73  < 2e-16 ***
+## metricGCV             4.23e-03   9.78e-04    4.33  1.5e-05 ***
+## metricLOOCV           1.04e-02   9.78e-04   10.64  < 2e-16 ***
+## metricSCV             1.82e-01   9.97e-04  182.76  < 2e-16 ***
+## B0sv1                 3.10e-01   8.58e-04  361.75  < 2e-16 ***
+## B0sv3                 6.75e-01   9.05e-04  745.99  < 2e-16 ***
+## B1sv1                 1.33e-02   8.47e-04   15.66  < 2e-16 ***
+## B1sv3                 6.20e-02   8.47e-04   73.18  < 2e-16 ***
+## B2sv1                 1.35e-02   8.47e-04   15.89  < 2e-16 ***
+## B2sv3                 6.36e-02   8.47e-04   75.08  < 2e-16 ***
+## error1                1.09e-01   8.49e-04  128.32  < 2e-16 ***
+## error2                2.99e-01   8.58e-04  348.72  < 2e-16 ***
+## ModelBeta0svTrueTRUE -9.40e-02   9.96e-04  -94.43  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.176 on 259186 degrees of freedom
+## Multiple R-squared:  0.774,	Adjusted R-squared:  0.774 
+## F-statistic: 6.84e+04 on 13 and 259186 DF,  p-value: <2e-16
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{RMSEregression1} \hlkwb{<-} \hlkwd{lm}\hlstd{(B1RMSE} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+} \hlstd{B2sv} \hlopt{+} \hlstd{error} \hlopt{+}
+    \hlstd{ModelBeta1svTrue,} \hlkwc{data} \hlstd{= rankData)}
+\hlkwd{summary}\hlstd{(RMSEregression1)}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = B1RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + 
+##     error + ModelBeta1svTrue, data = rankData)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -0.820 -0.161 -0.026  0.113  5.368 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)           2.60e-01   2.40e-03  108.37  < 2e-16 ***
+## samplesize           -3.86e-04   1.66e-06 -232.97  < 2e-16 ***
+## metricGCV             1.36e-02   1.57e-03    8.66  < 2e-16 ***
+## metricLOOCV           2.37e-02   1.57e-03   15.02  < 2e-16 ***
+## metricSCV             1.81e-01   1.57e-03  115.02  < 2e-16 ***
+## B0sv1                 1.04e-01   1.37e-03   75.39  < 2e-16 ***
+## B0sv3                 1.57e-01   1.41e-03  111.16  < 2e-16 ***
+## B1sv1                 9.77e-02   1.49e-03   65.51  < 2e-16 ***
+## B1sv3                 3.99e-01   1.38e-03  290.14  < 2e-16 ***
+## B2sv1                 5.86e-03   1.36e-03    4.30  1.7e-05 ***
+## B2sv3                 1.12e-02   1.36e-03    8.24  < 2e-16 ***
+## error1                1.26e-01   1.37e-03   91.92  < 2e-16 ***
+## error2                3.57e-01   1.37e-03  259.78  < 2e-16 ***
+## ModelBeta1svTrueTRUE -9.59e-02   1.29e-03  -74.17  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.283 on 259186 degrees of freedom
+## Multiple R-squared:  0.512,	Adjusted R-squared:  0.512 
+## F-statistic: 2.09e+04 on 13 and 259186 DF,  p-value: <2e-16
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{RMSEregression2} \hlkwb{<-} \hlkwd{lm}\hlstd{(B2RMSE} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+} \hlstd{B2sv} \hlopt{+} \hlstd{error} \hlopt{+}
+    \hlstd{ModelBeta2svTrue,} \hlkwc{data} \hlstd{= rankData)}
+\hlkwd{summary}\hlstd{(RMSEregression2)}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = B2RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + 
+##     error + ModelBeta2svTrue, data = rankData)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -0.857 -0.162 -0.026  0.113  4.462 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)           2.60e-01   2.41e-03  107.81  < 2e-16 ***
+## samplesize           -3.85e-04   1.67e-06 -231.09  < 2e-16 ***
+## metricGCV             1.40e-02   1.58e-03    8.84  < 2e-16 ***
+## metricLOOCV           2.45e-02   1.58e-03   15.47  < 2e-16 ***
+## metricSCV             1.81e-01   1.58e-03  114.11  < 2e-16 ***
+## B0sv1                 1.00e-01   1.38e-03   72.30  < 2e-16 ***
+## B0sv3                 1.55e-01   1.42e-03  109.58  < 2e-16 ***
+## B1sv1                 8.18e-03   1.37e-03    5.96  2.5e-09 ***
+## B1sv3                 1.15e-02   1.37e-03    8.38  < 2e-16 ***
+## B2sv1                 9.82e-02   1.50e-03   65.45  < 2e-16 ***
+## B2sv3                 4.01e-01   1.38e-03  289.99  < 2e-16 ***
+## error1                1.26e-01   1.37e-03   91.35  < 2e-16 ***
+## error2                3.55e-01   1.38e-03  257.01  < 2e-16 ***
+## ModelBeta2svTrueTRUE -9.63e-02   1.30e-03  -74.09  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.285 on 259186 degrees of freedom
+## Multiple R-squared:  0.508,	Adjusted R-squared:  0.508 
+## F-statistic: 2.06e+04 on 13 and 259186 DF,  p-value: <2e-16
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+Now add all three:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{RMSEregression0} \hlkwb{<-} \hlkwd{lm}\hlstd{(B0RMSE} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+} \hlstd{B2sv} \hlopt{+} \hlstd{error} \hlopt{+}
+    \hlstd{ModelBeta0svTrue,} \hlkwc{data} \hlstd{= rankData)}
+\hlkwd{summary}\hlstd{(RMSEregression0)}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = B0RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + 
+##     error + ModelBeta0svTrue, data = rankData)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.6612 -0.1027 -0.0178  0.0727  2.6565 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)           1.91e-01   1.48e-03  128.91  < 2e-16 ***
+## samplesize           -2.87e-04   1.03e-06 -278.73  < 2e-16 ***
+## metricGCV             4.23e-03   9.78e-04    4.33  1.5e-05 ***
+## metricLOOCV           1.04e-02   9.78e-04   10.64  < 2e-16 ***
+## metricSCV             1.82e-01   9.97e-04  182.76  < 2e-16 ***
+## B0sv1                 3.10e-01   8.58e-04  361.75  < 2e-16 ***
+## B0sv3                 6.75e-01   9.05e-04  745.99  < 2e-16 ***
+## B1sv1                 1.33e-02   8.47e-04   15.66  < 2e-16 ***
+## B1sv3                 6.20e-02   8.47e-04   73.18  < 2e-16 ***
+## B2sv1                 1.35e-02   8.47e-04   15.89  < 2e-16 ***
+## B2sv3                 6.36e-02   8.47e-04   75.08  < 2e-16 ***
+## error1                1.09e-01   8.49e-04  128.32  < 2e-16 ***
+## error2                2.99e-01   8.58e-04  348.72  < 2e-16 ***
+## ModelBeta0svTrueTRUE -9.40e-02   9.96e-04  -94.43  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.176 on 259186 degrees of freedom
+## Multiple R-squared:  0.774,	Adjusted R-squared:  0.774 
+## F-statistic: 6.84e+04 on 13 and 259186 DF,  p-value: <2e-16
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{RMSEregression1} \hlkwb{<-} \hlkwd{lm}\hlstd{(B1RMSE} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+} \hlstd{B2sv} \hlopt{+} \hlstd{error} \hlopt{+}
+    \hlstd{ModelBeta1svTrue,} \hlkwc{data} \hlstd{= rankData)}
+\hlkwd{summary}\hlstd{(RMSEregression1)}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = B1RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + 
+##     error + ModelBeta1svTrue, data = rankData)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -0.820 -0.161 -0.026  0.113  5.368 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)           2.60e-01   2.40e-03  108.37  < 2e-16 ***
+## samplesize           -3.86e-04   1.66e-06 -232.97  < 2e-16 ***
+## metricGCV             1.36e-02   1.57e-03    8.66  < 2e-16 ***
+## metricLOOCV           2.37e-02   1.57e-03   15.02  < 2e-16 ***
+## metricSCV             1.81e-01   1.57e-03  115.02  < 2e-16 ***
+## B0sv1                 1.04e-01   1.37e-03   75.39  < 2e-16 ***
+## B0sv3                 1.57e-01   1.41e-03  111.16  < 2e-16 ***
+## B1sv1                 9.77e-02   1.49e-03   65.51  < 2e-16 ***
+## B1sv3                 3.99e-01   1.38e-03  290.14  < 2e-16 ***
+## B2sv1                 5.86e-03   1.36e-03    4.30  1.7e-05 ***
+## B2sv3                 1.12e-02   1.36e-03    8.24  < 2e-16 ***
+## error1                1.26e-01   1.37e-03   91.92  < 2e-16 ***
+## error2                3.57e-01   1.37e-03  259.78  < 2e-16 ***
+## ModelBeta1svTrueTRUE -9.59e-02   1.29e-03  -74.17  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.283 on 259186 degrees of freedom
+## Multiple R-squared:  0.512,	Adjusted R-squared:  0.512 
+## F-statistic: 2.09e+04 on 13 and 259186 DF,  p-value: <2e-16
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{RMSEregression2} \hlkwb{<-} \hlkwd{lm}\hlstd{(B2RMSE} \hlopt{~} \hlstd{samplesize} \hlopt{+} \hlstd{metric} \hlopt{+} \hlstd{B0sv} \hlopt{+} \hlstd{B1sv} \hlopt{+} \hlstd{B2sv} \hlopt{+} \hlstd{error} \hlopt{+}
+    \hlstd{ModelBeta2svTrue,} \hlkwc{data} \hlstd{= rankData)}
+\hlkwd{summary}\hlstd{(RMSEregression2)}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = B2RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + 
+##     error + ModelBeta2svTrue, data = rankData)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -0.857 -0.162 -0.026  0.113  4.462 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)           2.60e-01   2.41e-03  107.81  < 2e-16 ***
+## samplesize           -3.85e-04   1.67e-06 -231.09  < 2e-16 ***
+## metricGCV             1.40e-02   1.58e-03    8.84  < 2e-16 ***
+## metricLOOCV           2.45e-02   1.58e-03   15.47  < 2e-16 ***
+## metricSCV             1.81e-01   1.58e-03  114.11  < 2e-16 ***
+## B0sv1                 1.00e-01   1.38e-03   72.30  < 2e-16 ***
+## B0sv3                 1.55e-01   1.42e-03  109.58  < 2e-16 ***
+## B1sv1                 8.18e-03   1.37e-03    5.96  2.5e-09 ***
+## B1sv3                 1.15e-02   1.37e-03    8.38  < 2e-16 ***
+## B2sv1                 9.82e-02   1.50e-03   65.45  < 2e-16 ***
+## B2sv3                 4.01e-01   1.38e-03  289.99  < 2e-16 ***
+## error1                1.26e-01   1.37e-03   91.35  < 2e-16 ***
+## error2                3.55e-01   1.38e-03  257.01  < 2e-16 ***
+## ModelBeta2svTrueTRUE -9.63e-02   1.30e-03  -74.09  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.285 on 259186 degrees of freedom
+## Multiple R-squared:  0.508,	Adjusted R-squared:  0.508 
+## F-statistic: 2.06e+04 on 13 and 259186 DF,  p-value: <2e-16
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\subsection{RMSE Rank}
+
+\subsection{RMSE Rank Proportion}
 
 \end{document}
