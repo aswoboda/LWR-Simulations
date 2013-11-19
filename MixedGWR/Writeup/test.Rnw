@@ -1,0 +1,11 @@
+\documentclass{article}
+
+\author{Aaron}
+\title{A Test}
+\begin{document}
+\maketitle
+
+This is a test.
+
+
+\end{document}
