@@ -33,17 +33,49 @@ opts_chunk$set(cache=TRUE)
 
 \section{Methodology}
 
-Imagine a simple linear model with two explanatory variables,
+Imagine a simple linear model,
 \begin{equation}
-Y = \beta _0 + \beta _1 *X_1 + \beta _2 * X_2 + \epsilon
+Y = \beta _0 + \beta _1 *X_1 + \beta _2 * X_2 + \epsilon .
 \end{equation}
-Now imagine that each of our $N$ individual observations in this model occur at geographical locations on a Cartesian plane. Thus our data consists of an $N x 5$ matrix, where $Y$ may be house prices, $X_1$ and $X_2$ could be the living space and lot size associated with each house, and the final two columns determine the location of the observations (for instance, latitude and longitude, or distances north and east from a prescribed point serving as the origin).
+In addition to the three variables listed above ($Y$, $X_1$, and $X_2$), assume we know the two dimensional geographical location for each of our $N$ observations. Thus, our data consists of an $N x 5$ matrix, where $Y$ may be house prices, $X_1$ and $X_2$ could be the living space and lot size associated with each house, and the final two columns determine the location of the observations (for instance, latitude and longitude, or distances north and east from a prescribed point serving as the origin).
 
 The above simple model exemplifies spatial stationarity in the parameters. The $\beta$ coefficients are constant over space. Instead, the coefficients could exhibit spatial non-stationarity, in which case one, two, or all three of the $\beta$ coefficients are a function of location. This has a natural interpretation in the current real estate example. Location matters. Location can matter in different ways. For instance, if the value of land varies over space, then we would expect the coefficient on lot size to vary over space, while it is also possible that the intercept varies over space to reflect variation in prices of similar houses in different locations. 
 
 While it is possible to parameterize the variation in coefficients, for instance researchers often (CITATION?) include a variable measuring the distance from an observation to an important amenity such as the Central Business District and then this distance variable could be interacted with variables whose value are predicted to vary over space. However, it is not implausible to believe that the variation in coefficients might not be easily parameterized (for instance, if land values are a non-monotonic function of distance). Researchers may instead interact variables with fixed effects for cities or census tracts. However, such strategies require the analyst to make assumptions that severely limit the type and degree of variation in the parameters. For instance, interaction terms with geographic boundaries assume discrete differences in the value of parameters across the boundaries, while instead the parameters may instead be a continuous function of location.
 
 \subsection{Local Regression to the Rescue?}
+Locally Weighted Regression (also known as Geographically Weighted Regression) is one possible solution to the challenge presented by spatially non-stationary regression coeffiecients. Locally Weighted Regression (LWR) techniques (also known as Geographically Weighted Regression) are described in detail by \citet{Cleveland1988}, \citet{Brunsdon1998b}, \citet{Fotheringham2002}, and others. It is a weighted least squares methodology in which regression coefficients are estimated over space as a function of the local data as described in Equation~\eqref{eq:LWRbeta},
+\begin{equation}\label{eq:LWRbeta}
+\hat{\beta}_i = (X'W_iX)^{-1}X'W_iY,
+\end{equation}
+where X is a $N \times 2$ matrix of independent variables, $W_i$ is the $N \times N$ weights matrix, and Y is the $N \times 1$ vector of dependent variable values. The weights matrix, $W_i$ is a diagonal matrix where element $w_{jj}$ denotes the weight that the $j^{th}$ data point will receive in the regression coefficients estimated at location $i$ in the dataset. We employ a bi-square weights function and a k-nearest neighbor bandwidth approach as described in equation~\eqref{eq:weights}, 
+\begin{equation}\label{eq:weights}
+w_{jj}=\left[1-\left(\frac{d_{ij}}{d_{k}}\right)^2 \right]^2 \textrm{ if  }d_{ij}<d_{ik}\textrm{, otherwise = 0},
+\end{equation}
+where $d_{ij}$ denotes the distance between observations $i$ and $j$, and $d_{ik}$ is the distance from observation $i$ to the $k^{th}$ nearest observation. This function assigns weights close to 1 for data points near observation $i$, weights positive but closer to zero for observations farther away, and zero for all $n-k$ observations farther away than the $k^{th}$ nearest observation. 
+
+A key decision in estimating LWR models is choosing the number of observations to include in the bandwidth. Often, researchers choose a bandwidth my minimizing a cross validation metric. 
+
+Perhaps the most common cross validation metric used in the literature (how many citations?) is the Leave One Out Cross Validation score (LOOCV), which is calculated as follows,
+\begin{equation}\label{eq:LOOCV}
+LOOCV = \frac{1}{N} \sqrt{\sum _{i = 1}^{N} (y - \hat{y}_{\neq i})^2},  
+\end{equation}
+where $\hat{y}_{\neq i}$ represents the dependent variable estimate for observation $i$ while excluding observation $i$ from the regression. This prevents the observation from having undue influence in the regression with small bandwidths and overfitting the model. Such a model, while intuitively appealing, can be computationally expensive, as regressions must be estimated first while excluding individual observations to calculate the LOOCV and then again while including the observation to obtain the regression coefficients.
+
+An alternative cross validation metric is known as the Generalized Cross Validation (GCV) score, which only requires calculating the regressions once per location and explicitly calculates the leverage each observation has over the regression coefficients. The GCV score calculation is detailed in equation~\eqref{eq:GCV},
+\begin{equation}\label{eq:GCV}
+n*\sum_{i=1}^{n}\frac{(y_i-\hat{y}_i)^2}{(n-v_1)^2}, 
+\end{equation} 
+where $\hat{y}_i$ is the predicted dependent variable value for observation $i$, and $v_1$ can be interpreted as the ``effective number of model parameters,'' and calculated as $v_1=$tr(\textbf{S}), where the matrix \textbf{S} is the ``hat matrix'' which maps $y$ onto $\hat{y}$,
+                   \begin{equation}
+                   \hat{y}=\textbf{S}y,
+                   \end{equation}
+                   and each row of \textbf{S}, $r_i$ is given by:
+                  \begin{equation}
+                   r_i=X_i(X'W_iX)^{-1}X'W_i.
+                   \end{equation}
+The GCV score is a convenient model selection metric that rewards models that provide a good fit to the data, while penalizing models with a greater number of model parameters \citep{Loader1999, McMillen2010}.  \citep{Paez2011, McMillen2010, McMillen2012}. 
+
 
 
 \subsection{Experimental Design}
@@ -169,17 +201,17 @@ names(rankData)[which(names(rankData)=="Model Number")] = "selectedmodel"
 
 \subsection{RMSE Values}
 
-<<RMSEregression0>>=
+<<RMSEregression011>>=
 RMSEregression0 <- lm(B0RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
                data = rankData)
 summary(RMSEregression0)
 @
-<<RMSEregression1>>=
+<<RMSEregression111>>=
 RMSEregression1 <- lm(B1RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
                data = rankData)
 summary(RMSEregression1)
 @
-<<RMSEregression2>>=
+<<RMSEregression211>>=
 RMSEregression2 <- lm(B2RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
                data = rankData)
 summary(RMSEregression2)
@@ -204,17 +236,17 @@ rankData$ModelBeta1svTrue = ModelBetaSV.selected.true(TrueModelBeta1sv)
 rankData$ModelBeta2svTrue = ModelBetaSV.selected.true(TrueModelBeta2sv)
 @
 
-<<RMSEregression01>>=
+<<RMSEregression012>>=
 RMSEregression0 <- lm(B0RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue, 
                data = rankData)
 summary(RMSEregression0)
 @
-<<RMSEregression11>>=
+<<RMSEregression112>>=
 RMSEregression1 <- lm(B1RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta1svTrue, 
                data = rankData)
 summary(RMSEregression1)
 @
-<<RMSEregression21>>=
+<<RMSEregression212>>=
 RMSEregression2 <- lm(B2RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta2svTrue, 
                data = rankData)
 summary(RMSEregression2)
@@ -222,94 +254,154 @@ summary(RMSEregression2)
 
 Now add all three:
 
-<<RMSEregression02>>=
+<<RMSEregression013>>=
 RMSEregression0 <- lm(B0RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue, 
                data = rankData)
 summary(RMSEregression0)
 @
-<<RMSEregression12>>=
+<<RMSEregression113>>=
 RMSEregression1 <- lm(B1RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta1svTrue, 
                data = rankData)
 summary(RMSEregression1)
 @
-<<RMSEregression22>>=
+<<RMSEregression213>>=
 RMSEregression2 <- lm(B2RMSE ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta2svTrue, 
                data = rankData)
 summary(RMSEregression2)
 @
 
 \subsection{RMSE Rank}
+How are the various parameters related to the results of the $\beta _0$ ranking?
+<<regression021>>=
+rankData$B0rank = rankData[, "B0RMSE Rank"]
+rankData$B1rank = rankData[, "B1RMSE Rank"]
+rankData$B2rank = rankData[, "B2RMSE Rank"]
+rankLM <- lm(B0rank ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
+data = rankData)
+summary(rankLM)
+@
+
+How are the various parameters related to the results of the $\beta _1$ ranking?
+<<regression121>>=
+rankLM <- lm(B1rank ~ samplesize + metric + B0sv + B1sv + B2sv + error, data = rankData)
+summary(rankLM)
+@
+
+How are the various parameters related to the results of the $\beta _2$ ranking?
+<<regression221>>=
+rankLM <- lm(B2rank ~ samplesize + metric + B0sv + B1sv + B2sv + error, data = rankData)
+summary(rankLM)
+@
+
+
+Now add in whether or not the correct model was specified.
+<<regression022>>=
+rankLM <- lm(B0rank ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue, data = rankData)
+summary(rankLM)
+@
+
+How are the various parameters related to the results of the $\beta _1$ ranking?
+<<regression122>>=
+rankLM <- lm(B1rank ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta1svTrue, data = rankData)
+summary(rankLM)
+@
+
+How are the various parameters related to the results of the $\beta _2$ ranking?
+<<regression222>>=
+rankLM <- lm(B0rank ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta2svTrue, data = rankData)
+summary(rankLM)
+@
+
+Let's also throw in all three variables about whether the selected model has the same spatial variation as the true model for a certain beta.
+
+<<regression023>>=
+rankLM <- lm(B0rank ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, data = rankData)
+summary(rankLM)
+@
+
+How are the various parameters related to the results of the $\beta _1$ ranking?
+<<regression123>>=
+rankLM <- lm(B1rank ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, data = rankData)
+summary(rankLM)
+@
+
+How are the various parameters related to the results of the $\beta _2$ ranking?
+<<regression223>>=
+rankLM <- lm(B2rank ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, data = rankData)
+summary(rankLM)
+@
 
 \subsection{RMSE Rank Proportion}
 
 Let's convert ranks into a proportion and then use a logistic regression to look for patterns in rank vs.\ other variables like the metric and degree of spatial variation, etc.
 
 How are the various parameters related to the results of the $\beta _0$ ranking?
-<<regression0>>=
-rankData$B0rank = rankData[, "B0RMSE Rank"]/50
-rankData$B1rank = rankData[, "B1RMSE Rank"]/50
-rankData$B2rank = rankData[, "B2RMSE Rank"]/50
-mylogit <- glm(cbind(B0rank, 1-B0rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
+<<regression031>>=
+rankData$B0rankP = rankData[, "B0RMSE Rank"]/50
+rankData$B1rankP= rankData[, "B1RMSE Rank"]/50
+rankData$B2rankP = rankData[, "B2RMSE Rank"]/50
+mylogit <- glm(cbind(B0rankP, 1-B0rankP) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
 data = rankData, family = "binomial")
 summary(mylogit)
 @
 
 How are the various parameters related to the results of the $\beta _1$ ranking?
-<<regression1>>=
-mylogit <- glm(cbind(B1rank, 1-B1rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
+<<regression131>>=
+mylogit <- glm(cbind(B1rankP, 1-B1rankP) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
 data = rankData, family = "binomial")
 summary(mylogit)
 @
 
 How are the various parameters related to the results of the $\beta _2$ ranking?
-<<regression2>>=
-mylogit <- glm(cbind(B2rank, 1-B2rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
+<<regression231>>=
+mylogit <- glm(cbind(B2rankP, 1-B2rankP) ~ samplesize + metric + B0sv + B1sv + B2sv + error, 
 data = rankData, family = "binomial")
 summary(mylogit)
 @
 
 
-
-<<regression01>>=
-mylogit <- glm(cbind(B0rank, 1-B0rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue, 
+Now add in whether the model selected a model with appropriate spatial variation for the parameter.
+<<regression032>>=
+mylogit <- glm(cbind(B0rankP, 1-B0rankP) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue, 
 data = rankData, family = "binomial")
 summary(mylogit)
 @
 
 How are the various parameters related to the results of the $\beta _1$ ranking?
-<<regression11>>=
-mylogit <- glm(cbind(B1rank, 1-B1rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta1svTrue, 
+<<regression132>>=
+mylogit <- glm(cbind(B1rankP, 1-B1rankP) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta1svTrue, 
 data = rankData, family = "binomial")
 summary(mylogit)
 @
 
 How are the various parameters related to the results of the $\beta _2$ ranking?
-<<regression21>>=
-mylogit <- glm(cbind(B2rank, 1-B2rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta2svTrue, 
+<<regression232>>=
+mylogit <- glm(cbind(B2rankP, 1-B2rankP) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta2svTrue, 
 data = rankData, family = "binomial")
 summary(mylogit)
 @
 
 Let's also throw in all three variables about whether the selected model has the same spatial variation as the true model for a certain beta.
 
-<<regression02>>=
-mylogit <- glm(cbind(B0rank, 1-B0rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, 
+<<regression033>>=
+mylogit <- glm(cbind(B0rankP, 1-B0rankP) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, 
                data = rankData, family = "binomial")
 summary(mylogit)
 @
 
 How are the various parameters related to the results of the $\beta _1$ ranking?
-<<regression12>>=
-mylogit <- glm(cbind(B1rank, 1-B1rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, 
+<<regression133>>=
+mylogit <- glm(cbind(B1rankP, 1-B1rankP) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, 
                data = rankData, family = "binomial")
 summary(mylogit)
 @
 
 How are the various parameters related to the results of the $\beta _2$ ranking?
-<<regression22>>=
-mylogit <- glm(cbind(B2rank, 1-B2rank) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, 
+<<regression233>>=
+mylogit <- glm(cbind(B2rankP, 1-B2rankP) ~ samplesize + metric + B0sv + B1sv + B2sv + error + ModelBeta0svTrue+ ModelBeta1svTrue+ ModelBeta2svTrue, 
                data = rankData, family = "binomial")
 summary(mylogit)
 @
+\subsection{Bandwidth Size}
 
 \end{document}
