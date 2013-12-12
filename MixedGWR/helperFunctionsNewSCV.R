@@ -1,5 +1,5 @@
 
- ### running multiple parameters
+### running multiple parameters
 ## This function runs multiple sets of parameters for sample size, error size, number of repetions, and spatial variation in B0, B1, and B2.  
 ## It needs to be passed a matrix where each row is a set of parametrers.  
 ## the columns of the matrix need to be named the same as they are called in lines 15 through 20, but the order does not matter
@@ -11,7 +11,7 @@ mcMultParams <- function(dataGenParameters, MC = FALSE){ #runs data on a list of
   
   uberList <- list() #empty list for the results
   uberListNum <- 1 #this will be used to put each repeat in a new spot in the list
-
+  
   #loops through all of the inputs
   for(model in 1:numModels){
     
@@ -32,9 +32,9 @@ mcMultParams <- function(dataGenParameters, MC = FALSE){ #runs data on a list of
       print(difftime(end,start, units = "m"))
       print(paste0("On parameter set ", model, " of ", numModels, " total sets. Total remaining: ", numModels - model))
       print(paste0("This models parameters were: SS: ", ss, ", error: ", error, ", B0, B1, B2 spatial variations of ", B0.SpVar,", ", B1.SpVar, ", and ", B2.SpVar))
-
+      
       saveRDS(listToArray(uberList), file = "mcOutput.rds") #saveRDS lets you rename an object when reloading it into the environment, x <- readRDS("mcOutput.rds") assigns x as the name for the R data
-                      
+      
     } else{
       start <- Sys.time()
       tempUberOutput <- lapply(1:repNum, uberFunction, ss, error, B0.SpVar, B1.SpVar, B2.SpVar) #runs gwr
@@ -44,7 +44,7 @@ mcMultParams <- function(dataGenParameters, MC = FALSE){ #runs data on a list of
       print(difftime(end,start, units = "m"))
       print(paste0("On parameter set ", model, " of ", numModels, " total sets. Total remaining: ", numModels - model))
       print(paste0("This models parameters were: SS: ", ss, ", error: ", error, ", B0, B1, B2 spatial variations of ", B0.SpVar,", ", B1.SpVar, ", and ", B2.SpVar))
-
+      
       saveRDS(listToArray(uberList), file = "mcOutput.rds") #see above in MC part for reason to use saveRDS
     }
     
@@ -114,7 +114,7 @@ uberFunction <- function(repetition, sampleSize, errorSD, B0.SpVar, B1.SpVar, B2
   
   #and find the true model number
   trueModelNumber <- which(modelStat[1] == models[,1] & modelStat[2] == models[,2] & modelStat[3] == models[,3]) #returns the row number where all the variables match
- 
+  
   #data gen
   n = sampleSize # number of observations in our simulation
   east = runif(n) # create a location variable
@@ -123,7 +123,7 @@ uberFunction <- function(repetition, sampleSize, errorSD, B0.SpVar, B1.SpVar, B2
   x1 = runif(n) # create a vector for x1 values
   x2 = runif(n) # create a vector for x2 values
   error = rnorm(n, 0, errorSD) # create an error term
-    
+  
   
   #now generating the betas...
   #they will ALWAYS have an expectation of 2 and have an expected correlation of 0 (except for corner cases in LLL)  
@@ -243,7 +243,7 @@ megaMaker = function(bandwidths, models, data) { #this function is written to re
   }
   
   
-
+  
   
   #This generates a vector that contains the names for all the models run (GGG, LGG, ...)
   modelNames <- c()
@@ -485,10 +485,10 @@ calc.aic <- function(y, yhat, lev, nonStationary){
 }
 
 
-calc.scv <- function(dep.var, yhats.without) {
+calc.scv <- function(dep.var, yhats.without, na.rm = FALSE) {
   numer = ((dep.var - yhats.without)^2)
-  denom = rowSums(numer) 
-  stan.CV.values = colSums(numer/denom)
+  denom = rowSums(numer, na.rm = na.rm) 
+  stan.CV.values = colSums(numer/denom, na.rm = na.rm)
   stan.CV.values
 }
 
@@ -593,35 +593,38 @@ input.aic <- function(y, megaList, results){
 
 input.scv <- function(y, megaList, results){
   modelNames <- names(megaList) #get names of models run
+  numModels <- length(modelNames)
   numBandwidths <- length(megaList[[2]]) #megaList[[1]] may only have 1 bandwidth for the GGG model, as it is now model 1 should have all bandwidths though
   n <- length(y)
   #this loops through the names of each model and bandwidth
   #if models are done in an unusual order this should still input the correct results
   
-  #first, we need to loop through everything and extract the fitted values without 
-  for(model in modelNames[-1]){ #this ignores the first model, which I assusme is GGG
-    fittedValuesWithoutMat <- matrix(NA, n, numBandwidths) #this matrix should make calculating the SCV easier; it wil be filled with the fitted values without the current observation (the row number)
+  #for the old SCV calculation, we standardized using a matrix where the rows are observations and columns were bandwidths (using a new matrix for each model)
+  #but now, we want to standardize accross all models. Instead of making 8 individual matricies for each model, I make one large matrix with all of them. 
+  fittedValuesWithoutMat <- matrix(NA, n, numBandwidths*numModels) #this first column will be deleted later
+  colNum <- 1
+  for(model in modelNames){ 
     for(bandwidth in 1:numBandwidths){
       #this collects the estimated coefficient, the indexing is a bit intense but this should get the coefficient estimates for the correct model and bandwidth
       yhatWithout <- megaList[[model]][[bandwidth]][[5]] #estimated ys without obs
-      fittedValuesWithoutMat[,bandwidth] <- yhatWithout #putting them in the column
+      fittedValuesWithoutMat[,colNum] <- yhatWithout
+      colNum <- colNum + 1
     }
-    
-    #if the names of the dimensions of megaList are not GGG, LGG, ... use the next two lines to get the model name, this will store it in the results section properly too
-    #modelName <- megaList[[model]][[bandwidth]][[1]]
-    #model <- modelName
-    
-    #calc scv
-    scv <- calc.scv(y, fittedValuesWithoutMat)
-    #and put it into the results matrix.  Again, this is done by model/BW name not number for if only a subset of models are run
-    results[, model, "SCV"] <- scv #by indexing to "scv" we can add metrics fairly easily, this will still put this result in the right place
-    
   }
   
-  #returns the modified results input
-  results
-}
+  #calc scv
+  scvScores <- calc.scv(y, fittedValuesWithoutMat, na.rm = TRUE)
+  scvScores[1:(numBandwidths - 1)] <- NA #these should be NAs as the GGG model doesn't run on non-global bandwidths
+  
+  for(scvScoreNum in 0:(length(scvScores) - 1)){
+    modelNum <- (scvScoreNum %/% numBandwidths) + 1
+    bandwidthNum <- (scvScoreNum %% numBandwidths) + 1
+    results[bandwidthNum, modelNum, "SCV"] <- scvScores[scvScoreNum + 1]
+  }
 
+#returns the modified results input
+results
+}
 
 input.loocv <- function(y, megaList, results){
   modelNames <- names(megaList) #get names of models run
