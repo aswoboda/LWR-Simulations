@@ -49,6 +49,10 @@
 
 \usepackage{alltt}
 \usepackage{animate}
+\usepackage[round]{natbib}
+\usepackage[nolists]{endfloat}
+\usepackage[width = 5in]{geometry}
+\usepackage{caption, amsmath, graphicx, setspace, multirow, color, hyperref, array}
 \title{Mixed GWR Simulation Write-up}
 \author{Aaron Swoboda}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -1711,5 +1715,11 @@ How are the various parameters related to the results of the $\beta _2$ ranking?
 \end{knitrout}
 
 \subsection{Bandwidth Size}
+
+\newpage
+\begin{singlespace}
+\bibliographystyle{plainnat}
+\bibliography{MixedGWRbibliography}
+\end{singlespace}
 
 \end{document}

@@ -1,5 +1,9 @@
 \documentclass{article}
 \usepackage{animate}
+\usepackage[round]{natbib}
+\usepackage[nolists]{endfloat}
+\usepackage[width = 5in]{geometry}
+\usepackage{caption, amsmath, graphicx, setspace, multirow, color, hyperref, array}
 \title{Mixed GWR Simulation Write-up}
 \author{Aaron Swoboda}
 
@@ -403,5 +407,11 @@ mylogit <- glm(cbind(B2rankP, 1-B2rankP) ~ samplesize + metric + B0sv + B1sv + B
 summary(mylogit)
 @
 \subsection{Bandwidth Size}
+
+\newpage
+\begin{singlespace}
+\bibliographystyle{plainnat}
+\bibliography{MixedGWRbibliography}
+\end{singlespace}
 
 \end{document}
