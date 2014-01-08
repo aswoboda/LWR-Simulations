@@ -224,7 +224,7 @@ mcRunTimeEst(sampleSizes, numRepeats){
 }
 
 
-sampleSizes <- c(100, 500, 700, 1000) #c(50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000)
+sampleSizes <- c(100, 500, 700, 1000) 
 B0.SpVar <- c(0, 2)
 B1.SpVar <- c(0, 2)
 B2.SpVar <- c(0, 2)
