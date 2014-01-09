@@ -645,7 +645,7 @@ input.loocv <- function(y, megaList, results){
       #modelName <- megaList[[model]][[bandwidth]][[1]]
       #model <- modelName
       
-      #calc scv
+      #calc cv
       #and put it into the results matrix.  Again, this is done by model/BW name not number for if only a subset of models are run
       results[bandwidth, model, "LOOCV"] <- loocv #by indexing to "loocv" we can add metrics fairly easily, this will still put this result in the right place
       
