@@ -142,9 +142,6 @@ uberFunction <- function(repetition, sampleSize, errorSD, B0.SpVar, B1.SpVar, B2
   trueB0 <- B0
   trueB1 <- B1
   trueB2 <- B2
-  # X0 = X1 = X2 = c("stationary", "non-stationary")
-  # models = expand.grid(x0 = X0, x1 = X1, x2 = X2) # makes a data frame of all the different models we could run
-  
   
   numk = 7 # number of bandwidths we'll use
   krat = 2/3 # rate at which bandwidths decrease (ie. 45 -> 30 -> 20, etc.)
@@ -180,8 +177,10 @@ uberFunction <- function(repetition, sampleSize, errorSD, B0.SpVar, B1.SpVar, B2
                    dimnames = list(bandwidthNames, modelNames, c(metrics, metricRanks)))
   
   
-  temp = megaMaker(ks, models = models[1:8,], data = mydata) #to test the results
-  
+  temp = megaMaker(ks, models = models[c(1,8),], data = mydata) #to test the results #previously models[1:8,]
+  #######
+  ####### HERE is where we might change something to only run certain models 
+  ####### (maybe models = models[c(1,8),]) to just run model 1 and model 8
   
   
   ##input all the beta coefficients, these slowly fill in all the NAs
@@ -684,13 +683,15 @@ resultsToKeep.gen <- function(results, trueModelNumber, metrics, metricRanks){
   colnames(uberOutput) <- c("Model Number", "Bandwidth", metrics, metricRanks) #puts the column names in place, the last are where the rankings for each metric will be stored
   rownames(uberOutput) <- c(paste0("True Model ", metrics), metrics)
   
+  
+  modelNAME = c("GGG", "LGG", "GLG", "LLG", "GGL", "LGL", "GLL", "LLL")[trueModelNumber]
   #input the true data
   for(metric in metrics){
-    minMetricTrue <- min(results[,trueModelNumber, metric], na.rm = T) #find the smallest value of the metric for the true model
+    minMetricTrue <- min(results[,modelNAME, metric], na.rm = T) #find the smallest value of the metric for the true model
     minMetricTrueBW <- which(minMetricTrue == results, arr.ind = T)[1] #this picks out the bandwidth number
     uberOutput[paste0("True Model ", metric), "Model Number"] <- trueModelNumber #put true model into the output
     uberOutput[paste0("True Model ", metric), "Bandwidth"] <- minMetricTrueBW #and its bandwidth
-    uberOutput[paste0("True Model ", metric), 3:ncol(uberOutput)] <- results[minMetricTrueBW, trueModelNumber, ] #and filling in every thing else
+    uberOutput[paste0("True Model ", metric), 3:ncol(uberOutput)] <- results[minMetricTrueBW, modelNAME, ] #and filling in every thing else
   } 
   
   #now the unrestricted minimization
