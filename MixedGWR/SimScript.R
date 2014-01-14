@@ -10,7 +10,7 @@ numRepeats <- 100
 
 testParams <- expand.grid(numRepeats = numRepeats, B0SpatialVar = B0.SpVar, B1SpatialVar = B1.SpVar, B2SpatialVar = B2.SpVar, errorSD = errors, sampleSizes = sampleSizes)
 
-x <- mcMultParams(testParams, MC = F)
+x <- mcMultParams(testParams, MC = T)
 # saves output as "mcOutputFinal.rds" and ultimately "mcOutputFinal.rds"
 
-table(x["SCV", 1, ])
+#table(x["SCV", 1, ])
