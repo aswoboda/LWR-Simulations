@@ -684,7 +684,10 @@ resultsToKeep.gen <- function(results, trueModelNumber, metrics, metricRanks){
   rownames(uberOutput) <- c(paste0("True Model ", metrics), metrics)
   
   
-  modelNAME = c("GGG", "LGG", "GLG", "LLG", "GGL", "LGL", "GLL", "LLL")[trueModelNumber]
+  modelNAMES = c("GGG", "LGG", "GLG", "LLG", "GGL", "LGL", "GLL", "LLL")
+  trueModelNAME = modelNAMES[trueModelNumber]
+  
+  resultsNAMES = unlist(dimnames(results)[2])
   #input the true data
   for(metric in metrics){
     minMetricTrue <- min(results[,modelNAME, metric], na.rm = T) #find the smallest value of the metric for the true model
@@ -699,7 +702,8 @@ resultsToKeep.gen <- function(results, trueModelNumber, metrics, metricRanks){
     minMetric <- min(results[,, metric], na.rm = T)
     minMetricBW <- which(minMetric == results, arr.ind = T)[1] #this picks out the bandwidth number
     minMetricModel <- which(minMetric == results, arr.ind = T)[2] #and the model number
-    uberOutput[metric, "Model Number"] <- minMetricModel
+    realModelNumber = which(modelNAMES == resultsNAMES[minMetricModel])
+    uberOutput[metric, "Model Number"] <- realModelNumber
     uberOutput[metric, "Bandwidth"] <- minMetricBW #this just returns the bandwidth number (1 through 7)
     uberOutput[metric, 3:ncol(uberOutput)] <- results[minMetricBW, minMetricModel, ]
   } 
