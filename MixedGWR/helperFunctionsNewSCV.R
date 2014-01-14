@@ -115,6 +115,7 @@ uberFunction <- function(repetition, sampleSize, errorSD, B0.SpVar, B1.SpVar, B2
   #and find the true model number
   trueModelNumber <- which(modelStat[1] == models[,1] & modelStat[2] == models[,2] & modelStat[3] == models[,3]) #returns the row number where all the variables match
   
+  models = models[c(1,8),]
   #data gen
   n = sampleSize # number of observations in our simulation
   east = runif(n) # create a location variable
@@ -177,7 +178,7 @@ uberFunction <- function(repetition, sampleSize, errorSD, B0.SpVar, B1.SpVar, B2
                    dimnames = list(bandwidthNames, modelNames, c(metrics, metricRanks)))
   
   
-  temp = megaMaker(ks, models = models[c(1,8),], data = mydata) #to test the results #previously models[1:8,]
+  temp = megaMaker(ks, models = models, data = mydata) #to test the results #previously models[1:8,]
   #######
   ####### HERE is where we might change something to only run certain models 
   ####### (maybe models = models[c(1,8),]) to just run model 1 and model 8
@@ -690,11 +691,11 @@ resultsToKeep.gen <- function(results, trueModelNumber, metrics, metricRanks){
   resultsNAMES = unlist(dimnames(results)[2])
   #input the true data
   for(metric in metrics){
-    minMetricTrue <- min(results[,modelNAME, metric], na.rm = T) #find the smallest value of the metric for the true model
+    minMetricTrue <- min(results[,trueModelNAME, metric], na.rm = T) #find the smallest value of the metric for the true model
     minMetricTrueBW <- which(minMetricTrue == results, arr.ind = T)[1] #this picks out the bandwidth number
     uberOutput[paste0("True Model ", metric), "Model Number"] <- trueModelNumber #put true model into the output
     uberOutput[paste0("True Model ", metric), "Bandwidth"] <- minMetricTrueBW #and its bandwidth
-    uberOutput[paste0("True Model ", metric), 3:ncol(uberOutput)] <- results[minMetricTrueBW, modelNAME, ] #and filling in every thing else
+    uberOutput[paste0("True Model ", metric), 3:ncol(uberOutput)] <- results[minMetricTrueBW, trueModelNAME, ] #and filling in every thing else
   } 
   
   #now the unrestricted minimization
