@@ -115,7 +115,7 @@ uberFunction <- function(repetition, sampleSize, errorSD, B0.SpVar, B1.SpVar, B2
   #and find the true model number
   trueModelNumber <- which(modelStat[1] == models[,1] & modelStat[2] == models[,2] & modelStat[3] == models[,3]) #returns the row number where all the variables match
   
-  models = models[c(1,8),]
+  # models = models[c(1,8),] By commenting this out, we re-run the whole thing...
   #data gen
   n = sampleSize # number of observations in our simulation
   east = runif(n) # create a location variable
