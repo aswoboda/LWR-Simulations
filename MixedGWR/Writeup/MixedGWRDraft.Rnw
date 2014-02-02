@@ -29,7 +29,7 @@ What are our research questions? Basically:
 
 <<loadData, cache=TRUE, echo = FALSE, results='hide'>>=
 #setwd("MixedGWR/Writeup/")
-mcOutput = readRDS("../SimulationOutput/mcOutputFinal201309.rds")
+mcOutput = readRDS("../SimulationOutput/mcOutputFinal20140109.rds")
 options(digits = 2)
 require(animation, quietly = TRUE)
 opts_chunk$set(cache=TRUE)

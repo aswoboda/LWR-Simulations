@@ -4,7 +4,7 @@ set.seed(123452)
 sampleSizes <- c(50, 100, 200, 400, 800) 
 B0.SpVar <- c(0, 2, 4) # 
 B1.SpVar <- c(0, 2, 4) #
-B2.SpVar <- c(0 , 2, 4) #
+B2.SpVar <- c(0, 2, 4) # 
 errors <- c(0.25, .5, 1, 2, 3) #, 1, 2
 numRepeats <- 100
 
