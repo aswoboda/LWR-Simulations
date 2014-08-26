@@ -88,6 +88,8 @@ The Standardized Cross Validation Score was suggested by (CITATION)
 
 AIC
 
+SCV
+
 \subsection{Experimental Design}
 
 We generate data in the following format:
@@ -184,18 +186,30 @@ dev.off()
 \begin{figure}
   \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelSelectionFigures.pdf}}
 \caption{This figure shows }
-\label{fig:}
+\label{fig:modelIdentification}
 \end{figure}
 
 Another visualization idea: put the eight tables in a 4 x 3 matrix with the rows denoting how many coefficients in the true DGP are ``local''. Top row contains the `GGG' model, middle `LGG' `GLG' and 'GGL'... bottom row contains the `LLL' model. Will have to use `layout' function in R to leave the blank spots
 
+
+Some patterns clearly emerge from Figure~\ref{fig:modelIdentification}. 
+\begin{itemize}
+\item The AIC and GCV metrics almost \emph{never} select the `GGG' model, even when it is the actual model.
+\item When exactly one variable is non-stationary, AIC, GCV, and LOOCV do a very good job identifying the true model(over two-thirds of the time), while SCV does slightly less well (only 50 percent of the time if the non-stationary coefficient isn't the intercept term).
+\item Frequently, when there are two or more non-stationary variables, AIC, GCV, SCV, and LOOCV over selected the `LGG' model. 
+\item There are several occasions where the model/bandwidth combination with the smallest RMSE is not the ``correct'' model.
+\item It is frequently the case that the models with the smallest RMSE for a given coefficient have the (non-) stationarity of the individuals coefficient correctly identified but incorrectly identify the (non-)stationarity of the other coefficients.
+\end{itemize}
+
+\subsection{Bandwidth Size}
+
 The results of the previous tables must be taken with a grain of salt, as there could times when a ``true'' model may include variation in a coefficient, but the degree of non-stationarity in the coefficient may be small. In such cases, choosing an incorrect model (such as one that keeps such a coefficient constant) may not be such a big problem. Alternatively, the ``best'' model may have some local coefficients, but the bandwidth chosen might be large and therefore implying the model allows for very little variation in the coefficients.
 
-Some patterns clearly emerge. 
-\begin{itemize}
-\item The AIC and GCV metrics \emph{never} select Model 1, even when it is the actual model.
-\item There are several occasions where the model/bandwidth combination with the smallest RMSE is not the ``correct'' model.
-\end{itemize}
+How can we test this hypothesis? How do we operationalize it?
+
+The idea is that the model selected might look `overly local' in that it selects models with too many local coefficients. (OK, so need a new variable that is the number of coefficients that are local in the selected model, number in the correct model, difference, and whether or not - even if the number is the same, say one or two, but are they the correct one or two...)
+
+Then, can we look at the bandwidth sizes for different groups of models? For instance, if two local coefficients are selected but only supposed to be one, how do those bandwidths compare to those that correctly identify as one or two?
 
 % \subsection{Coefficient Formulation}
 % 
@@ -475,7 +489,6 @@ Some patterns clearly emerge.
 %                data = rankData, family = "binomial")
 % summary(mylogit)
 % @
-\subsection{Bandwidth Size}
 
 \newpage
 \begin{singlespace}
