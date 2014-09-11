@@ -1,8 +1,10 @@
 \documentclass{article}
 %\usepackage{animate}
 \usepackage[round]{natbib}
-\usepackage[nolists]{endfloat}
+%\usepackage[nolists]{endfloat}
 \usepackage[width = 5in]{geometry}
+\usepackage{pdfpages}
+\usepackage{rotating}
 \usepackage{caption, amsmath, graphicx, setspace, multirow, color, hyperref, array}
 \title{Mixed GWR Simulation Write-up}
 \author{Aaron Swoboda}
@@ -54,7 +56,7 @@ Locally Weighted Regression (also known as Geographically Weighted Regression) i
 \end{equation}
 where X is a $N \times 2$ matrix of independent variables, $W_i$ is the $N \times N$ weights matrix, and Y is the $N \times 1$ vector of dependent variable values. The weights matrix, $W_i$ is a diagonal matrix where element $w_{jj}$ denotes the weight that the $j^{th}$ data point will receive in the regression coefficients estimated at location $i$ in the dataset. We employ a bi-square weights function and a k-nearest neighbor bandwidth approach as described in equation~\eqref{eq:weights}, 
 \begin{equation}\label{eq:weights}
-w_{jj}=\left[1-\left(\frac{d_{ij}}{d_{k}}\right)^2 \right]^2 \textrm{ if  }d_{ij}<d_{ik}\textrm{, otherwise = 0},
+w_{jj}=\left[1-\left(\frac{d_{ij}}{d_{k}}\right)^2 \right]^2 \textrm{ if }d_{ij}<d_{ik}\textrm{, otherwise = 0},
 \end{equation}
 where $d_{ij}$ denotes the distance between observations $i$ and $j$, and $d_{ik}$ is the distance from observation $i$ to the $k^{th}$ nearest observation. This function assigns weights close to 1 for data points near observation $i$, weights positive but closer to zero for observations farther away, and zero for all $n-k$ observations farther away than the $k^{th}$ nearest observation. 
 
@@ -203,13 +205,165 @@ Some patterns clearly emerge from Figure~\ref{fig:modelIdentification}.
 
 \subsection{Bandwidth Size}
 
-The results of the previous tables must be taken with a grain of salt, as there could times when a ``true'' model may include variation in a coefficient, but the degree of non-stationarity in the coefficient may be small. In such cases, choosing an incorrect model (such as one that keeps such a coefficient constant) may not be such a big problem. Alternatively, the ``best'' model may have some local coefficients, but the bandwidth chosen might be large and therefore implying the model allows for very little variation in the coefficients.
+The results of the previous tables must be taken with a grain of salt, as there could times when a ``true'' model may include variation in a coefficient, but the degree of non-stationarity in the coefficient may be small. In such cases, choosing an incorrect model (such as one that keeps such a coefficient constant) may not be such a big problem. Alternatively, the model with the smallest metric may incorrectly have some local coefficients, but the bandwidth chosen might be large and therefore allows for very little variation in the coefficients.
 
 How can we test this hypothesis? How do we operationalize it?
 
 The idea is that the model selected might look `overly local' in that it selects models with too many local coefficients. (OK, so need a new variable that is the number of coefficients that are local in the selected model, number in the correct model, difference, and whether or not - even if the number is the same, say one or two, but are they the correct one or two...)
 
 Then, can we look at the bandwidth sizes for different groups of models? For instance, if two local coefficients are selected but only supposed to be one, how do those bandwidths compare to those that correctly identify as one or two?
+
+Let's look at the simplest case first - when the true model was GGG. 
+
+Let's construct a table of the bandwidth size selected by model...
+
+<<BandwidthsGGG, echo = FALSE, results='hide'>>=
+  TrueModel1 = which(mcOutput[1, "True Model", ] == 1)
+pdf("figure/ModelAndBandwidthByMetric-GGG.pdf", width = 8, height = 10)
+par(mar = c(0.5, 6, 6, 0.5))
+par(xpd = NA)
+par(mfrow = c(4, 2))
+  for (mymetric in dimnames(mcOutput)[[1]][8:14]) {
+    output = mcOutput[mymetric, c("Model Number", "Bandwidth"), TrueModel1]
+    tempdata = data.frame(ModelNum = factor(output[1, ], levels = 1:8),
+                          Bandwidth = factor(output[2, ], levels = 1:7))
+#     print(mymetric)
+#     print(round(table(tempdata$ModelNum, tempdata$Bandwidth)/length(TrueModel1)*100, 0))
+    
+      temptab = table(tempdata$ModelNum, tempdata$Bandwidth)/length(TrueModel1)*100
+      testdf = round(temptab, 1)
+      #colnames(testdf)[5:7] = c("B0", "B1", "B2")
+      rownames(testdf) = c("GGG", "LGG", "GLG", "LLG", "GGL", "LGL", "GLL", "LLL")
+      cellcol<-color.scale(testdf, extremes = c("white", "blue"),
+                           xrange = c(0, 100))
+      color2D.matplot(testdf, 
+                      show.values = TRUE,
+                      axes = FALSE,
+                      xlab = "",
+                      ylab = "",
+                      vcex = 1,
+                      vcol = "black",
+                      border = NA,
+                      cellcolors = cellcol)
+      axis(3, at = seq_len(ncol(testdf)) - 0.5, line = -1,
+         labels = colnames(testdf), tick = FALSE, cex.axis = .9)
+      axis(2, at = seq_len(nrow(testdf)) -0.5,
+         labels = rev(rownames(testdf)), tick = FALSE, las = 1, cex.axis = 1.2)
+      mtext("model selected", 2, line = 4)
+      mtext(paste("metric used ", mymetric), 3, line = 2.5, cex = 1.5)
+  }
+dev.off()
+#}
+@
+
+\begin{figure}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelAndBandwidthByMetric-GGG.pdf}}
+\caption{This figure shows }
+\label{fig:GGGmodelBandwidths}
+\end{figure}
+
+Figure \ref{fig:GGGmodelBandwidths} shows
+
+<<BandwidthsLGG, echo = FALSE, results='hide'>>=
+  TrueModel1 = which(mcOutput[1, "True Model", ] == 2)
+pdf("figure/ModelAndBandwidthByMetric-LGG.pdf", width = 8, height = 10)
+par(mar = c(0.5, 6, 6, 0.5))
+par(xpd = NA)
+par(mfrow = c(4, 2))
+  for (mymetric in dimnames(mcOutput)[[1]][8:14]) {
+    output = mcOutput[mymetric, c("Model Number", "Bandwidth"), TrueModel1]
+    tempdata = data.frame(ModelNum = factor(output[1, ], levels = 1:8),
+                          Bandwidth = factor(output[2, ], levels = 1:7))
+#     print(mymetric)
+#     print(round(table(tempdata$ModelNum, tempdata$Bandwidth)/length(TrueModel1)*100, 0))
+    
+      temptab = table(tempdata$ModelNum, tempdata$Bandwidth)/length(TrueModel1)*100
+      testdf = round(temptab, 1)
+      #colnames(testdf)[5:7] = c("B0", "B1", "B2")
+      rownames(testdf) = c("GGG", "LGG", "GLG", "LLG", "GGL", "LGL", "GLL", "LLL")
+      cellcol<-color.scale(testdf, extremes = c("white", "blue"),
+                           xrange = c(0, 100))
+      color2D.matplot(testdf, 
+                      show.values = TRUE,
+                      axes = FALSE,
+                      xlab = "",
+                      ylab = "",
+                      vcex = 1,
+                      vcol = "black",
+                      border = NA,
+                      cellcolors = cellcol)
+      axis(3, at = seq_len(ncol(testdf)) - 0.5, line = -1,
+         labels = colnames(testdf), tick = FALSE, cex.axis = .9)
+      axis(2, at = seq_len(nrow(testdf)) -0.5,
+         labels = rev(rownames(testdf)), tick = FALSE, las = 1, cex.axis = 1.2)
+      mtext("model selected", 2, line = 4)
+      mtext(paste("metric used ", mymetric), 3, line = 2.5, cex = 1.5)
+  }
+dev.off()
+#}
+@
+
+\begin{figure}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelAndBandwidthByMetric-LGG.pdf}}
+\caption{This figure shows }
+\label{fig:LGGmodelBandwidths}
+\end{figure}
+
+Figure \ref{fig:LGGmodelBandwidths} shows
+
+<<BandwidthsError, echo = FALSE, results='hide'>>=
+pdf("figure/ModelAndBandwidthByMetric.pdf", width = 20, height = 18)
+par(mar = c(0.5, 6, 6, 0.5))
+par(xpd = NA)
+par(mfcol = c(7, 5))
+for (mymodel in 2:8) {
+TrueModels = which(mcOutput[1, "True Model", ] == mymodel)
+for (myerror in c(0.25, 0.5, 1, 2, 3)) {
+  errorReps = which(mcOutput[1, "Error", ] == myerror)
+  reps2look = intersect(TrueModels, errorReps)
+  for (mymetric in dimnames(mcOutput)[[1]][8:14]) {
+
+    output = mcOutput[mymetric, c("Model Number", "Bandwidth"), reps2look]
+    tempdata = data.frame(ModelNum  = factor(output[1, ], levels = 1:8),
+                          Bandwidth = factor(output[2, ], levels = 1:7))
+
+      temptab = table(tempdata$ModelNum, tempdata$Bandwidth)/length(reps2look)*100
+      testdf = round(temptab, 1)
+      #colnames(testdf)[5:7] = c("B0", "B1", "B2")
+      rownames(testdf) = c("GGG", "LGG", "GLG", "LLG", "GGL", "LGL", "GLL", "LLL")
+      cellcol<-color.scale(testdf, extremes = c("white", "blue"),
+                           xrange = c(0, 100))
+      color2D.matplot(testdf, 
+                      show.values = TRUE,
+                      axes = FALSE,
+                      xlab = "",
+                      ylab = "",
+                      vcex = 1,
+                      vcol = "black",
+                      border = NA,
+                      cellcolors = cellcol)
+      axis(3, at = seq_len(ncol(testdf)) - 0.5, line = -1,
+         labels = colnames(testdf), tick = FALSE, cex.axis = .9)
+      axis(2, at = seq_len(nrow(testdf)) -0.5,
+         labels = rev(rownames(testdf)), tick = FALSE, las = 1, cex.axis = 1.2)
+      mtext("model selected", 2, line = 4)
+      mtext(paste("metric used ", mymetric), 3, line = 2.5, cex = 1.5)
+  }
+}
+}
+dev.off()
+#}
+@
+
+\begin{figure}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelAndBandwidthByMetric-GLG.pdf}}
+\caption{This figure shows }
+\label{fig:GLGmodelBandwidths}
+\end{figure}
+
+Figure \ref{fig:GLGmodelBandwidths} shows
+
+%\includepdf[pages={7}]{figure/ModelAndBandwidthByMetric.pdf}
 
 % \subsection{Coefficient Formulation}
 % 
