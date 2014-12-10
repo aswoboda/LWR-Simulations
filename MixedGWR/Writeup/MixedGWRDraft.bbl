@@ -1,4 +1,4 @@
-\begin{thebibliography}{7}
+\begin{thebibliography}{8}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -23,6 +23,13 @@ William~S Cleveland and Susan~J Devlin.
 \newblock \emph{Journal of the American Statistical Association}, 83\penalty0
   (403):\penalty0 596--610, June 1988.
 \newblock \doi{10.1080/01621459.1959.10501996}.
+
+\bibitem[Farber and P\'{a}ez(2007)]{Farber2007b}
+S~Farber and A~P\'{a}ez.
+\newblock {A systematic investigation of cross-validation in GWR model
+  estimation: empirical analysis and Monte Carlo simulations}.
+\newblock \emph{Journal of Geographical Systems}, 9\penalty0 (4):\penalty0
+  371--396, 2007.
 
 \bibitem[Fotheringham et~al.(2002)Fotheringham, Brunsdon, and
   Charlton]{Fotheringham2002}

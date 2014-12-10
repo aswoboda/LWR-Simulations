@@ -55,26 +55,26 @@
 \usepackage{pdfpages}
 \usepackage{rotating}
 \usepackage{caption, amsmath, graphicx, setspace, multirow, color, hyperref, array}
-\title{Mixed GWR Simulation Write-up}
+\title{Can Conventional Measures Identify Geographically Varying Mixed Relationships? A Simulation-based Analysis of Locally Weighted Regression}
 \author{Aaron Swoboda}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 \maketitle
 
-What are our research questions? Basically:
-\begin{enumerate}
-\item Can we find the ``true'' model among the eight different possibilities with three model parameters?
-\item Are there differences in the results based on the metric used?
-\item What happens as we change the sample size and amount of error in the model?
-\item How much does it really matter if we are concerned with coefficient estimates?
-  \begin{itemize}
-  \item How well does our selected model perform as measured by beta RMSE?
-  \item Does our model perform better when we select the correct model?
-  \item Can we control for whether we selected a model with the correct spatial variation for a given parameter?
-  \end{itemize}
-\item What about using bandwidth size as a dependent variable?
-\item What happens when we use other decision tools to help with model selection? (Monte Carlo simulations and test statistics)
-\end{enumerate}
+% What are our research questions? Basically:
+% \begin{enumerate}
+% \item Can we find the ``true'' model among the eight different possibilities with three model parameters?
+% \item Are there differences in the results based on the metric used?
+% \item What happens as we change the sample size and amount of error in the model?
+% \item How much does it really matter if we are concerned with coefficient estimates?
+%   \begin{itemize}
+%   \item How well does our selected model perform as measured by beta RMSE?
+%   \item Does our model perform better when we select the correct model?
+%   \item Can we control for whether we selected a model with the correct spatial variation for a given parameter?
+%   \end{itemize}
+% \item What about using bandwidth size as a dependent variable?
+% \item What happens when we use other decision tools to help with model selection? (Monte Carlo simulations and test statistics)
+% \end{enumerate}
 
 
 
@@ -89,10 +89,10 @@ In addition to the three variables listed above ($Y$, $X_1$, and $X_2$), assume 
 
 The simple model in \eqref{eq:simpleOLS} exemplifies spatial stationarity in the parameters: the $\beta$ coefficients are constant over space. Alternatively, the coefficients could exhibit spatial non-stationarity, in which case one, two, or all three of the $\beta$ coefficients are a function of location. This has a natural interpretation in the current real estate example: location matters. However, location can matter in different ways. For instance, if the value of land varies over space, then we would expect the coefficient on lot size to vary over space, while it is also possible that the intercept varies over space to reflect variation in prices of similar houses in different locations. 
 
-While it is possible to parameterize the variation in coefficients, for instance researchers often (CITATION?) include a variable measuring the distance from an observation to an important amenity such as the Central Business District and then this distance variable could be interacted with variables whose value are predicted to vary over space. However, it is not implausible to believe that the variation in coefficients might not be easily parameterized (for instance, if land values are a non-monotonic function of distance). Researchers may instead interact variables with fixed effects for cities or census tracts. However, such strategies require the analyst to make assumptions that severely limit the type and degree of variation in the parameters. For instance, interaction terms with geographic boundaries assume discrete differences in the value of parameters across the boundaries, while instead the parameters may instead be a continuous function of location.
+While it is possible to parameterize the variation in coefficients, for instance by including a variable measuring the distance from an observation to an important amenity such as the Central Business District and then this distance variable could be interacted with variables whose value are predicted to vary over space. However, it is not implausible to believe that the variation in coefficients might not be easily parameterized (for instance, if land values are a non-monotonic function of distance). Researchers may instead interact variables with fixed effects for cities or census tracts. However, such strategies require the analyst to make assumptions that severely limit the type and degree of variation in the parameters. For instance, interaction terms with geographic boundaries assume discrete differences in the value of parameters across the boundaries, while instead the parameters may instead be a continuous function of location.
 
-\subsection{Local Regression to the Rescue?}
-Locally Weighted Regression (also known as Geographically Weighted Regression) is one possible solution to the challenge presented by spatially non-stationary regression coeffiecients. Locally Weighted Regression (LWR) techniques (also known as Geographically Weighted Regression) are described in detail by \citet{Cleveland1988}, \citet{Brunsdon1998b}, \citet{Fotheringham2002}, and others. It is a weighted least squares methodology in which regression coefficients are estimated over space as a function of the local data as described in Equation~\eqref{eq:LWRbeta},
+\subsection{Geographically Weighted Regression to the Rescue?}
+Locally Weighted Regression (also referred to as Geographically Weighted Regression) is one possible solution to the challenge presented by spatially non-stationary regression coeffiecients. Locally Weighted Regression (LWR) techniques (also known as Geographically Weighted Regression) are described in detail by \citet{Cleveland1988}, \citet{Brunsdon1998b}, \citet{Fotheringham2002}, and others. It is a weighted least squares methodology in which regression coefficients are estimated over space as a function of the local data as described in Equation~\eqref{eq:LWRbeta},
 \begin{equation}\label{eq:LWRbeta}
 \hat{\beta}_i = (X'W_iX)^{-1}X'W_iY,
 \end{equation}
@@ -104,11 +104,9 @@ where $d_{ij}$ denotes the distance between observations $i$ and $j$, and $d_{ik
 
 A key decision in estimating LWR models is choosing the number of observations to include in the bandwidth. Bandwidths that are too large in the presence of spatial non-stationarity create bias in the regression estimates (the large bandwidth creates weights matrices that are similar over space and therefore the regression coefficients are forced to be similar when they should vary over space). Bandwidths that are too small add unneccessary error in our estimates by excluding informative observations. Often, researchers choose a bandwidth my minimizing a cross validation metric. This choice is further complicated in the context of mixed models where only some coefficents exhibit spatial stationarity (in contrast to standard models in which all coefficients are treated as spatially stationary or LWR models in which no coefficients are treated as stationary). Little is known about model performance when models are selected across multiple mixed models and among multiple different potenial bandwidth sizes.
 
-\section{Title Needed}
-
 This paper uses simulated data generated under multiple conditions to begin to answer some of the outstanding questions in the area of geographically mixed models. We compare four important cross-validation/information criteria: Leave One Out Cross Validation (LOOCV), Generalized Cross Validation (GCV), Standardized Cross Validation (SCV), and the Akaike Information Criterion (AIC). How frequently can researchers utilizing these metrics identify the correct model among the various possible combinations? Are certain metrics more/less prone to false positive/negatives? Do they suggest no spatial variation when in fact it exists? Do they suggest spatial variation when in fact there is not? 
 
-Perhaps the most common cross validation metric used in the literature (how many citations?) is the Leave One Out Cross Validation score (LOOCV), which is calculated as follows,
+Perhaps the most common cross validation metric used in the literature is the Leave One Out Cross Validation score (LOOCV), which is calculated as follows,
 \begin{equation}\label{eq:LOOCV}
 LOOCV = \frac{1}{N} \sqrt{\sum _{i = 1}^{N} (y - \hat{y}_{\neq i})^2},  
 \end{equation}
@@ -128,11 +126,22 @@ where $\hat{y}_i$ is the predicted dependent variable value for observation $i$,
                    \end{equation}
 The GCV score is a convenient model selection metric that rewards models that provide a good fit to the data, while penalizing models with a greater number of model parameters \citep{Loader1999, McMillen2010}.  \citep{Paez2011, McMillen2010, McMillen2012}. 
 
-The Standardized Cross Validation Score was suggested by (CITATION)
+The Standardized Cross Validation Score was suggested by \citep{Farber2007b} and elaborated on in \citep{Paez2011} as an alternative to conventional metrics. This metric is designed to limit the influence of outliers which may disproportionately impact the choice of bandwidth. The Standardized Cross Validation score for a given observation $i$ and bandwidth $k$ is, 
+\begin{equation}\label{eq:SCV}
+SCV_i (k) = \frac{\sum (y_i - \hat{y}_{-i}(k))^2} {\sum _k (y_i - \hat{y}_{-i})^2 },
+\end{equation}
+and the total score for bandwidth $k$ is then,
+\begin{equation}\label{eq:SCVtot}
+SCV(k) = \sum _i SCV_i(k).
+\end{equation}
+Equation \eqref{eq:SCV} calculates a partial score for each observation as a proportion of the total squared deviance at that observation across the different bandwidths, while \eqref{eq:SCVtot} then calculates the sum across all observations for a given bandwidth. Note that, contrary to the other metrics described here, the SCV score has to be calculated after all possible bandwidths have been implemented.
 
-AIC
-
-SCV
+As noted in \citep{Fotheringham2002}, the well-known Akaike Information Criterion is calculated in the geographically weighted regression framework as follows,
+\begin{equation}\label{eq:AIC}
+  2*n*ln(\hat{\sigma}) + n*ln(2*\pi) + 
+    n*\frac{n + v_1}{n - 2 - v_1}
+    \end{equation}
+where $\hat{\sigma}$ is the estimated standard error of the regression, n is the sample size, and $v_1$ remains the ``effective number of parameters'' estimated by the model as described above.
 
 \subsection{Experimental Design}
 
@@ -144,9 +153,7 @@ where sometimes the coefficient is in fact stationary, $\beta _m(location) = \be
 
 We generate data using all eight different combinations and then estimate all eight possible LWR models across seven different bandwidth sizes. We then calculate different Cross-Validation metrics and compare their values across models and bandwidths. 
 
-We have three different values for each coefficient in our DGP, no variation, some variation, and more variation.
-
-We also change the sample size of our data as well as the variance of the model error term.
+We have three different values for each coefficient in our DGP, no variation, some variation, and more variation. We also change the sample size of our data as well as the variance of the model error term.
 
 \section{Simulation Results}
 
@@ -159,10 +166,10 @@ On the other hand, the table shows that the AIC and GCV metrics were almost neve
 The final three columns show which model minimized the Root Mean Square Error for each of the three coefficients in our model. These metrics are only available because of the nature of the experiment - we know the true values of the coefficients in the underlying true model and so can compare the estimated coefficients to their true values. The results are startling. The true model, `GGG' yields that most accurate estimates of the coefficient in question less than 10 percent of the time. Further inspection shows an interesting pattern. For each of our three coefficients, the model with the most accurate estimates is the model that is correct about the global nature of the coefficient in question, but uses a local model for the other two coefficients. For instance, the most accurate estimates of $\beta _0$ occur almost one-third of the time when using the `GLL' model. In other words, the model that is most likely to have the most accurate estimates for a given coefficient is consistently NOT the correct model, although it tends to correctly identify the spatial (non-)stationarity of the coefficient in question.
 
 
-As a reminder, four of these are available to a researcher with actual data, while the $\textrm{RMSE}_{\hat{\beta _0}}$ etc are only available to 
+As a reminder, four of these are available to a researcher with actual data, while the $\textrm{RMSE}_{\hat{\beta _0}}$, $\textrm{RMSE}_{\hat{\beta _1}}$, and $\textrm{RMSE}_{\hat{\beta _2}}$  are only available to us with the simulated data because we generated the data and have known $\beta$s.
 
 
-We have seven different ways to pick the ``best'' model (the AIC, GCV, SCV, LOOCV, and RMSEs for the three different coefficients). Here are tables showing the relative frequency (in percentage) that each model number was selected by optimizing a given metric. Note that the columns in the following tables may not sum exactly to 100 due to rounding.
+We have seven different ways to pick the ``best'' model (the AIC, GCV, SCV, LOOCV, and RMSEs for the three different coefficients). Here we produce a table showing the relative frequency (in percentage) that each model number was selected by optimizing a given metric. Note that the columns in the following tables may not sum exactly to 100 due to rounding. In this instance the true model was one of complete spatial stationarity (no coefficients varied over space). The true model is model 1.
 
 
 
@@ -232,23 +239,17 @@ Figure \ref{fig:GGGmodelBandwidths} shows
 
 
 
-\begin{figure}
-  \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelAndBandwidthByMetric-LGG.pdf}}
-\caption{This figure shows }
-\label{fig:LGGmodelBandwidths}
-\end{figure}
-
-Figure \ref{fig:LGGmodelBandwidths} shows
 
 
 
 \begin{figure}
-  \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelAndBandwidthByMetric-GLG.pdf}}
-\caption{This figure shows }
+  \makebox[\textwidth][c]{\includegraphics[page = 1, width = 1.2\textwidth]{figure/ModelBandwidthMetricError.pdf}}
+\caption{This figure shows the GLG model...}
 \label{fig:GLGmodelBandwidths}
 \end{figure}
 
 Figure \ref{fig:GLGmodelBandwidths} shows
+
 
 %\includepdf[pages={7}]{figure/ModelAndBandwidthByMetric.pdf}
 

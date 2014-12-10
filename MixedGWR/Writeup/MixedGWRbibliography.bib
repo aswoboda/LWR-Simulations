@@ -732,51 +732,7 @@ title = {{A systematic investigation of cross-validation in GWR model estimation
 volume = {9},
 year = {2007}
 }
-@article{Farber2007b,
-abstract = {In geographically weighted regression, one must determine a window size which will be used to subset the data locally. Typically, a cross-validation procedure is used to determine a globally optimal window size. Preliminary investigations indicate that the global cross-validation score is heavily influenced by a small number of observations in the dataset. At present, the ramifications of this behaviour in cross-validation are unknown. The research reported here explores the extent to which individual and groups of observations impact optimal window size determination, and whether one can explain why some points are more influential than others. In addition, we strive to examine the impact neighbourhood specifi- cation has on model quality in terms of predictive capabilities and the ability of the method to retrieve spatially varying processes. The analysis is based on several datasets and using simulated data in order to compare and validate results. The results provide some practical guidelines for the use of cross-validation.},
-annote = {RQ: When conducting GWR, to what extent do individual and groups of observations impact optimal window size determination when using CVS to determine said window size, and why are some observations more influential than others?
 
-        
-Results: The authors reveal that depending on the dependent variable values, certain observations do influence CVS more than others, and propose 3 methods of smoothing the disproportionate influence of said observations that they then apply to 3 empirical datasets as well as a Monte Carlo simulation.
-
-        
-Contribution: While it is a technical paper, the authors intend to education the reader on the limitations of using CV, and the advantages and disadvantages of using the 3 correctional methods.
-
-        
-          
-They choose row standardization over the other 2 methods b/c they are interested in eliminating undue influence of certain observations in det optimal bandwidth based on CV minimization, and RowStan. has the lowest polarization score, a measure of how influential certain observations have on determining total CV. See page 387
-        
-
-        
-
-        
-
-        Cited by:
-        
-Harris, et al, 2010 -- ILLiaded, will add to Mendeley
-Wheeler, 2009 -- ILLiaded, will add to Mendeley
-Redfearn, McMillen 2010 -- In Mendeley
-Redfearn, 2009 -- In Mendeley
-Paez, 2007 -- In Mendeley
-Matthews, 2012 -- In Mendeley
-          
-
-          
-Cites: 
-        
-Wheeler and Tiefelsdorf, 2005 -- In Mendeley},
-author = {Farber, S and P\'{a}ez, A},
-file = {::},
-journal = {Journal of Geographical Systems},
-keywords = {AIC,EmpEx,Extra,LOOCV,Theo},
-mendeley-tags = {AIC,EmpEx,Extra,LOOCV,Theo},
-number = {4},
-pages = {371--396},
-publisher = {Springer},
-title = {{A systematic investigation of cross-validation in GWR model estimation: empirical analysis and Monte Carlo simulations}},
-volume = {9},
-year = {2007}
-}
 @article{Florax2003a,
 annote = {This reviews spacial econometrics developments, but doesn't go into detail about GWR techniques.  },
 author = {Florax, R and {Van Der Vlist}, A},
