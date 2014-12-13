@@ -3,9 +3,16 @@
 \usepackage[round]{natbib}
 %\usepackage[nolists]{endfloat}
 \usepackage[width = 5in]{geometry}
-\usepackage{pdfpages}
+\usepackage{pdfpages, caption}
 \usepackage{rotating}
 \usepackage{caption, amsmath, graphicx, setspace, multirow, color, hyperref, array}
+\usepackage{xcolor, colortbl}
+\usepackage{arydshln}
+
+\definecolor{Gray}{gray}{0.85}
+\definecolor{Gray95}{gray}{0.95}
+\definecolor{Gray75}{gray}{0.75}
+
 \title{Can Conventional Measures Identify Geographically Varying Mixed Relationships? A Simulation-based Analysis of Locally Weighted Regression}
 \author{Aaron Swoboda}
 
@@ -43,16 +50,16 @@ Imagine a simple linear model,
 \begin{equation}\label{eq:simpleOLS}
 Y = \beta _0 + \beta _1 *X_1 + \beta _2 * X_2 + \epsilon .
 \end{equation}
-In addition to the three variables listed above ($Y$, $X_1$, and $X_2$), assume we know the geographical location for each of our $N$ observations. Thus, our data consists of an $N x 5$ matrix, where $Y$ may be house prices, $X_1$ and $X_2$ could be the living space and lot size associated with each house, and the final two columns determine the location of the observations (for instance, latitude and longitude, or distances north and east from a prescribed point).
+In addition to the three variables listed above ($Y$, $X_1$, and $X_2$), assume we know the geographical location for each of our $N$ observations. Thus, our data consists of an $N \times 5$ matrix, where $Y$ may be house prices, $X_1$ and $X_2$ could be the living space and lot size associated with each house, and the final two columns determine the location of the observations (for instance, latitude and longitude, or distances north and east from a prescribed point).
 
 The simple model in \eqref{eq:simpleOLS} exemplifies spatial stationarity in the parameters: the $\beta$ coefficients are constant over space. Alternatively, the coefficients could exhibit spatial non-stationarity, in which case one, two, or all three of the $\beta$ coefficients are a function of location. This has a natural interpretation in the current real estate example: location matters. However, location can matter in different ways. For instance, if the value of land varies over space, then we would expect the coefficient on lot size to vary over space, while it is also possible that the intercept varies over space to reflect variation in prices of similar houses in different locations. 
 
-While it is possible to parameterize the variation in coefficients, for instance by including a variable measuring the distance from an observation to an important amenity such as the Central Business District and then this distance variable could be interacted with variables whose value are predicted to vary over space. However, it is not implausible to believe that the variation in coefficients might not be easily parameterized (for instance, if land values are a non-monotonic function of distance). Researchers may instead interact variables with fixed effects for cities or census tracts. However, such strategies require the analyst to make assumptions that severely limit the type and degree of variation in the parameters. For instance, interaction terms with geographic boundaries assume discrete differences in the value of parameters across the boundaries, while instead the parameters may instead be a continuous function of location.
+It is possible to parameterize the variation in coefficients, for instance by including a variable measuring the distance from an observation to an important amenity such as the Central Business District and then this distance variable could be interacted with variables whose value are predicted to vary over space. However, it is not implausible to believe that the variation in coefficients might not be easily parameterized (for instance, if land values are a non-monotonic function of distance). Researchers may instead interact variables with fixed effects for cities or census tracts. However, such strategies require the analyst to make assumptions that severely limit the type and degree of variation in the parameters. For instance, interaction terms with geographic boundaries assume discrete differences in the value of parameters across the boundaries, while instead the parameters may instead be a continuous function of location. Additionally, numerous interaction terms may unduly reduce the degrees of freedom.
 
 \subsection{Geographically Weighted Regression to the Rescue?}
 Locally Weighted Regression (also referred to as Geographically Weighted Regression) is one possible solution to the challenge presented by spatially non-stationary regression coeffiecients. Locally Weighted Regression (LWR) techniques (also known as Geographically Weighted Regression) are described in detail by \citet{Cleveland1988}, \citet{Brunsdon1998b}, \citet{Fotheringham2002}, and others. It is a weighted least squares methodology in which regression coefficients are estimated over space as a function of the local data as described in Equation~\eqref{eq:LWRbeta},
 \begin{equation}\label{eq:LWRbeta}
-\hat{\beta}_i = (X'W_iX)^{-1}X'W_iY,
+\hat{\beta}(location_i) = (X'W(location_i)X)^{-1}X'W(location_i)Y,
 \end{equation}
 where X is a $N \times 2$ matrix of independent variables, $W_i$ is the $N \times N$ weights matrix, and Y is the $N \times 1$ vector of dependent variable values. The weights matrix, $W_i$ is a diagonal matrix where element $w_{jj}$ denotes the weight that the $j^{th}$ data point will receive in the regression coefficients estimated at location $i$ in the dataset. We employ a bi-square weights function and a k-nearest neighbor bandwidth approach as described in equation~\eqref{eq:weights}, 
 \begin{equation}\label{eq:weights}
@@ -60,7 +67,9 @@ w_{jj}=\left[1-\left(\frac{d_{ij}}{d_{k}}\right)^2 \right]^2 \textrm{ if }d_{ij}
 \end{equation}
 where $d_{ij}$ denotes the distance between observations $i$ and $j$, and $d_{ik}$ is the distance from observation $i$ to the $k^{th}$ nearest observation. This function assigns weights close to 1 for data points near observation $i$, weights positive but closer to zero for observations farther away, and zero for all $n-k$ observations farther away than the $k^{th}$ nearest observation. 
 
-A key decision in estimating LWR models is choosing the number of observations to include in the bandwidth. Bandwidths that are too large in the presence of spatial non-stationarity create bias in the regression estimates (the large bandwidth creates weights matrices that are similar over space and therefore the regression coefficients are forced to be similar when they should vary over space). Bandwidths that are too small add unneccessary error in our estimates by excluding informative observations. Often, researchers choose a bandwidth my minimizing a cross validation metric. This choice is further complicated in the context of mixed models where only some coefficents exhibit spatial stationarity (in contrast to standard models in which all coefficients are treated as spatially stationary or LWR models in which no coefficients are treated as stationary). Little is known about model performance when models are selected across multiple mixed models and among multiple different potenial bandwidth sizes.
+A key decision in estimating LWR models is choosing the number of observations to include in the bandwidth. Bandwidths that are too large in the presence of spatial non-stationarity create bias in the regression estimates (the large bandwidth creates weights matrices that are similar over space and therefore the regression coefficients are forced to be similar when they should vary over space). Bandwidths that are too small add unneccessary error in our estimates by excluding informative observations. Often, researchers choose a bandwidth my minimizing a cross validation metric. 
+
+This choice is further complicated in the context of mixed models where only some coefficents exhibit spatial stationarity (in contrast to standard models in which all coefficients are treated as spatially stationary or LWR models in which no coefficients are treated as stationary). Little is known about model performance when models are selected across multiple mixed models and among multiple different potenial bandwidth sizes.
 
 This paper uses simulated data generated under multiple conditions to begin to answer some of the outstanding questions in the area of geographically mixed models. We compare four important cross-validation/information criteria: Leave One Out Cross Validation (LOOCV), Generalized Cross Validation (GCV), Standardized Cross Validation (SCV), and the Akaike Information Criterion (AIC). How frequently can researchers utilizing these metrics identify the correct model among the various possible combinations? Are certain metrics more/less prone to false positive/negatives? Do they suggest no spatial variation when in fact it exists? Do they suggest spatial variation when in fact there is not? 
 
@@ -107,7 +116,7 @@ We generate data in the following format:
 \begin{equation}
 Y = \beta _0(location) + \beta _1(location) *X_1 + \beta _2(location) * X_2 + \epsilon ,
 \end{equation}
-where sometimes the coefficient is in fact stationary, $\beta _m(location) = \beta$, and other times it is non-stationary, $\beta _m (location_p) \neq \beta _m (location_q)$. With three coefficients, $m = \{0, 1, 2\}$, each having the possibility of being stationary or not, there are eight different possible combinations, ranging from (stationary, stationary, stationary) to (non-stationary, non-stationary, non-stationary).
+where sometimes the coefficient is in fact stationary, $\beta _m(location) = \beta _m$, and other times it is non-stationary, $\beta _m (location_p) \neq \beta _m (location_q)$. With three coefficients, $m = \{0, 1, 2\}$, each having the possibility of being stationary or not, there are eight different possible combinations of the three parameters, ranging from (stationary, stationary, stationary) to (non-stationary, non-stationary, non-stationary). We refer to any parameter combination containing both stationary and non-stationary coefficients as ``mixed.''
 
 We generate data using all eight different combinations and then estimate all eight possible LWR models across seven different bandwidth sizes. We then calculate different Cross-Validation metrics and compare their values across models and bandwidths. 
 
@@ -115,19 +124,9 @@ We have three different values for each coefficient in our DGP, no variation, so
 
 \section{Simulation Results}
 
-We begin by showing the results for the data generation process with no spatial variation for any of the coeffients. To denote that $\beta _0$, $\beta _1$, and $\beta _2$ are each ``Global'' (rather than ``Local'') we label this model ``GGG''. At this point, we are most interested in which model, among the eight possible, would be chosen by minimizing the various metrics, AIC, GCV, SCV, and LOOCV. The following table shows the different selection metrics in columns and the eight different models (GGG, LGG, GLG, GGL, LLG, LGL, GLL, and LLL) in the rows. The values in each cell represent the percentage of the experiments that the metric in the column was minimized by the row model. Each column sums to 100 (subject to rounding error). 
+\subsection{Starting Simple: All Coefficients are Spatially Stationary}
 
-For instance, the table shows that 72 percent of the time when the true model contained no spatial variation, the LOOCV metric was minimized by the `GGG' model, while the majority of the remaining 28 percent of the time the LOOCV was minimized by the `LGG', `GLG', and `GGL' models. In other words, almost three-fourths of the time the LOOCV was minimized using the model that was ``correct'' across all three coefficients and only 5 percent of the time was this metric minimized by a model ``wrong'' about two or three of the coefficients at the same time.
-
-On the other hand, the table shows that the AIC and GCV metrics were almost never minimized by the true model ($<0.5$ percent). Instead, the models ``chosen'' by these metrics were approximately evenly split among `LGG', `GLG', and `GGL', each of which is wrong about one of the coefficients (a coefficient is believed to be local when it is global). The SCV metric chooses the true model more than the AIC or GCV metrics (8 percent vs. $<0.5$ percent), but far less than the LOOCV metric. However, it also is `wrong' about two or more coefficients in almost 20 percent of these cases (compared to 1 [AIC], 3 [GCV], and 4 [LOOCV]).
-
-The final three columns show which model minimized the Root Mean Square Error for each of the three coefficients in our model. These metrics are only available because of the nature of the experiment - we know the true values of the coefficients in the underlying true model and so can compare the estimated coefficients to their true values. The results are startling. The true model, `GGG' yields that most accurate estimates of the coefficient in question less than 10 percent of the time. Further inspection shows an interesting pattern. For each of our three coefficients, the model with the most accurate estimates is the model that is correct about the global nature of the coefficient in question, but uses a local model for the other two coefficients. For instance, the most accurate estimates of $\beta _0$ occur almost one-third of the time when using the `GLL' model. In other words, the model that is most likely to have the most accurate estimates for a given coefficient is consistently NOT the correct model, although it tends to correctly identify the spatial (non-)stationarity of the coefficient in question.
-
-
-As a reminder, four of these are available to a researcher with actual data, while the $\textrm{RMSE}_{\hat{\beta _0}}$, $\textrm{RMSE}_{\hat{\beta _1}}$, and $\textrm{RMSE}_{\hat{\beta _2}}$  are only available to us with the simulated data because we generated the data and have known $\beta$s.
-
-
-We have seven different ways to pick the ``best'' model (the AIC, GCV, SCV, LOOCV, and RMSEs for the three different coefficients). Here we produce a table showing the relative frequency (in percentage) that each model number was selected by optimizing a given metric. Note that the columns in the following tables may not sum exactly to 100 due to rounding. In this instance the true model was one of complete spatial stationarity (no coefficients varied over space). The true model is model 1.
+We begin by examining the simulation resuts for the spatially stationary data generation process. With no spatial variation for any of the coeffients, these data are consistent with standard OLS regression. We label this model `GGG' to denote that all three coefficients are `Global' rather than `Local'.\footnote{The eight GWR models representing the unique mixture/combinations of (non-)stationarity across the three coefficients are labeled: GGG, LGG, GLG, GGL, LLG, LGL, GLL, and LLL.} Table \ref{tab:ModelbyMetricGGG} displays the percentage of simulation iterations that each of the eight different mixed GWR models was `selected' by each of the four different metrics: LOOCV, GCV, SCV, and AIC. Correspondingly, each column sums to 100 (subject to rounding error). 
 
 <<models, echo=FALSE>>=
 NY = c("no", "yes")
@@ -135,20 +134,77 @@ models = expand.grid(beta0 = NY, beta1 = NY, beta2 = NY)
 @
 
 
-<<ModelSelectionTabulations, echo = FALSE>>=
-for (i in 1:1) {
-  temp2 = which(mcOutput[,"True Model" ,] == i, arr.ind = TRUE)
+<<ModelSelectionTabulations, echo = FALSE, results='hide'>>=
+library(xtable)
+  temp2 = which(mcOutput[,"True Model" ,] == 1, arr.ind = TRUE)
   temp3 = mcOutput[8:14, "Model Number", unique(temp2[, 2])]
   temp4 = factor(temp3)
   
   newdata = data.frame(ModelNum = temp4, 
                        Metric = factor(rownames(temp3), levels = rownames(temp3)))
-#   cat(paste("\n true model =", i, "\n"))
-#   cat("spatial variation...\n")
-#   print(models[i, ])
-  print(round(table(newdata)*100*7/sum(table(newdata)), 0))
-}
+
+  mytable = round(table(newdata)*100*7/sum(table(newdata)), 0)
+  rownames(mytable) = c("GGG", "LGG", "GLG", "LLG", "GGL", "LGL", "GLL", "LLL")
+  mytable = xtable(mytable[c(1, 2, 3, 5, 4, 6, 7, 8), c(4, 2, 3, 1, 5:7)], digits = 0)
 @
+\begin{table}[ht]
+\centering
+\begin{tabular}{crccccl}
+\multicolumn{2}{c}{} & \multicolumn{4}{c}{Metric} & \\  \cline{3-6}
+\multicolumn{2}{c}{} & LOOCV & GCV & SCV & \multicolumn{1}{c}{AIC} & \\  
+ \parbox[t]{2mm}{\multirow{8}{*}{\rotatebox[origin=c]{90}{Model Selected}}} & GGG & 72 & 0 & 8 & 0 & 3/3  Correct\\ 
+&  \cellcolor{Gray95}LGG & \cellcolor{Gray95}7 & \cellcolor{Gray95}28 & \cellcolor{Gray95}29 & \cellcolor{Gray95}28 & \multirow{3}{*}{2/3  Correct}\\ 
+&  \cellcolor{Gray95}GLG & \cellcolor{Gray95}8 & \cellcolor{Gray95}36 & \cellcolor{Gray95}22 & \cellcolor{Gray95}37 & \\ 
+&  \cellcolor{Gray95}GGL & \cellcolor{Gray95}8 & \cellcolor{Gray95}33 & \cellcolor{Gray95}22 & \cellcolor{Gray95}34 & \\ 
+&  \cellcolor{Gray}LLG & \cellcolor{Gray}1 & \cellcolor{Gray}1 & \cellcolor{Gray}5 & \cellcolor{Gray}0 & \multirow{3}{*}{1/3  Correct} \\ 
+&  \cellcolor{Gray}LGL & \cellcolor{Gray}2 & \cellcolor{Gray}1 & \cellcolor{Gray}5 & \cellcolor{Gray}1 & \\ 
+&  \cellcolor{Gray}GLL & \cellcolor{Gray}1 & \cellcolor{Gray}1 & \cellcolor{Gray}8 & \cellcolor{Gray}0 &  \\ 
+&  \cellcolor{Gray75}LLL & \cellcolor{Gray75}0 & \cellcolor{Gray75}0 & \cellcolor{Gray75}1 & \cellcolor{Gray75}0 & 0/3  Correct \\ \cline{3-6}
+&    & 100 & 100 & 100 & 100 & \\
+
+\end{tabular}
+\caption{Distribution of Model Selected by Metric when True Model = GGG (All Coefficients are Non-Stationary).\\ Cell values denote the percentage of simulations in which each model yielded the best metric value. For instance, the GGG model had the smallest LOOCV value for 72 percent of our simulations. Each column sums to 100 subject to rounding error. Cell shading denotes the number of coefficients that are correctly identified as stationary or not.}  \label{tab:ModelbyMetricGGG}
+\end{table}
+
+
+Table \ref{tab:ModelbyMetricGGG} shows a distinct difference between LOOCV and the three other metrics. Almost three-fourths of the time the LOOCV was minimized using the model that was ``correct'' across all three coefficients. Conversely, the SCV metric selected the correct (`GGG') model in less than 10 percent of the simulations and both the GCV and AIC metrics selected the correct model less than 1 percent of the time. Interestingly, while the GCV, SCV, and AIC metrics did not choose the correct model nearly as frequently as the LOOCV metric, they tend to make a correctly identify the spatial (non-)stationarity for two out of three coefficients. The GCV and AIC metric almost exclusively selected one of the `LGG', `GLG', and `GGL' models. Almost 20 percent of the time the SCV metric selected a model that was incorrect about two (`LLG', `LGL', `GLL') or all (`LLL') of the coefficients stationarity.
+
+At first glance, the high frequency of type one error displayed in Table \ref{tab:ModelbyMetricGGG} is frustrating. However, the goal of regression analyses tends to be the efficient, consistent, and unbiased estimation of a particular variable coefficient rather than identifying the exact model specification. We therefore also calculated the Root Mean Square Error for each regression coefficient across all of our model specifications as,
+\begin{equation}
+\textrm{RMSE } \widehat{\beta} _m = \sqrt{\frac{1}{N} \sum _{i=1}^N (\widehat{\beta} _{mi} - \beta _{mi})^2},   
+\end{equation}
+where $i$ denotes the observation, $N$ is the sample size, and $m \in \{0, 1, 2\}$ specifies the model coefficient in question.  Unlike the metrics in Table \ref{tab:ModelbyMetricGGG}, these model performance metrics are not available to researchers with observational data. These measures of estimated coefficient accuracy can only be calculated because we know the true underlying data generating process. Table \ref{tab:RMSEGGG} shows the distribution of models selected by having the smallest RMSE for each coefficient. 
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{crccc}
+\multicolumn{2}{c}{} & \multicolumn{3}{c}{Coefficient RMSE}  \\ \cline{3-5}
+\multicolumn{2}{c}{} & $\widehat{B_0}$ & $\widehat{B_1}$ & \multicolumn{1}{c}{$\widehat{B_2}$}  \\  
+ \parbox[t]{2mm}{\multirow{8}{*}{\rotatebox[origin=c]{90}{Model Selected}}} & GGG & \cellcolor{Gray}6 & \cellcolor{Gray}6 & \cellcolor{Gray}7 \\ 
+& LGG &  3 & \cellcolor{Gray}23 & \cellcolor{Gray}24 \\ 
+&  GLG & \cellcolor{Gray}22 & 4 & \cellcolor{Gray}24  \\ 
+&  GGL & \cellcolor{Gray}23 & \cellcolor{Gray}23 & 3  \\ 
+&  LLG &  5 & 3 & \cellcolor{Gray}33 \\ 
+&  LGL &  5 &  \cellcolor{Gray}36 &  2  \\ 
+&  GLL &  \cellcolor{Gray}32 &  4 &  4 \\ 
+&  LLL & 4 & 2 & 3 \\ 
+   \cline{3-5}
+&     & 100 & 100 & 100 \\   
+\end{tabular}
+\caption{Distribution of Model Selected by RMSE when True Model = GGG (All Coefficients are Non-Stationary).\\ Cell values denote the percentage of simulations in which each model yielded the lowest RMSE value for each coefficient. For instance, the GGG model had the smallest RMSE $\widehat{B_0}$ value for 6 percent of our simulations. Each column sums to 100 subject to rounding error. Shaded cells denote model for which the spatial non-stationarity of the column coefficient is correct. } \label{tab:RMSEGGG}
+\end{table}
+
+The top row of Table \ref{tab:RMSEGGG} shows that correct `GGG' model yielded the smallest RMSE for $\widehat{B}$ in only 6 to 7 percent of simulations. An interesting pattern emerges upon examination of Table \ref{tab:RMSEGGG}. The largest value in each column represents approximately one-third of the simulations, but is not the perfect model. Instead, the model most frequently minimizing the RMSE for $\widehat{B}$ correctly identifies the spatial stationarity of the coefficient in question, but incorrectly treats both of the other  coefficients as non-stationary. For instance, in 32 percent of these simulations with a true `GGG' model, the smallest RMSE for $\widehat{B}$ was obtained using the `GLL' model. In each column the four respective models that correctly identify the spatial non-stationarity of the respective coefficient yield the most accurate estiamtes of the coefficient in question for approximately 85 percent of our simulations. It is relatively rare for the most accurate stationary regression coefficient estimates to be obtained from a model that incorrectly identifies it as spatially non-stationary. Approximately half of our simulations yielded minimum RMSEs using models that were correct about the coefficient in question, but were incorrect about one of the two remaining coefficients.
+
+\subsubsection{Model and Bandwidth}
+
+The previous section explored the model selected by different metrics in the presence of an underlying globally stationary data generation process. The results showed that the correct model, `GGG', was only selected relatively frequently by the LOOCV metric. However, we have also seen that some of the most accurate estimates of the individual regression coefficients come from incorrect models. We have not yet quantified how wrong these incorrect model are. For instance, a model may incorrectly dentify a coefficient as spatially non-stationary, but might estimate a very small degree of variation in the coefficient by using a large bandwidth relative to our sample size. That is, it is potentially very different to select the `GGL' model instead of the `GGG' with a large vs. small bandwidth. A small bandwidth can yield more variation in coefficient estimates across our sample, while a large bandwidth will restrict the non-stationary coefficients to be more similar.
+
+In each of our simulations we estimated the seven models allowing non-stationarity in at least coefficient for seven different bandwidths, ranging from  
+
+We have seven different ways to pick the ``best'' model (the AIC, GCV, SCV, LOOCV, and RMSEs for the three different coefficients). Here we produce a table showing the relative frequency (in percentage) that each model number was selected by optimizing a given metric. Note that the columns in the following tables may not sum exactly to 100 due to rounding. In this instance the true model was one of complete spatial stationarity (no coefficients varied over space). The true model is model 1.
+
+
 
 Let's visualize these results in Figure~\ref{fig:modelIdentification}. Some patterns are evident:
 
