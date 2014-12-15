@@ -86,6 +86,9 @@
 
 
 
+
+
+
 \section{Background}
 
 Imagine a simple linear model,
@@ -200,10 +203,9 @@ At first glance, the high frequency of type one error displayed in Table \ref{ta
 \begin{equation}
 \textrm{RMSE } \widehat{\beta} _m = \sqrt{\frac{1}{N} \sum _{i=1}^N (\widehat{\beta} _{mi} - \beta _{mi})^2},   
 \end{equation}
-where $i$ denotes the observation, $N$ is the sample size, and $m \in \{0, 1, 2\}$ specifies the model coefficient in question.
+where $i$ denotes the observation, $N$ is the sample size, and $m \in \{0, 1, 2\}$ specifies the model coefficient in question.  Unlike the metrics in Table \ref{tab:ModelbyMetricGGG}, these model performance metrics are not available to researchers with observational data. These measures of estimated coefficient accuracy can only be calculated because we know the true underlying data generating process. Table \ref{tab:RMSEGGG} shows the distribution of models selected by having the smallest RMSE for each coefficient. 
 
-\begin{table}[ht]
-\caption{Here is my Title}
+\begin{table}[htb]
 \centering
 \begin{tabular}{crccc}
 \multicolumn{2}{c}{} & \multicolumn{3}{c}{Coefficient RMSE}  \\ \cline{3-5}
@@ -219,28 +221,84 @@ where $i$ denotes the observation, $N$ is the sample size, and $m \in \{0, 1, 2\
    \cline{3-5}
 &     & 100 & 100 & 100 \\   
 \end{tabular}
-\\
-This table shows\ldots
+\caption{Distribution of Model Selected by RMSE when True Model = GGG (All Coefficients are Non-Stationary).\\ Cell values denote the percentage of simulations in which each model yielded the lowest RMSE value for each coefficient. For instance, the GGG model had the smallest RMSE $\widehat{B_0}$ value for 6 percent of our simulations. Each column sums to 100 subject to rounding error. Shaded cells denote model for which the spatial non-stationarity of the column coefficient is correct. } \label{tab:RMSEGGG}
 \end{table}
-The final three columns show which model minimized the Root Mean Square Error for each of the three coefficients in our model. These metrics are only available because of the nature of the experiment - we know the true values of the coefficients in the underlying true model and so can compare the estimated coefficients to their true values. The results are startling. The true model, `GGG' yields that most accurate estimates of the coefficient in question less than 10 percent of the time. Further inspection shows an interesting pattern. For each of our three coefficients, the model with the most accurate estimates is the model that is correct about the global nature of the coefficient in question, but uses a local model for the other two coefficients. For instance, the most accurate estimates of $\beta _0$ occur almost one-third of the time when using the `GLL' model. In other words, the model that is most likely to have the most accurate estimates for a given coefficient is consistently NOT the correct model, although it tends to correctly identify the spatial (non-)stationarity of the coefficient in question.
 
+An interesting pattern emerges upon examination of Table \ref{tab:RMSEGGG}. The largest value in each column represents approximately one-third of the simulations, but is not the perfect model. The `GGG' row of Table \ref{tab:RMSEGGG} shows that the correct model yielded the smallest RMSE for a given $\widehat{B}$ in only 6 to 7 percent of simulations.  Instead, the model most frequently minimizing the RMSE for $\widehat{B}$ correctly identifies the spatial stationarity of the coefficient in question, but incorrectly treats both of the other coefficients as non-stationary. For instance, in 32 percent of these simulations with a true `GGG' model, the smallest RMSE for $\widehat{B}_0$ was obtained using the `GLL' model. In each column the four respective models that correctly identify the spatial non-stationarity of the respective coefficient yield the most accurate estiamtes of the coefficient in question for approximately 85 percent of our simulations. It is relatively rare for the most accurate stationary regression coefficient estimates to be obtained from a model that incorrectly identifies it as spatially non-stationary. Approximately half of our simulations yielded minimum RMSEs using models that were correct about the coefficient in question, but were incorrect about one of the two remaining coefficients.
 
-As a reminder, four of these are available to a researcher with actual data, while the $\textrm{RMSE}_{\hat{\beta _0}}$, $\textrm{RMSE}_{\hat{\beta _1}}$, and $\textrm{RMSE}_{\hat{\beta _2}}$  are only available to us with the simulated data because we generated the data and have known $\beta$s.
+\subsubsection{Model and Bandwidth}
 
+The previous section explored the model selected by different metrics in the presence of an underlying globally stationary data generation process. The results showed that the correct model, `GGG', was only selected relatively frequently by the LOOCV metric. However, we have also seen that some of the most accurate estimates of the individual regression coefficients come from incorrect models. We have not yet quantified how wrong these incorrect model are. For instance, a model may incorrectly dentify a coefficient as spatially non-stationary, but might estimate a very small degree of variation in the coefficient by using a large bandwidth relative to our sample size. That is, it is potentially very different to select the `GGL' model instead of the `GGG' with a large vs. small bandwidth. A small bandwidth can yield more variation in coefficient estimates across our sample, while a large bandwidth will restrict the non-stationary coefficients to be more similar.
 
-We have seven different ways to pick the ``best'' model (the AIC, GCV, SCV, LOOCV, and RMSEs for the three different coefficients). Here we produce a table showing the relative frequency (in percentage) that each model number was selected by optimizing a given metric. Note that the columns in the following tables may not sum exactly to 100 due to rounding. In this instance the true model was one of complete spatial stationarity (no coefficients varied over space). The true model is model 1.
-
-
-
-Let's visualize these results in Figure~\ref{fig:modelIdentification}. Some patterns are evident:
+In each of our simulations we estimated the seven models allowing non-stationarity in at least coefficient for seven different bandwidths, ranging from using all of the data to just under 10 percent of the observations in the mixed models with the smallest bandwidth. Figure \ref{fig:GGGmodelBandwidths} shows the distribution of model selected and bandwidth size for each of the seven metrics we've discussed.
 
 
 
-\begin{figure}
-  \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelSelectionFigures.pdf}}
-\caption{This figure shows }
-\label{fig:modelIdentification}
-\end{figure}
+\begin{sidewaysfigure}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelAndBandwidthByMetric-GGG.pdf}}
+\caption{Model and Bandwidth Selected by Metric when the True Model = `GGG' (All coefficients are stationary) \\ Each subfigure shows the percentage of simulations a given model and bandwidth combination was selected among the 50 possible combinations (7 bandwidths for each of the seven mixed models plus the GGG model) for a given metric. The sum of all values in a given subfigure sum to 100 subject to rounding error. For convenience, cell values less than 0.5 percent are omitted. The color saturation of the cells helps denote the magnitude of the values.}
+\label{fig:GGGmodelBandwidths}
+\end{sidewaysfigure}
+
+\subsection{All Local Coefficients}
+
+The previous section investigated the simulation results when the true model was stationary across all three coefficients. In this section we examine the opposite extreme: all non-stationary coefficients. To begin, we construct a figure similar to Figure \ref{fig:GGGmodelBandwidths} but with a true model of `LLL.'   
+
+
+
+\begin{sidewaysfigure}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelAndBandwidthByMetric-LLL.pdf}}
+\caption{Model and Bandwidth Selected by Metric when the True Model = `LLL' (All coefficients are non-stationary) \\ Each subfigure shows the percentage of simulations a given model and bandwidth combination was selected among the 50 possible combinations (7 bandwidths for each of the seven mixed models plus the GGG model) for a given metric. The sum of all values in a given subfigure sum to 100 subject to rounding error. For convenience, cell values less than 0.5 percent are omitted. The color saturation of the cells helps denote the magnitude of the values.}
+\label{fig:LLLmodelBandwidths}
+\end{sidewaysfigure}
+
+% 
+% <<ModelSelectionTabulations1, echo = FALSE, results='hide'>>= 
+% #, fig.height=14, fig.width=10>>=
+% pdf("figure/ModelSelectionFigures.pdf", width = 10, height = 14)
+% par(mar = c(0.5, 6, 6, 0.5))
+% par(xpd = NA)
+% par(mfcol = c(4, 2))
+% for (i in 1:8) {
+%   temp2 = which(mcOutput[,"True Model" ,] == i, arr.ind = TRUE)
+%   temp3 = mcOutput[8:14, c("Model Number"), unique(temp2[, 2])]
+%   temp4 = factor(temp3)
+%   newdata = data.frame(ModelNum = temp4, 
+%                        Metric = factor(rownames(temp3), levels = rownames(temp3)))
+%   temptab = table(newdata)*100*7/sum(table(newdata))
+%       testdf = round(temptab, 0)
+%       testdf[which(testdf == 0)] = NA
+%       colnames(testdf)[5:7] = c("B0", "B1", "B2")
+%       rownames(testdf) = c("GGG", "LGG", "GLG", "LLG", "GGL", "LGL", "GLL", "LLL")
+%       testdf = testdf[c(1:3, 5, 4, 6:8), c(4, 2, 3, 1, 5:7)] # this groups the three models with 1 L together and reorders the columns
+%   cellcol<-color.scale(testdf, extremes = c("white", "blue"),
+%                        xrange = c(0, 100))
+%   color2D.matplot(testdf, 
+%                   show.values = TRUE,
+%                   axes = FALSE,
+%                   xlab = "",
+%                   ylab = "",
+%                   vcex = 1,
+%                   vcol = "black",
+%                   border = NA,
+%                   cellcolors = cellcol)
+%   axis(3, at = seq_len(ncol(testdf)) - 0.5, line = -1,
+%      labels = colnames(testdf), tick = FALSE, cex.axis = .9)
+%   axis(2, at = seq_len(nrow(testdf)) -0.5,
+%      labels = rev(rownames(testdf)), tick = FALSE, las = 1, cex.axis = 1.2)
+%   mtext("model selected", 2, line = 4)
+%   mtext(paste("true model is ", rownames(testdf)[i]), 3, line = 2.5, cex = 1.5)
+%   mtext("model selection metric", 3, line = 1)
+%   rect(-.85, 8-i, 0, 9-i, border = "blue")
+% }
+% dev.off()
+% @
+% 
+% \begin{figure}
+%   \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelSelectionFigures.pdf}}
+% \caption{This figure shows }
+% \label{fig:modelIdentification}
+% \end{figure}
 
 % Another visualization idea: put the eight tables in a 4 x 3 matrix with the rows denoting how many coefficients in the true DGP are ``local''. Top row contains the `GGG' model, middle `LGG' `GLG' and 'GGL'... bottom row contains the `LLL' model. Will have to use `layout' function in R to leave the blank spots
 
@@ -254,27 +312,7 @@ Let's visualize these results in Figure~\ref{fig:modelIdentification}. Some patt
 \item It is frequently the case that the models with the smallest RMSE for a given coefficient have the (non-) stationarity of the individuals coefficient correctly identified but incorrectly identify the (non-)stationarity of the other coefficients.
 \end{itemize}
 
-\subsection{Bandwidth Size}
 
-The results of the previous tables must be taken with a grain of salt, as there could times when a ``true'' model may include variation in a coefficient, but the degree of non-stationarity in the coefficient may be small. In such cases, choosing an incorrect model (such as one that keeps such a coefficient constant) may not be such a big problem. Alternatively, the model with the smallest metric may incorrectly have some local coefficients, but the bandwidth chosen might be large and therefore allows for very little variation in the coefficients.
-
-The idea is that the model selected might look `overly local' in that it selects models with too many local coefficients. (OK, so need a new variable that is the number of coefficients that are local in the selected model, number in the correct model, difference, and whether or not - even if the number is the same, say one or two, but are they the correct one or two...)
-
-Then, can we look at the bandwidth sizes for different groups of models? For instance, if two local coefficients are selected but only supposed to be one, how do those bandwidths compare to those that correctly identify as one or two?
-
-Let's look at the simplest case first - when the true model was GGG. 
-
-Let's construct a table of the bandwidth size selected by model...
-
-
-
-\begin{figure}
-  \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelAndBandwidthByMetric-GGG.pdf}}
-\caption{This figure shows }
-\label{fig:GGGmodelBandwidths}
-\end{figure}
-
-Figure \ref{fig:GGGmodelBandwidths} shows
 
 
 

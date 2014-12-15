@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  12 DEC 2014 17:44
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  15 DEC 2014 10:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -503,73 +503,74 @@ LaTeX Info: Redefining \nameref on input line 68.
 
 {/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
 
-Overfull \hbox (1.2539pt too wide) in paragraph at lines 182--182
+Overfull \hbox (1.2539pt too wide) in paragraph at lines 185--185
 [][] 
  []
 
 [4]
-Overfull \hbox (1.2539pt too wide) in paragraph at lines 211--211
+Overfull \hbox (1.2539pt too wide) in paragraph at lines 213--213
 [][] 
  []
 
-[5] <figure/ModelSelectionFigures.pdf, id=118, 722.7pt x 1011.78pt>
-File: figure/ModelSelectionFigures.pdf Graphic file (type pdf)
+[5] [6]
+Overfull \hbox (5.42839pt too wide) in paragraph at lines 233--234
+[]\OT1/cmr/m/n/10 In each of our sim-u-la-tions we es-ti-mated the seven mod-el
+s al-low-ing non-stationarity
+ []
 
-<use figure/ModelSelectionFigures.pdf>
-Package pdftex.def Info: figure/ModelSelectionFigures.pdf used on input line 24
-0.
-(pdftex.def)             Requested size: 433.61888pt x 607.07268pt.
+<figure/ModelAndBandwidthByMetric-GGG.pdf, id=131, 794.97pt x 433.62pt>
+File: figure/ModelAndBandwidthByMetric-GGG.pdf Graphic file (type pdf)
 
+<use figure/ModelAndBandwidthByMetric-GGG.pdf>
+Package pdftex.def Info: figure/ModelAndBandwidthByMetric-GGG.pdf used on input
+ line 238.
+(pdftex.def)             Requested size: 556.47656pt x 303.53854pt.
 
-LaTeX Warning: Float too large for page by 72.59612pt on input line 243.
+<figure/ModelAndBandwidthByMetric-LLL.pdf, id=133, 794.97pt x 433.62pt>
+File: figure/ModelAndBandwidthByMetric-LLL.pdf Graphic file (type pdf)
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 250.
+<use figure/ModelAndBandwidthByMetric-LLL.pdf>
+Package pdftex.def Info: figure/ModelAndBandwidthByMetric-LLL.pdf used on input
+ line 250.
+(pdftex.def)             Requested size: 556.47656pt x 303.53854pt.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 308.
+
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 250.
- [6] [7 <./figure/ModelSelectionFigures.pdf>]
-<figure/ModelAndBandwidthByMetric-GGG.pdf, id=137, 578.16pt x 722.7pt>
-File: figure/ModelAndBandwidthByMetric-GGG.pdf Graphic file (type pdf)
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 308.
 
-<use figure/ModelAndBandwidthByMetric-GGG.pdf>
-Package pdftex.def Info: figure/ModelAndBandwidthByMetric-GGG.pdf used on input
- line 272.
-(pdftex.def)             Requested size: 433.61888pt x 542.02367pt.
-
-
-LaTeX Warning: Float too large for page by 7.5471pt on input line 275.
-
-<figure/ModelBandwidthMetricError.pdf, id=139, page=1, 1445.4pt x 1300.86pt>
+<figure/ModelBandwidthMetricError.pdf, id=134, page=1, 1445.4pt x 1300.86pt>
 File: figure/ModelBandwidthMetricError.pdf Graphic file (type pdf)
 
 <use figure/ModelBandwidthMetricError.pdf, page 1>
 Package pdftex.def Info: figure/ModelBandwidthMetricError.pdf, page1 used on in
-put line 285.
+put line 323.
 (pdftex.def)             Requested size: 433.61888pt x 390.26102pt.
- [8] [9 <./figure/ModelAndBandwidthByMetric-GGG.pdf>] [10 <./figure/ModelBandwi
-dthMetricError.pdf>]
-(./MixedGWRDraft.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 580.
+ [7] [8 <./figure/ModelAndBandwidthByMetric-GGG.pdf>] [9 <./figure/ModelAndBand
+widthByMetric-LLL.pdf>]
+[10 <./figure/ModelBandwidthMetricError.pdf>] (./MixedGWRDraft.bbl)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 618.
  [11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 580.
- (./MixedGWRDraft.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 580.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 580.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 618.
+
+(./MixedGWRDraft.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 618.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 618.
 Package rerunfilecheck Info: File `MixedGWRDraft.out' has not changed.
-(rerunfilecheck)             Checksum: 160DCEFA5B150FA472E1E509A63B1569;434.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 580.
+(rerunfilecheck)             Checksum: 09F52536809E17D590A51CADF481DAC1;520.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 618.
  ) 
 Here is how much of TeX's memory you used:
- 9183 strings out of 493315
- 136931 string characters out of 6137904
- 253616 words of memory out of 5000000
- 12459 multiletter control sequences out of 15000+600000
+ 9187 strings out of 493315
+ 137017 string characters out of 6137904
+ 257197 words of memory out of 5000000
+ 12462 multiletter control sequences out of 15000+600000
  10156 words of font info for 37 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 36i,14n,38p,1147b,401s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,14n,38p,1371b,379s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
@@ -578,18 +579,17 @@ usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></us
 r/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/
 local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/lo
 cal/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/loca
-l/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/t
-exlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texl
-ive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive
-/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/20
-13/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/201
-3/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2013/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2013/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on MixedGWRDraft.pdf (11 pages, 259634 bytes).
+l/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/t
+exlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texl
+ive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive
+/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/
+2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/20
+13/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/201
+3/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on MixedGWRDraft.pdf (11 pages, 250163 bytes).
 PDF statistics:
- 241 PDF objects out of 1000 (max. 8388607)
- 203 compressed objects within 3 object streams
- 45 named destinations out of 1000 (max. 500000)
- 64 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 245 PDF objects out of 1000 (max. 8388607)
+ 208 compressed objects within 3 object streams
+ 46 named destinations out of 1000 (max. 500000)
+ 72 words of extra memory for PDF output out of 10000 (max. 10000000)
 
