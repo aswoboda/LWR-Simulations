@@ -62,7 +62,7 @@
 \definecolor{Gray95}{gray}{0.95}
 \definecolor{Gray75}{gray}{0.75}
 
-\title{Can Conventional Measures Identify Geographically Varying Mixed Relationships? A Simulation-based Analysis of Locally Weighted Regression}
+\title{Can Conventional Measures Identify Geographically Varying Mixed Regression Relationships? A Simulation-based Analysis of Locally Weighted Regression}
 \author{Aaron Swoboda}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
@@ -252,6 +252,20 @@ The previous section investigated the simulation results when the true model was
 \label{fig:LLLmodelBandwidths}
 \end{sidewaysfigure}
 
+Figure \ref{fig:LLLmodelBandwidths} reveals a stark pattern. Although the true underlying model is non-stationary, none of the four metrics choose the `LLL' model in more than 10 percent of our simulations. Instead, the `LGG' model is selected over 50 percent of the time by each metric. The LOOCV, GCV, and AIC metrics all select the `LGG' model with the smallest bandwidth much more frequently than any other model/bandwidth combination. For instance, LOOCV and GCV select the `LGG' model with the smallest bandwidth over 50 percent of the time. 
+
+The second row of results in Figure \ref{fig:LLLmodelBandwidths} displays the model and bandwidth combinations that yield the smallest RMSE for the coefficients in our model. The pattern for the smallest RMSE associated with the intercept term, $\beta _0$ closely resembles the pattern of models and bandwidths for LOOCV, GCC, and AIC. Roughly 10 percent of simulations have the smallest RMSE using the `LLL' model, while roughly half of the simulations selected the `LGG' model with the smallest bandwidth. However, we see a different pattern for $\beta _1$ and $\beta _2$. In both instances, no single model and bandwidth combination yielded the smallest RMSE more than 20 percent of the time (the `GLL' model with the second largest bandwidth). That is, the intercept was fixed while the other two coefficients were treated as non-stationary and the bandwidth was comprised of approximately two-thirds of the observations. 
+
+The simulations contained in Figure \ref{fig:LLLmodelBandwidths} actually contain a lot of variation in the amount of coefficient non-stationarity. Recalling that we implemented two amounts of spatial variation in each coefficient (think of it as `some' and `more') there are actually eight combinations of `LLL' models ranging from ``some, some, some,'' to ``more, more, more.'' We therefore present a comparison of the following three models, the `GGG' model we've already discussed, the `LLL' model containing the smallest amount of overall spatial non-stationarity in all coefficients (the ``some, some, some'' model), and the largest amount of overall spatial non-stationarity (the ``more, more, more'' model).
+
+
+
+
+\begin{figure}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelSelectionGGGtoLLL.pdf}}
+\caption{Model and Bandwidth Selected by Metric for `None', `Some', and `More' Spatial Variation in the Three Regression Coefficients \\ Each subfigure shows the percentage of simulations a given model and bandwidth combination was selected among the 50 possible combinations (7 bandwidths for each of the seven mixed models plus the GGG model) for a given metric. The sum of all values in a given subfigure sum to 100 subject to rounding error. For convenience, cell values less than 0.5 percent are omitted. The color saturation of the cells helps denote the magnitude of the values.}
+\label{fig:GGG2LLLmodelBandwidths}
+\end{figure}
 % 
 % <<ModelSelectionTabulations1, echo = FALSE, results='hide'>>= 
 % #, fig.height=14, fig.width=10>>=
