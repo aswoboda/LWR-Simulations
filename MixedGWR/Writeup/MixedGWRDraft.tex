@@ -68,21 +68,6 @@
 \begin{document}
 \maketitle
 
-% What are our research questions? Basically:
-% \begin{enumerate}
-% \item Can we find the ``true'' model among the eight different possibilities with three model parameters?
-% \item Are there differences in the results based on the metric used?
-% \item What happens as we change the sample size and amount of error in the model?
-% \item How much does it really matter if we are concerned with coefficient estimates?
-%   \begin{itemize}
-%   \item How well does our selected model perform as measured by beta RMSE?
-%   \item Does our model perform better when we select the correct model?
-%   \item Can we control for whether we selected a model with the correct spatial variation for a given parameter?
-%   \end{itemize}
-% \item What about using bandwidth size as a dependent variable?
-% \item What happens when we use other decision tools to help with model selection? (Monte Carlo simulations and test statistics)
-% \end{enumerate}
-
 
 
 
@@ -157,15 +142,60 @@ where $\hat{\sigma}$ is the estimated standard error of the regression, n is the
 
 \subsection{Experimental Design}
 
-We generate data in the following format:
-\begin{equation}
-Y = \beta _0(location) + \beta _1(location) *X_1 + \beta _2(location) * X_2 + \epsilon ,
+\subsection{Data Generation Process}
+
+For a given sample size, $n 50, 100, 200, 800$ we generate an $n \times 4$ matrix of independently uniformly distributed values between 0 and 1. Let the first two of these columns be called $East$ and $North$ and denote the location of each of our observations within a two-dimensional unit grid (East, North), while the remaining two columns be $X_1$ and $X_2$ and serve as the independent variables in our regression equation.
+
+
+Our goal is to generate data according to the following process:
+\begin{equation} \label{eq:DGP}
+Y_i = \beta _0 (East_i, North_i) + \beta _1 (East_i, North_i)*X_{1i} + \beta _2 (East_i, North_i) * X_{2i} + \epsilon _i ,
 \end{equation}
-where sometimes the coefficient is in fact stationary, $\beta _m(location) = \beta _m$, and other times it is non-stationary, $\beta _m (location_p) \neq \beta _m (location_q)$. With three coefficients, $m = \{0, 1, 2\}$, each having the possibility of being stationary or not, there are eight different possible combinations of the three parameters, ranging from (stationary, stationary, stationary) to (non-stationary, non-stationary, non-stationary). We refer to any parameter combination containing both stationary and non-stationary coefficients as ``mixed.''
+where $\epsilon _i n(0, \sigma ^2)$.
+Equation \ref{eq:DGP} states that the dependent variable value for a given observation depends on the values of $X_1$, $X_2$, a normally distributed error term, and the values of three $\beta$ coefficients. We write $\beta _m (East, North)$, $m = \{0, 1, 2\}$, to denote that each of the three coefficients may vary over space (they are spatially non-stationary). If all three coefficients are instead stationary, $\beta _m(location) = \beta _m$, then Equation \ref{eq:DGP} is simply a standard regression equation and the three coefficients could be estimated using Ordinary Least Squares. 
+
+We generate each of the $\beta _m$ coefficient vectors according to three different scenarios. First, we assume spatial stationarity in which each coefficient is equal to 2. We also generate each $\beta _m$ coefficient with \emph{some} spatial non-stationarity and \emph{more} non-stationarity. 
+
+and other times it is non-stationary, $\beta _m (location_p) \neq \beta _m (location_q)$. With three coefficients each having the possibility of being stationary or not, there are eight different possible combinations of the three parameters, ranging from (stationary, stationary, stationary) to (non-stationary, non-stationary, non-stationary). We refer to any parameter combination containing both stationary and non-stationary coefficients as ``mixed.''
 
 We generate data using all eight different combinations and then estimate all eight possible LWR models across seven different bandwidth sizes. We then calculate different Cross-Validation metrics and compare their values across models and bandwidths. 
 
 We have three different values for each coefficient in our DGP, no variation, some variation, and more variation. We also change the sample size of our data as well as the variance of the model error term.
+
+The following equations describe how the $\beta$s were calculated.
+
+
+
+
+
+Here are the parameters for the simulation.
+\begin{verbatim}
+sampleSizes <- c(50, 100, 200, 400, 800) 
+B0.SpVar <- c(0, 2, 4)  
+B1.SpVar <- c(0, 2, 4) 
+B2.SpVar <- c(0, 2, 4) 
+errors <- c(0.25, .5, 1, 2, 3)
+numRepeats <- 100
+\end{verbatim}
+
+which we use as follows:
+
+\begin{verbatim}
+  n = sampleSize # number of observations in our simulation
+  east = runif(n) # create a location variable
+  north = runif(n) # create another location variable
+  x0 = rep(1, n) # create a vector of 1's to serve as the intercept column
+  x1 = runif(n) # create a vector for x1 values
+  x2 = runif(n) # create a vector for x2 values
+  error = rnorm(n, 0, errorSD) # create an error term
+  
+  # now generating the betas...
+  # they will ALWAYS have an expectation of 2 and have an expected correlation of 0 
+  # (except for corner cases in LLL)  
+  B1 <- 2 - .5*B1.SpVar + east*B1.SpVar
+  B2 <- 2 - .5*B2.SpVar + north*B2.SpVar
+  B0 <- 2 + B0.SpVar*(.387452 + cos(2*pi*sqrt((east - .5)^2 + (north- .5)^2)/sqrt(.5)))
+\end{verbatim}
 
 \section{Simulation Results}
 
@@ -266,67 +296,59 @@ The simulations contained in Figure \ref{fig:LLLmodelBandwidths} actually contai
 \caption{Model and Bandwidth Selected by Metric for `None', `Some', and `More' Spatial Variation in the Three Regression Coefficients \\ Each subfigure shows the percentage of simulations a given model and bandwidth combination was selected among the 50 possible combinations (7 bandwidths for each of the seven mixed models plus the GGG model) for a given metric. The sum of all values in a given subfigure sum to 100 subject to rounding error. For convenience, cell values less than 0.5 percent are omitted. The color saturation of the cells helps denote the magnitude of the values.}
 \label{fig:GGG2LLLmodelBandwidths}
 \end{figure}
-% 
-% <<ModelSelectionTabulations1, echo = FALSE, results='hide'>>= 
-% #, fig.height=14, fig.width=10>>=
-% pdf("figure/ModelSelectionFigures.pdf", width = 10, height = 14)
-% par(mar = c(0.5, 6, 6, 0.5))
-% par(xpd = NA)
-% par(mfcol = c(4, 2))
-% for (i in 1:8) {
-%   temp2 = which(mcOutput[,"True Model" ,] == i, arr.ind = TRUE)
-%   temp3 = mcOutput[8:14, c("Model Number"), unique(temp2[, 2])]
-%   temp4 = factor(temp3)
-%   newdata = data.frame(ModelNum = temp4, 
-%                        Metric = factor(rownames(temp3), levels = rownames(temp3)))
-%   temptab = table(newdata)*100*7/sum(table(newdata))
-%       testdf = round(temptab, 0)
-%       testdf[which(testdf == 0)] = NA
-%       colnames(testdf)[5:7] = c("B0", "B1", "B2")
-%       rownames(testdf) = c("GGG", "LGG", "GLG", "LLG", "GGL", "LGL", "GLL", "LLL")
-%       testdf = testdf[c(1:3, 5, 4, 6:8), c(4, 2, 3, 1, 5:7)] # this groups the three models with 1 L together and reorders the columns
-%   cellcol<-color.scale(testdf, extremes = c("white", "blue"),
-%                        xrange = c(0, 100))
-%   color2D.matplot(testdf, 
-%                   show.values = TRUE,
-%                   axes = FALSE,
-%                   xlab = "",
-%                   ylab = "",
-%                   vcex = 1,
-%                   vcol = "black",
-%                   border = NA,
-%                   cellcolors = cellcol)
-%   axis(3, at = seq_len(ncol(testdf)) - 0.5, line = -1,
-%      labels = colnames(testdf), tick = FALSE, cex.axis = .9)
-%   axis(2, at = seq_len(nrow(testdf)) -0.5,
-%      labels = rev(rownames(testdf)), tick = FALSE, las = 1, cex.axis = 1.2)
-%   mtext("model selected", 2, line = 4)
-%   mtext(paste("true model is ", rownames(testdf)[i]), 3, line = 2.5, cex = 1.5)
-%   mtext("model selection metric", 3, line = 1)
-%   rect(-.85, 8-i, 0, 9-i, border = "blue")
-% }
-% dev.off()
-% @
-% 
-% \begin{figure}
-%   \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelSelectionFigures.pdf}}
-% \caption{This figure shows }
-% \label{fig:modelIdentification}
-% \end{figure}
 
-% Another visualization idea: put the eight tables in a 4 x 3 matrix with the rows denoting how many coefficients in the true DGP are ``local''. Top row contains the `GGG' model, middle `LGG' `GLG' and 'GGL'... bottom row contains the `LLL' model. Will have to use `layout' function in R to leave the blank spots
+\subsection{One Local Coefficient}
+
+What have we learned in the previous sections?
+\begin{enumerate}
+\item LOOCV does the best identifying the non-stationary models
+\item most accurate $\hat{\beta}$ estimates do not necessarily come from the correct model
+\item SCV sucks
+\item something else.
+\end{enumerate}
+
+Now we explore the mosed model cases in which some of the coefficients are stationary and some are non-stationary. We begin with the case of a single non-stationary coefficient. 
 
 
 
-\begin{itemize}
-\item The AIC and GCV metrics almost \emph{never} select the `GGG' model, even when it is the actual model.
-\item When exactly one variable is non-stationary, AIC, GCV, and LOOCV do a very good job identifying the true model(over two-thirds of the time), while SCV does slightly less well (only 50 percent of the time if the non-stationary coefficient isn't the intercept term).
-\item Frequently, when there are two or more non-stationary variables, AIC, GCV, SCV, and LOOCV over selected the `LGG' model. 
-\item There are several occasions where the model/bandwidth combination with the smallest RMSE is not the ``correct'' model.
-\item It is frequently the case that the models with the smallest RMSE for a given coefficient have the (non-) stationarity of the individuals coefficient correctly identified but incorrectly identify the (non-)stationarity of the other coefficients.
-\end{itemize}
+
+\begin{sidewaysfigure}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelSelectionOneL.pdf}}
+\caption{This figure shows }
+\label{fig:modelIdentificationOneL}
+\end{sidewaysfigure}
+
+Figure \ref{fig:modelIdentificationOneL} shows that most metrics can correctly identify the propoer mixed model when only one coefficient is non-stationary.
+
+\subsection{Two Local Coefficients}
 
 
+Now we explore the mixed model cases in which two of the coefficients are non-stationary. 
+
+
+
+
+\begin{sidewaysfigure}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelSelectionOneG.pdf}}
+\caption{This figure shows }
+\label{fig:modelIdentificationOneG}
+\end{sidewaysfigure}
+
+Figure \ref{fig:modelIdentificationOneG} shows that most metrics can.
+
+\section{Discussion}
+
+Let's show the model selection by metric across our 8 different models.
+
+
+
+\begin{figure}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelSelectionAllModels.pdf}}
+\caption{This figure shows }
+\label{fig:modelIdentificationAll8}
+\end{figure}
+
+The left (right) column in Figure \ref{fig:modelIdentificationAll8} contains the four models in which the intercept coefficient is (non-)stationary over the study area. In the top row of the figure both $\beta _1$ and $\beta _2$ are stationary, the middle two rows contain one stationary and one non-stationary coefficient, and in the bottom row both $\beta _1$ and $\beta _2$ are non-stationary. An interesting pattern is visible. The models on the left tend to be more accurately identified by the metrics than the models on the right. That is, if the intercept term is stationary, our information metrics do a pretty good job identifying whether or not the other coefficients are stationary or not. However, when the intercept term is stationary, our metrics commonly choose the `LGG' model even when one or both of the other coefficients is non-stationary. 
 
 
 
@@ -342,7 +364,6 @@ The simulations contained in Figure \ref{fig:LLLmodelBandwidths} actually contai
 Figure \ref{fig:GLGmodelBandwidths} shows
 
 
-%\includepdf[pages={7}]{figure/ModelAndBandwidthByMetric.pdf}
 
 % \subsection{Coefficient Formulation}
 % 
