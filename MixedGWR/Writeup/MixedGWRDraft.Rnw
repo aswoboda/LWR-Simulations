@@ -60,16 +60,19 @@ where $d_{ij}$ denotes the distance between observations $i$ and $j$, and $d_{ik
 
 A key decision in estimating LWR models is choosing the number of observations to include in the bandwidth. Bandwidths that are too large in the presence of spatial non-stationarity create bias in the regression estimates (the large bandwidth creates weights matrices that are similar over space and therefore the regression coefficients are forced to be similar when they should vary over space). Bandwidths that are too small add unneccessary error in our estimates by excluding informative observations. Often, researchers choose a bandwidth my minimizing a cross validation metric. 
 
-This choice is further complicated in the context of mixed models where only some coefficents exhibit spatial stationarity (in contrast to standard models in which all coefficients are treated as spatially stationary or LWR models in which no coefficients are treated as stationary). Little is known about model performance when models are selected across multiple mixed models and among multiple different potenial bandwidth sizes.
+This choice is further complicated in the context of mixed models where only some coefficents exhibit spatial stationarity (in contrast to standard models in which all coefficients are treated as spatially stationary or LWR models in which no coefficients are treated as stationary). Little is known about model performance when models are selected across multiple mixed models and among multiple different potenial bandwidth sizes. This paper uses simulated data generated under multiple conditions to begin to answer some of the outstanding questions in the area of geographically mixed models. 
 
-This paper uses simulated data generated under multiple conditions to begin to answer some of the outstanding questions in the area of geographically mixed models. We compare four important cross-validation/information criteria: Leave One Out Cross Validation (LOOCV), Generalized Cross Validation (GCV), Standardized Cross Validation (SCV), and the Akaike Information Criterion (AIC). How frequently can researchers utilizing these metrics identify the correct model among the various possible combinations? Are certain metrics more/less prone to false positive/negatives? Do they suggest no spatial variation when in fact it exists? Do they suggest spatial variation when in fact there is not? 
+\subsection{Model Selection Metrics}
+We compare four important cross-validation/information criteria: Leave One Out Cross Validation (LOOCV), Generalized Cross Validation (GCV), Standardized Cross Validation (SCV), and the Akaike Information Criterion (AIC). How frequently can researchers utilizing these metrics identify the correct model among the various possible combinations? Are certain metrics more/less prone to false positive/negatives? Do they suggest no spatial variation when in fact it exists? Do they suggest spatial variation when in fact there is not? 
 
+\subsubsection{Leave One Out Cross Validation}
 Perhaps the most common cross validation metric used in the literature is the Leave One Out Cross Validation score (LOOCV), which is calculated as follows,
 \begin{equation}\label{eq:LOOCV}
 LOOCV = \frac{1}{N} \sqrt{\sum _{i = 1}^{N} (y - \hat{y}_{\neq i})^2},  
 \end{equation}
 where $\hat{y}_{\neq i}$ represents the dependent variable estimate for observation $i$ while excluding observation $i$ from the regression. This prevents the observation from having undue influence in the regression with small bandwidths and overfitting the model. Such a model, while intuitively appealing, can be computationally expensive, as regressions must be estimated first while excluding individual observations to calculate the LOOCV and then again while including the observation to obtain the regression coefficients.
 
+\subsubsection{Generalized Cross Validation}
 An alternative cross validation metric is known as the Generalized Cross Validation (GCV) score, which only requires calculating the regressions once per location and explicitly calculates the leverage each observation has over the regression coefficients. The GCV score calculation is detailed in equation~\eqref{eq:GCV},
 \begin{equation}\label{eq:GCV}
 n*\sum_{i=1}^{n}\frac{(y_i-\hat{y}_i)^2}{(n-v_1)^2}, 
@@ -84,6 +87,7 @@ where $\hat{y}_i$ is the predicted dependent variable value for observation $i$,
                    \end{equation}
 The GCV score is a convenient model selection metric that rewards models that provide a good fit to the data, while penalizing models with a greater number of model parameters \citep{Loader1999, McMillen2010}.  \citep{Paez2011, McMillen2010, McMillen2012}. 
 
+\subsubsection{Standardized Cross Validation}
 The Standardized Cross Validation Score was suggested by \citep{Farber2007b} and elaborated on in \citep{Paez2011} as an alternative to conventional metrics. This metric is designed to limit the influence of outliers which may disproportionately impact the choice of bandwidth. The Standardized Cross Validation score for a given observation $i$ and bandwidth $k$ is, 
 \begin{equation}\label{eq:SCV}
 SCV_i (k) = \frac{\sum (y_i - \hat{y}_{-i}(k))^2} {\sum _k (y_i - \hat{y}_{-i})^2 },
@@ -94,6 +98,7 @@ SCV(k) = \sum _i SCV_i(k).
 \end{equation}
 Equation \eqref{eq:SCV} calculates a partial score for each observation as a proportion of the total squared deviance at that observation across the different bandwidths, while \eqref{eq:SCVtot} then calculates the sum across all observations for a given bandwidth. Note that, contrary to the other metrics described here, the SCV score has to be calculated after all possible bandwidths have been implemented.
 
+\subsubsection{Akaike Information Criterion}
 As noted in \citep{Fotheringham2002}, the well-known Akaike Information Criterion is calculated in the geographically weighted regression framework as follows,
 \begin{equation}\label{eq:AIC}
   2*n*ln(\hat{\sigma}) + n*ln(2*\pi) + 
@@ -103,28 +108,98 @@ where $\hat{\sigma}$ is the estimated standard error of the regression, n is the
 
 \subsection{Experimental Design}
 
-\subsection{Data Generation Process}
-
-For a given sample size, $n 50, 100, 200, 800$ we generate an $n \times 4$ matrix of independently uniformly distributed values between 0 and 1. Let the first two of these columns be called $East$ and $North$ and denote the location of each of our observations within a two-dimensional unit grid (East, North), while the remaining two columns be $X_1$ and $X_2$ and serve as the independent variables in our regression equation.
-
+For a given sample size, $n \in \{50, 100, 200, 800\}$ we generate an $n \times 4$ matrix of independently uniformly distributed values between 0 and 1. Let the first two of these columns be called $East$ and $North$ and denote the location of each of our observations within a two-dimensional unit grid (East, North), while the remaining two columns be $X_1$ and $X_2$ and serve as the independent variables in our regression equation.
 
 Our goal is to generate data according to the following process:
 \begin{equation} \label{eq:DGP}
 Y_i = \beta _0 (East_i, North_i) + \beta _1 (East_i, North_i)*X_{1i} + \beta _2 (East_i, North_i) * X_{2i} + \epsilon _i ,
 \end{equation}
 where $\epsilon _i n(0, \sigma ^2)$.
-Equation \ref{eq:DGP} states that the dependent variable value for a given observation depends on the values of $X_1$, $X_2$, a normally distributed error term, and the values of three $\beta$ coefficients. We write $\beta _m (East, North)$, $m = \{0, 1, 2\}$, to denote that each of the three coefficients may vary over space (they are spatially non-stationary). If all three coefficients are instead stationary, $\beta _m(location) = \beta _m$, then Equation \ref{eq:DGP} is simply a standard regression equation and the three coefficients could be estimated using Ordinary Least Squares. 
+Equation \ref{eq:DGP} states that the dependent variable value for a given observation depends on the values of $X_1$, $X_2$, a normally distributed error term, and the values of three $\beta$ coefficients, each of which is a function of the location within our dataset.
 
-We generate each of the $\beta _m$ coefficient vectors according to three different scenarios. First, we assume spatial stationarity in which each coefficient is equal to 2. We also generate each $\beta _m$ coefficient with \emph{some} spatial non-stationarity and \emph{more} non-stationarity. 
+The relationship between location and $\beta _1$ is given by,
+\begin{equation}\label{eq:beta1}
+\beta _1 =  2 + \eta _1 \times (East - .5) ,
+\end{equation}
+where the $\eta _1$ parameter changes the degree to which the $\beta _1$ coefficient varies over space. When $\eta _1 =0$, equation \eqref{eq:beta1} simplifies to $\beta _1 =2$ and there is no spatial variation in the coefficient. When $\eta _1 \in \{1, 2\}$, there is a linear relationship between $\beta _1$ and the $East$ location of the data point. Note that the expected value of $\beta _1 = 2$ for all three cases of $\eta _1 \in \{0, 1, 2\}$ because of the uniform distribution of $East \in [\, 0, 1]\,$. A visual representation of the relationship is presented in the first row of Figure \ref{fig:spvarBeta}.
 
-and other times it is non-stationary, $\beta _m (location_p) \neq \beta _m (location_q)$. With three coefficients each having the possibility of being stationary or not, there are eight different possible combinations of the three parameters, ranging from (stationary, stationary, stationary) to (non-stationary, non-stationary, non-stationary). We refer to any parameter combination containing both stationary and non-stationary coefficients as ``mixed.''
+Similar to $\beta _1$, the relationship between location and $\beta _2$ is given by,
+\begin{equation}\label{eq:beta2}
+\beta _2 =  2 + \eta _2 \times (North- .5),
+\end{equation}
+where the $\eta _2$ parameter changes the degree to which the $\beta _2$ coefficient varies over space. When $\eta _2 =0$, equation \eqref{eq:beta2} simplifies to $\beta _2 =2$ and there is no spatial variation in the coefficient. When $\eta _2 \in \{1, 2\}$, there is a linear relationship between $\beta _2$ and the $North$ location of the data point. Note that the expected value of $\beta _2 = 2$ for all three cases of $\eta _2 \in \{0, 1, 2\}$ because of the uniform distribution of $North \in [\, 0, 1]\,$. A visual representation of the relationship is presented in the second row of Figure \ref{fig:spvarBeta}.
 
-We generate data using all eight different combinations and then estimate all eight possible LWR models across seven different bandwidth sizes. We then calculate different Cross-Validation metrics and compare their values across models and bandwidths. 
+The $\beta _1$ and $\beta _2$ coefficients are orthogonal to one another ($\beta 1$ is a function of the $East$ locational variable, while $\beta _2$ is a function of $North$.) In order to introduce spatial non-stationarity in the $\beta _0$ coefficient without also creating high and/or perfect multicollinearity among the coefficients, we generated the $\beta _0$ coefficient by the following,
+\begin{equation}\label{eq:beta0}
+\beta _0 = 2 + \eta _0 \times \Bigg[.387452 + cos\Bigg(2\pi\times\sqrt{\frac{(East - .5)^2 + (North- .5)^2}{.5}}\Bigg)\Bigg],
+\end{equation}
+which is presented visually in the third row of Figure \ref{fig:spvarBeta}.
+<<betaSpVar, echo = FALSE, results='hide'>>=
+pdf("SpatialVariationBetas.pdf", width = 8, height = 6)
+east <- north <- seq(0, 1, length = 21)
+B0func = function(east, north, B0.SpVar = 1) {
+  2 + B0.SpVar*(.387452 + cos(2*pi*sqrt((east - .5)^2 + (north- .5)^2)/sqrt(.5)))
+}
+B1func = function(east, north, B1.SpVar = 1) {
+  2 - .5*B1.SpVar + east*B1.SpVar
+}
+B2func = function(east, north, B2.SpVar = 1) {
+  2 - .5*B2.SpVar + north*B2.SpVar
+}
 
-We have three different values for each coefficient in our DGP, no variation, some variation, and more variation. We also change the sample size of our data as well as the variance of the model error term.
+par(mfrow = c(3, 3))
+par(mar = c(0, 0, 0, 0))
+par(oma = c(1, 3, 3, 0))
+B1.0 = outer(east, north, B1func, B1.SpVar = 0)
+persp(east, north, B1.0, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
+B1.1 = outer(east, north, B1func, B1.SpVar = 1)
+persp(east, north, B1.1, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
+B1.2 = outer(east, north, B1func, B1.SpVar = 2)
+persp(east, north, B1.2, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
 
-The following equations describe how the $\beta$s were calculated.
+B2.0 = outer(east, north, B2func, B2.SpVar = 0)
+persp(east, north, B2.0, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
+B2.1 = outer(east, north, B2func, B2.SpVar = 1)
+persp(east, north, B2.1, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
+B2.2 = outer(east, north, B2func, B2.SpVar = 2)
+persp(east, north, B2.2, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
 
+B0.0 = outer(east, north, B0func, B0.SpVar = 0)
+persp(east, north, B0.0, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
+B0.1 = outer(east, north, B0func, B0.SpVar = 1)
+persp(east, north, B0.1, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
+B0.2 = outer(east, north, B0func, B0.SpVar = 2)
+persp(east, north, B0.2, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
+
+mtext(expression(paste(eta, " = 0")), at = .15, side = 3, outer = TRUE, cex = 1.5)
+mtext(expression(paste(eta, " = 1")), at = .48, side = 3, outer = TRUE, cex = 1.5)
+mtext(expression(paste(eta, " = 2")), at = .81, side = 3, outer = TRUE, cex = 1.5)
+
+mtext(expression(beta[1]), at = .85, side = 2, outer = TRUE, las = 1, cex = 1.5)
+mtext(expression(beta[2]), at = .5 , side = 2, outer = TRUE, las = 1, cex = 1.5)
+mtext(expression(beta[0]), at = .15, side = 2, outer = TRUE, las = 1, cex = 1.5)
+dev.off()
+@
+
+\begin{figure}
+\makebox[\textwidth][c]{\includegraphics[width = 1.1\textwidth]{SpatialVariationBetas}}
+\caption{Visual Representation of the Spatial Variation for the Three Coefficientsas Described in Equations \eqref{eq:beta1} - \eqref{eq:beta0}}
+\label{fig:spvarBeta}
+\end{figure}
+
+
+% We write $\beta _m (East, North)$, $m = \{0, 1, 2\}$, to denote that each of the three coefficients may vary over space (they are spatially non-stationary). If all three coefficients are instead stationary, $\beta _m(location) = \beta _m$, then Equation \ref{eq:DGP} is simply a standard regression equation and the three coefficients could be estimated using Ordinary Least Squares. 
+% 
+% We generate each of the $\beta _m$ coefficient vectors according to three different scenarios. First, we assume spatial stationarity in which each coefficient is equal to 2. We also generate each $\beta _m$ coefficient with \emph{some} spatial non-stationarity and \emph{more} non-stationarity. 
+% 
+% and other times it is non-stationary, $\beta _m (location_p) \neq \beta _m (location_q)$. With three coefficients each having the possibility of being stationary or not, there are eight different possible combinations of the three parameters, ranging from (stationary, stationary, stationary) to (non-stationary, non-stationary, non-stationary). We refer to any parameter combination containing both stationary and non-stationary coefficients as ``mixed.''
+% 
+% We generate data using all eight different combinations and then estimate all eight possible LWR models across seven different bandwidth sizes. We then calculate different Cross-Validation metrics and compare their values across models and bandwidths. 
+% 
+% We have three different values for each coefficient in our DGP, no variation, some variation, and more variation. We also change the sample size of our data as well as the variance of the model error term.
+% 
+% The following equations describe how the $\beta$s were calculated.
+% 
 
 
 
