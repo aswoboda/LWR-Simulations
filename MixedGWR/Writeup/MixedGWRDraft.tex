@@ -82,16 +82,16 @@ Y = \beta _0 + \beta _1 *X_1 + \beta _2 * X_2 + \epsilon .
 \end{equation}
 In addition to the three variables listed above ($Y$, $X_1$, and $X_2$), assume we know the geographical location for each of our $N$ observations. Thus, our data consists of an $N \times 5$ matrix, where $Y$ may be house prices, $X_1$ and $X_2$ could be the living space and lot size associated with each house, and the final two columns determine the location of the observations (for instance, latitude and longitude, or distances north and east from a prescribed point).
 
-The simple model in \eqref{eq:simpleOLS} exemplifies spatial stationarity in the parameters: the $\beta$ coefficients are constant over space. Alternatively, the coefficients could exhibit spatial non-stationarity, in which case one, two, or all three of the $\beta$ coefficients are a function of location. This has a natural interpretation in the current real estate example: location matters. However, location can matter in different ways. For instance, if the value of land varies over space, then we would expect the coefficient on lot size to vary over space, while it is also possible that the intercept varies over space to reflect variation in prices of similar houses in different locations. 
+The simple model in \eqref{eq:simpleOLS} exemplifies spatial stationarity in the parameters: the $\beta$ coefficients are constant over space. Alternatively, the coefficients could exhibit spatial non-stationarity, in which case one, two, or all three of the $\beta$ coefficients vary with location. This has a natural interpretation in the current real estate example: location matters. However, location can matter in different ways. For instance, if the value of land varies over space, then we would expect the coefficient on lot size to vary over space, while it is also possible that the intercept varies over space to reflect variation in prices of similar houses in different locations. 
 
-It is possible to parameterize the variation in coefficients, for instance by including a variable measuring the distance from an observation to an important amenity such as the Central Business District and then this distance variable could be interacted with variables whose value are predicted to vary over space. However, it is not implausible to believe that the variation in coefficients might not be easily parameterized (for instance, if land values are a non-monotonic function of distance). Researchers may instead interact variables with fixed effects for cities or census tracts. However, such strategies require the analyst to make assumptions that severely limit the type and degree of variation in the parameters. For instance, interaction terms with geographic boundaries assume discrete differences in the value of parameters across the boundaries, while instead the parameters may instead be a continuous function of location. Additionally, numerous interaction terms may unduly reduce the degrees of freedom.
+It is possible to parameterize the variation in coefficients, for instance by including a variable measuring the distance from an observation to an important amenity such as the Central Business District and then this distance variable could be interacted with variables whose value are predicted to vary over space. However, it is plausible that the variation in coefficients might not be easily parameterized (for instance, if land values are a non-monotonic function of distance). Researchers may instead interact variables with fixed effects for cities or census tracts. However, such strategies require the analyst to make assumptions that severely limit the type and degree of variation in the parameters. For instance, interaction terms with geographic boundaries assume discrete differences in the value of parameters across the boundaries, while instead the parameters may instead be a continuous function of location. Additionally, numerous interaction terms may unduly reduce the degrees of freedom.
 
-\subsection{Geographically Weighted Regression to the Rescue?}
-Locally Weighted Regression (also referred to as Geographically Weighted Regression) is one possible solution to the challenge presented by spatially non-stationary regression coeffiecients. Locally Weighted Regression (LWR) techniques (also known as Geographically Weighted Regression) are described in detail by \citet{Cleveland1988}, \citet{Brunsdon1998b}, \citet{Fotheringham2002}, and others. It is a weighted least squares methodology in which regression coefficients are estimated over space as a function of the local data as described in Equation~\eqref{eq:LWRbeta},
+\subsection{Weighted Regression to the Rescue?}
+Locally Weighted Regression (LWR) techniques are one set of potential solutions to the challenge described. It is a weighted least squares methodology in which regression coefficients are estimated as a function of the local data. \citet{Cleveland1988} provides one of the first descriptions of the method, while more recently \citet{Brunsdon1998b}, \citet{Fotheringham2002} have explicitly incorporated geography/location. Specifically, the coefficients are estimated,
 \begin{equation}\label{eq:LWRbeta}
 \hat{\beta}(location_i) = (X'W(location_i)X)^{-1}X'W(location_i)Y,
 \end{equation}
-where X is a $N \times 2$ matrix of independent variables, $W_i$ is the $N \times N$ weights matrix, and Y is the $N \times 1$ vector of dependent variable values. The weights matrix, $W_i$ is a diagonal matrix where element $w_{jj}$ denotes the weight that the $j^{th}$ data point will receive in the regression coefficients estimated at location $i$ in the dataset. We employ a bi-square weights function and a k-nearest neighbor bandwidth approach as described in equation~\eqref{eq:weights}, 
+where X is a $N \times 2$ matrix of independent variables, $W_i$ is the $N \times N$ weights matrix, and Y is the $N \times 1$ vector of dependent variable values. The weights matrix, $W_i$ is a diagonal matrix where element $w_{jj}$ denotes the weight that the $j^{th}$ data point will receive in the regression coefficients estimated at location $i$ in the dataset.\footnote{If all diagonal elements of $W$ are one, then \eqref{eq:LWRbeta} simplifies to the standard OLS estimation.} We employ a bi-square weights function and a k-nearest neighbor bandwidth approach as described in equation~\eqref{eq:weights}, 
 \begin{equation}\label{eq:weights}
 w_{jj}=\left[1-\left(\frac{d_{ij}}{d_{k}}\right)^2 \right]^2 \textrm{ if }d_{ij}<d_{ik}\textrm{, otherwise = 0},
 \end{equation}
@@ -147,14 +147,13 @@ where $\hat{\sigma}$ is the estimated standard error of the regression, n is the
 
 \subsection{Experimental Design}
 
-For a given sample size, $n \in \{50, 100, 200, 800\}$ we generate an $n \times 4$ matrix of independently uniformly distributed values between 0 and 1. Let the first two of these columns be called $East$ and $North$ and denote the location of each of our observations within a two-dimensional unit grid (East, North), while the remaining two columns be $X_1$ and $X_2$ and serve as the independent variables in our regression equation.
+For a given sample size, $n \in \{50, 100, 200, 800\}$ we generate an $n \times 4$ matrix of  uniformly independently distributed values between 0 and 1. Let the first two of these columns be called $East$ and $North$ and denote the location of each of our observations within a two-dimensional unit grid (East, North), while the remaining two columns be $X_1$ and $X_2$ and serve as the independent variables in our regression equation.
 
 Our goal is to generate data according to the following process:
 \begin{equation} \label{eq:DGP}
 Y_i = \beta _0 (East_i, North_i) + \beta _1 (East_i, North_i)*X_{1i} + \beta _2 (East_i, North_i) * X_{2i} + \epsilon _i ,
 \end{equation}
-where $\epsilon _i n(0, \sigma ^2)$.
-Equation \ref{eq:DGP} states that the dependent variable value for a given observation depends on the values of $X_1$, $X_2$, a normally distributed error term, and the values of three $\beta$ coefficients, each of which is a function of the location within our dataset.
+where $\epsilon _i n(0, \sigma ^2)$. Equation \ref{eq:DGP} states that the dependent variable value for a given observation depends on the values of $X_1$, $X_2$, a normally distributed error term, and the values of three $\beta$ coefficients, each of which is a function of the location within our dataset.
 
 The relationship between location and $\beta _1$ is given by,
 \begin{equation}\label{eq:beta1}
@@ -170,9 +169,9 @@ where the $\eta _2$ parameter changes the degree to which the $\beta _2$ coeffic
 
 The $\beta _1$ and $\beta _2$ coefficients are orthogonal to one another ($\beta 1$ is a function of the $East$ locational variable, while $\beta _2$ is a function of $North$.) In order to introduce spatial non-stationarity in the $\beta _0$ coefficient without also creating high and/or perfect multicollinearity among the coefficients, we generated the $\beta _0$ coefficient by the following,
 \begin{equation}\label{eq:beta0}
-\beta _0 = 2 + \eta _0 \times \Bigg[.387452 + cos\Bigg(2\pi\times\sqrt{\frac{(East - .5)^2 + (North- .5)^2}{.5}}\Bigg)\Bigg],
+\beta _0 = 2 + \eta _0 \times \Bigg[C + cos\Bigg(2\pi\times\sqrt{\frac{(East - .5)^2 + (North- .5)^2}{.5}}\Bigg)\Bigg],
 \end{equation}
-which is presented visually in the third row of Figure \ref{fig:spvarBeta}.
+where $C$ is a constant selected to yield an $E(\beta _0) = 2$. Equation \eqref{eq:beta0} is presented visually in the third row of Figure \ref{fig:spvarBeta}.
 
 
 \begin{figure}
@@ -295,7 +294,7 @@ In each of our simulations we estimated the seven models allowing non-stationari
 
 
 \begin{sidewaysfigure}
-  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelAndBandwidthByMetric-GGG.pdf}}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/BandwidthsGGG.pdf}}
 \caption{Model and Bandwidth Selected by Metric when the True Model = `GGG' (All coefficients are stationary) \\ Each subfigure shows the percentage of simulations a given model and bandwidth combination was selected among the 50 possible combinations (7 bandwidths for each of the seven mixed models plus the GGG model) for a given metric. The sum of all values in a given subfigure sum to 100 subject to rounding error. For convenience, cell values less than 0.5 percent are omitted. The color saturation of the cells helps denote the magnitude of the values.}
 \label{fig:GGGmodelBandwidths}
 \end{sidewaysfigure}
@@ -307,7 +306,7 @@ The previous section investigated the simulation results when the true model was
 
 
 \begin{sidewaysfigure}
-  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelAndBandwidthByMetric-LLL.pdf}}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelBandwidthSelectionLLL.pdf}}
 \caption{Model and Bandwidth Selected by Metric when the True Model = `LLL' (All coefficients are non-stationary) \\ Each subfigure shows the percentage of simulations a given model and bandwidth combination was selected among the 50 possible combinations (7 bandwidths for each of the seven mixed models plus the GGG model) for a given metric. The sum of all values in a given subfigure sum to 100 subject to rounding error. For convenience, cell values less than 0.5 percent are omitted. The color saturation of the cells helps denote the magnitude of the values.}
 \label{fig:LLLmodelBandwidths}
 \end{sidewaysfigure}
@@ -343,7 +342,7 @@ Now we explore the mosed model cases in which some of the coefficients are stati
 
 
 \begin{sidewaysfigure}
-  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelSelectionOneL.pdf}}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelSelectionTabulations1.pdf}}
 \caption{This figure shows }
 \label{fig:modelIdentificationOneL}
 \end{sidewaysfigure}
@@ -359,7 +358,7 @@ Now we explore the mixed model cases in which two of the coefficients are non-st
 
 
 \begin{sidewaysfigure}
-  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelSelectionOneG.pdf}}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelSelectionTabulations1G.pdf}}
 \caption{This figure shows }
 \label{fig:modelIdentificationOneG}
 \end{sidewaysfigure}
@@ -373,7 +372,7 @@ Let's show the model selection by metric across our 8 different models.
 
 
 \begin{figure}
-  \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelSelectionAllModels.pdf}}
+  \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelSelectionTabulationsAll8.pdf}}
 \caption{This figure shows }
 \label{fig:modelIdentificationAll8}
 \end{figure}
@@ -385,13 +384,13 @@ The left (right) column in Figure \ref{fig:modelIdentificationAll8} contains the
 
 
 
-\begin{figure}
-  \makebox[\textwidth][c]{\includegraphics[page = 1, width = 1.2\textwidth]{figure/ModelBandwidthMetricError.pdf}}
-\caption{This figure shows the GLG model...}
-\label{fig:GLGmodelBandwidths}
-\end{figure}
-
-Figure \ref{fig:GLGmodelBandwidths} shows
+% \begin{figure}
+%   \makebox[\textwidth][c]{\includegraphics[page = 1, width = 1.2\textwidth]{figure/BandwidthsError.pdf}}
+% \caption{This figure shows the GLG model...}
+% \label{fig:GLGmodelBandwidths}
+% \end{figure}
+% 
+% Figure \ref{fig:GLGmodelBandwidths} shows
 
 
 

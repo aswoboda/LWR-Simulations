@@ -2,4 +2,5 @@ animation
 base
 knitr
 plotrix
+tikzDevice
 xtable
