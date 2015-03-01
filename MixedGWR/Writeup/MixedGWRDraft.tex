@@ -87,11 +87,11 @@ The simple model in \eqref{eq:simpleOLS} exemplifies spatial stationarity in the
 It is possible to parameterize the variation in coefficients, for instance by including a variable measuring the distance from an observation to an important amenity such as the Central Business District and then this distance variable could be interacted with variables whose value are predicted to vary over space. However, it is plausible that the variation in coefficients might not be easily parameterized (for instance, if land values are a non-monotonic function of distance). Researchers may instead interact variables with fixed effects for cities or census tracts. However, such strategies require the analyst to make assumptions that severely limit the type and degree of variation in the parameters. For instance, interaction terms with geographic boundaries assume discrete differences in the value of parameters across the boundaries, while instead the parameters may instead be a continuous function of location. Additionally, numerous interaction terms may unduly reduce the degrees of freedom.
 
 \subsection{Weighted Regression to the Rescue?}
-Locally Weighted Regression (LWR) techniques are one set of potential solutions to the challenge described. It is a weighted least squares methodology in which regression coefficients are estimated as a function of the local data. \citet{Cleveland1988} provides one of the first descriptions of the method, while more recently \citet{Brunsdon1998b}, \citet{Fotheringham2002} have explicitly incorporated geography/location. Specifically, the coefficients are estimated,
+Locally Weighted Regression (LWR) techniques are one set of potential solutions to the challenge described. It is a weighted least squares methodology in which regression coefficients are estimated as a function of the local data. \citet{Cleveland1988} provides one of the first descriptions of the method, while more recently \citet{Brunsdon1998b} and \citet{Fotheringham2002} have explicitly incorporated geography/location into the methodology. Specifically, the coefficients are estimated,
 \begin{equation}\label{eq:LWRbeta}
 \hat{\beta}(location_i) = (X'W(location_i)X)^{-1}X'W(location_i)Y,
 \end{equation}
-where X is a $N \times 2$ matrix of independent variables, $W_i$ is the $N \times N$ weights matrix, and Y is the $N \times 1$ vector of dependent variable values. The weights matrix, $W_i$ is a diagonal matrix where element $w_{jj}$ denotes the weight that the $j^{th}$ data point will receive in the regression coefficients estimated at location $i$ in the dataset.\footnote{If all diagonal elements of $W$ are one, then \eqref{eq:LWRbeta} simplifies to the standard OLS estimation.} We employ a bi-square weights function and a k-nearest neighbor bandwidth approach as described in equation~\eqref{eq:weights}, 
+where X is a $N \times m$ matrix of independent variables, $W_i$ is the $N \times N$ weights matrix, and Y is the $N \times 1$ vector of dependent variable values. The weights matrix, $W_i$ is a diagonal matrix where element $w_{jj}$ denotes the weight that the $j^{th}$ data point will receive in the regression coefficients estimated at location $i$ in the dataset.\footnote{If all diagonal elements of $W$ are one, then \eqref{eq:LWRbeta} simplifies to the standard OLS estimation.} We employ a bi-square weights function and a k-nearest neighbor bandwidth approach as described in equation~\eqref{eq:weights}, 
 \begin{equation}\label{eq:weights}
 w_{jj}=\left[1-\left(\frac{d_{ij}}{d_{k}}\right)^2 \right]^2 \textrm{ if }d_{ij}<d_{ik}\textrm{, otherwise = 0},
 \end{equation}
@@ -99,9 +99,23 @@ where $d_{ij}$ denotes the distance between observations $i$ and $j$, and $d_{ik
 
 A key decision in estimating LWR models is choosing the number of observations to include in the bandwidth. Bandwidths that are too large in the presence of spatial non-stationarity create bias in the regression estimates (the large bandwidth creates weights matrices that are similar over space and therefore the regression coefficients are forced to be similar when they should vary over space). Bandwidths that are too small add unneccessary error in our estimates by excluding informative observations. Often, researchers choose a bandwidth my minimizing a cross validation metric. 
 
-This choice is further complicated in the context of mixed models where only some coefficents exhibit spatial stationarity (in contrast to standard models in which all coefficients are treated as spatially stationary or LWR models in which no coefficients are treated as stationary). Little is known about model performance when models are selected across multiple mixed models and among multiple different potenial bandwidth sizes. This paper uses simulated data generated under multiple conditions to begin to answer some of the outstanding questions in the area of geographically mixed models. 
+\subsection{Mixed Geographic Models}
 
-\subsection{Model Selection Metrics}
+Thus far two models have been discussed - the standard OLS model in which all of the coefficients are stationary and a local model in which all coefficients are estimated locally using some bandwidth. The two cases are identical in the extreme case of an infinite bandwidth. Other ``mixed'' models are also possible in which some coefficients are assumed to be stationary while others are estimated locally. 
+
+This choice of bandwidth is further complicated in the context of mixed models where only some coefficents exhibit spatial stationarity (in contrast to standard models in which all coefficients are treated as spatially stationary or LWR models in which no coefficients are treated as stationary). In this case, researchers must choose which variables to treat as spatially non-stationary and the bandwidth at which to perform the analysis. Little is known about model performance when models are selected across multiple mixed models and among multiple different potenial bandwidth sizes. This paper uses simulated data generated under multiple conditions to begin to answer some of the outstanding questions in the area of geographically mixed models. 
+
+
+
+\subsection{Model Selection}
+
+Gotta say something about \citet{Leung2000a}. What does it do and what are some potential weaknesses?
+
+They talk about two things... first develop a test of stationarity for the model as a whole, then a step-wise model for adding/subtracting spatially varying variables. Weaknesses? Some quote about "not being able to undo" the addition or subtraction, which may be a problem in the presence of correlated coefficients.
+
+The \citet{Fotheringham2002} text suggests a system of Monte Carlo experiments.
+
+
 We compare four important cross-validation/information criteria: Leave One Out Cross Validation (LOOCV), Generalized Cross Validation (GCV), Standardized Cross Validation (SCV), and the Akaike Information Criterion (AIC). How frequently can researchers utilizing these metrics identify the correct model among the various possible combinations? Are certain metrics more/less prone to false positive/negatives? Do they suggest no spatial variation when in fact it exists? Do they suggest spatial variation when in fact there is not? 
 
 \subsubsection{Leave One Out Cross Validation}
@@ -144,6 +158,42 @@ As noted in \citep{Fotheringham2002}, the well-known Akaike Information Criterio
     n*\frac{n + v_1}{n - 2 - v_1}
     \end{equation}
 where $\hat{\sigma}$ is the estimated standard error of the regression, n is the sample size, and $v_1$ remains the ``effective number of parameters'' estimated by the model as described above.
+
+
+\subsection{Examples of citations using different methods...}
+\subsubsection{Uses the AIC}
+\cite{Borst2007}
+\citet{Axhausen2010}
+\citet{Cahill2007}
+\citet{Eckey2007}
+\citet{Foody2003}
+\citet{Hanink2010}
+\citet{Haynes2011}
+\citet{Helbich2009}
+\citet{Kestens2005}
+\citet{Partridge2008}
+\citet{Partridge2007}
+\citet{PinedaJaimes2010}
+\citet{Sa2010}
+\citet{Tu2008}
+\citet{Yu2006}
+\citet{Yu2007a}
+\citet{Yu2007}
+
+\subsection{Uses SCV}
+No one in our sample, but do a google scholar search and look for articles that cite the original articles
+
+\begin{verbatim}
+\https://scholar.google.com/scholar?as_ylo=2011&hl=en&as_sdt=5,24&sciodt=0,24&cites=9654495652239805234&scipsc=
+\end{verbatim}
+
+\subsubsection{Mixed Models?}
+
+\citet{Cahill2007} determine that a mixed model might be best because of Monte Carlo simulations.
+
+\citet{Huang2010} find evidence consistent with a mixed model (some coefficients appear to stationary and others non-stationary), but do not estimate one.
+
+\citet{Yu2006} implement a mixed model after using tests of spatial stationarity 
 
 \subsection{Experimental Design}
 

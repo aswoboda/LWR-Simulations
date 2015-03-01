@@ -1,9 +1,27 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{27}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Axhausen and L\"{o}chl(2010)]{Axhausen2010}
+Kay~W Axhausen and Michael L\"{o}chl.
+\newblock {Modeling hedonic residential rents for land use and transport
+  simulation while considering spatial effects}.
+\newblock \emph{Journal of Transport and Land Use}, 3\penalty0 (2):\penalty0
+  39--63, 2010.
+\newblock \doi{10.1598/jtlu.v3i2.117}.
+
+\bibitem[Borst and Mccluskey(2007)]{Borst2007}
+B~Y Richard~A Borst and William~J Mccluskey.
+\newblock {Using Geographically Weighted Regression to Detect Housing
+  Submarkets: Modeling Large-Scale Spatial Variations in Value}.
+\newblock \emph{Journal of Property Tax Assessment Administration}, 5\penalty0
+  (1):\penalty0 21--54, 2007.
+\newblock ISSN 15483614.
+\newblock URL
+  \url{http://www.redi-bw.de/db/ebsco.php/search.ebscohost.com/login.aspx?direct=true\&db=buh\&AN=31846286\&site=ehost-live}.
 
 \bibitem[Brunsdon et~al.(1998)Brunsdon, Fotheringham, and
   Charlton]{Brunsdon1998b}
@@ -16,6 +34,16 @@ Chris Brunsdon, Stewart Fotheringham, and Martin Charlton.
 \newblock \doi{10.1111/1467-9884.00145}.
 \newblock URL \url{http://www.jstor.org/stable/2988625}.
 
+\bibitem[Cahill and Mulligan(2007)]{Cahill2007}
+M~Cahill and G~Mulligan.
+\newblock {Using Geographically Weighted Regression to Explore Local Crime
+  Patterns}.
+\newblock \emph{Social Science Computer Review}, 25\penalty0 (2):\penalty0
+  174--193, 2007.
+\newblock ISSN 08944393.
+\newblock \doi{10.1177/0894439307298925}.
+\newblock URL \url{http://ssc.sagepub.com/cgi/doi/10.1177/0894439307298925}.
+
 \bibitem[Cleveland and Devlin(1988)]{Cleveland1988}
 William~S Cleveland and Susan~J Devlin.
 \newblock {Locally Weighted Regression: An Approach to Regression Analysis by
@@ -24,6 +52,17 @@ William~S Cleveland and Susan~J Devlin.
   (403):\penalty0 596--610, June 1988.
 \newblock \doi{10.1080/01621459.1959.10501996}.
 
+\bibitem[Eckey et~al.(2007)Eckey, Kosfeld, and T\"{u}rck]{Eckey2007}
+Hans-Friedrich Eckey, Reinhold Kosfeld, and Matthias T\"{u}rck.
+\newblock {Regional Convergence in Germany: a Geographically Weighted
+  Regression Approach}.
+\newblock \emph{Spatial Economic Analysis}, 2\penalty0 (1):\penalty0 45--64,
+  2007.
+\newblock ISSN 17421772.
+\newblock \doi{10.1080/17421770701251905}.
+\newblock URL
+  \url{http://www.tandfonline.com/doi/abs/10.1080/17421770701251905}.
+
 \bibitem[Farber and P\'{a}ez(2007)]{Farber2007b}
 S~Farber and A~P\'{a}ez.
 \newblock {A systematic investigation of cross-validation in GWR model
@@ -31,12 +70,86 @@ S~Farber and A~P\'{a}ez.
 \newblock \emph{Journal of Geographical Systems}, 9\penalty0 (4):\penalty0
   371--396, 2007.
 
+\bibitem[Foody(2003)]{Foody2003}
+G.M~M Foody.
+\newblock {Geographical weighting as a further refinement to regression
+  modelling: An example focused on the NDVI–rainfall relationship}.
+\newblock \emph{Remote Sensing of Environment}, 88\penalty0 (3):\penalty0
+  283--293, December 2003.
+\newblock ISSN 00344257.
+\newblock \doi{10.1016/j.rse.2003.08.004}.
+\newblock URL \url{http://eprints.soton.ac.uk/14528/
+  http://linkinghub.elsevier.com/retrieve/pii/S0034425703001949}.
+
 \bibitem[Fotheringham et~al.(2002)Fotheringham, Brunsdon, and
   Charlton]{Fotheringham2002}
 A.~Stewart Fotheringham, Chris Brunsdon, and Martin Charlton.
 \newblock \emph{{Geographically Weighted Regression: the analysis of spatially
   varying relationships}}.
 \newblock John Wiley \& Sons, West Sussex, England, 2002.
+
+\bibitem[Hanink et~al.(2010)Hanink, Cromley, and Ebenstein]{Hanink2010}
+Dean~M Hanink, Robert~G Cromley, and Avraham~Y Ebenstein.
+\newblock {Spatial Variation in the Determinants of House Prices and Apartment
+  Rents in China}.
+\newblock \emph{The Journal of Real Estate Finance and Economics}, 2010.
+\newblock ISSN 08955638.
+\newblock \doi{10.1007/s11146-010-9262-3}.
+\newblock URL
+  \url{http://www.springerlink.com/index/10.1007/s11146-010-9262-3}.
+
+\bibitem[Haynes(2011)]{Haynes2011}
+K~E Haynes.
+\newblock {The Employment Effects of New Business Formation: A Regional
+  Perspective}.
+\newblock \emph{Economic Development Quarterly}, 25\penalty0 (3):\penalty0
+  282--292, 2011.
+\newblock ISSN 08912424.
+\newblock \doi{10.1177/0891242411407310}.
+\newblock URL \url{http://edq.sagepub.com/cgi/doi/10.1177/0891242411407310}.
+
+\bibitem[Helbich and Leitner(2009)]{Helbich2009}
+Marco Helbich and Michael Leitner.
+\newblock {Spatial Analysis of the Urban-to-Rural Migration Determinants in the
+  Viennese Metropolitan Area. A Transition from Suburbia to Postsuburbia?}
+\newblock \emph{Applied Spatial Analysis and Policy}, 2\penalty0 (3):\penalty0
+  237--260, 2009.
+\newblock ISSN 1874463X.
+\newblock \doi{10.1007/s12061-009-9026-8}.
+\newblock URL \url{http://www.springerlink.com/content/pkq04616t6577843}.
+
+\bibitem[Huang et~al.(2010)Huang, Wu, and Barry]{Huang2010}
+Bo~Huang, Bo~Wu, and Michael Barry.
+\newblock {Geographically and temporally weighted regression for modeling
+  spatio-temporal variation in house prices}.
+\newblock \emph{International Journal of Geographical Information Science},
+  24\penalty0 (3):\penalty0 383--401, 2010.
+\newblock ISSN 13658816.
+\newblock \doi{10.1080/13658810802672469}.
+\newblock URL
+  \url{http://www.informaworld.com/openurl?genre=article\&doi=10.1080/13658810802672469\&magic=crossref}.
+
+\bibitem[Kestens et~al.(2005)Kestens, Th\'{e}riault, and {Des
+  Rosiers}]{Kestens2005}
+Yan Kestens, Marius Th\'{e}riault, and Fran\c{c}ois {Des Rosiers}.
+\newblock {Heterogeneity in hedonic modelling of house prices: looking at
+  buyers’ household profiles}.
+\newblock \emph{Journal of Geographical Systems}, 8\penalty0 (1):\penalty0
+  61--96, 2005.
+\newblock ISSN 14355930.
+\newblock \doi{10.1007/s10109-005-0011-8}.
+\newblock URL
+  \url{http://www.springerlink.com/index/10.1007/s10109-005-0011-8}.
+
+\bibitem[Leung et~al.(2000)Leung, Mei, and Zhang]{Leung2000a}
+Yee Leung, Chang-Lin Mei, and Wen-Xiu Zhang.
+\newblock {Testing for spatial autocorrelation among the residuals of the
+  geographically weighted regression}.
+\newblock \emph{Environment and Planning - Part A}, 32\penalty0 (5):\penalty0
+  871--890, 2000.
+\newblock ISSN 0308518X.
+\newblock \doi{10.1068/a32117}.
+\newblock URL \url{http://www.envplan.com/abstract.cgi?id=a32117}.
 
 \bibitem[Loader(1999)]{Loader1999}
 Clive Loader.
@@ -69,5 +182,90 @@ Antonio Paez, Steven Farber, and David Wheeler.
   method for investigating spatially varying relationships}.
 \newblock \emph{Environment and Planning A}, 43\penalty0 (12):\penalty0
   2992--3010, 2011.
+
+\bibitem[Partridge et~al.(2008)Partridge, Rickman, Ali, and
+  Olfert]{Partridge2008}
+M~D Partridge, D~S Rickman, K~Ali, and M~R Olfert.
+\newblock {The Geographic Diversity of U . S . Nonmetropolitan Growth Dynamics
+  : A Geographically Weighted Regression Approach}.
+\newblock \emph{Land Economics}, 84\penalty0 (2):\penalty0 241--266, 2008.
+\newblock ISSN 00237639.
+\newblock URL
+  \url{http://www.scopus.com/inward/record.url?eid=2-s2.0-44649124821\&partnerID=40\&md5=1385582b8ae5c778c531d9481977e14c}.
+
+\bibitem[Partridge and Rickman(2007)]{Partridge2007}
+Mark~D Partridge and Dan~S Rickman.
+\newblock {Persistent pockets of extreme American poverty and job growth: Is
+  there a place-based policy role?}
+\newblock \emph{Journal of Agricultural and Resource Economics}, 32\penalty0
+  (1):\penalty0 201--224, 2007.
+\newblock ISSN 01621912.
+\newblock URL
+  \url{https://libserv7.princeton.edu:82/pul/nph-pul2.cgi/000000A/http/www.jstor.org/stable/info/40987359=3f\&Search=3dyes\&searchText=3dpersistent\&searchUri=3d=252Faction=252FdoBasicSearch=253FQuery=253Dpersistent=252Brural=252Bpoverty=2526acc=253Don=2526wc=253Don}.
+
+\bibitem[{Pineda Jaimes} et~al.(2010){Pineda Jaimes}, {Bosque Sendra},
+  {G\'{o}mez Delgado}, and {Franco Plata}]{PinedaJaimes2010}
+Noel~Bonfilio {Pineda Jaimes}, Joaqu\'{\i}n {Bosque Sendra}, Montserrat
+  {G\'{o}mez Delgado}, and Roberto {Franco Plata}.
+\newblock {Exploring the driving forces behind deforestation in the state of
+  Mexico (Mexico) using geographically weighted regression}.
+\newblock \emph{Applied Geography}, 30\penalty0 (4):\penalty0 576--591, 2010.
+\newblock ISSN 01436228.
+\newblock \doi{10.1016/j.apgeog.2010.05.004}.
+\newblock URL
+  \url{http://linkinghub.elsevier.com/retrieve/pii/S0143622810000561}.
+
+\bibitem[S\'{a} et~al.(2010)S\'{a}, Pereira, Charlton, Mota, Barbosa, and
+  {Stewart Fotheringham}]{Sa2010}
+Ana C~L S\'{a}, Jos\'{e} M~C Pereira, Martin~E Charlton, Bernardo Mota, Paulo~M
+  Barbosa, and A~{Stewart Fotheringham}.
+\newblock {The pyrogeography of sub-Saharan Africa: a study of the spatial
+  non-stationarity of fire–environment relationships using GWR}.
+\newblock \emph{Journal of Geographical Systems}, 13\penalty0 (3):\penalty0
+  227--248, 2010.
+\newblock ISSN 14355930.
+\newblock \doi{10.1007/s10109-010-0123-7}.
+\newblock URL
+  \url{http://www.springerlink.com/index/10.1007/s10109-010-0123-7}.
+
+\bibitem[Tu and Xia(2008)]{Tu2008}
+Jun Tu and Zong-Guo Xia.
+\newblock {Examining spatially varying relationships between land use and water
+  quality using geographically weighted regression I: Model design and
+  evaluation}.
+\newblock \emph{Science of the Total Environment}, 407\penalty0 (1):\penalty0
+  358--378, 2008.
+\newblock URL \url{http://www.ncbi.nlm.nih.gov/pubmed/18976797}.
+
+\bibitem[Yu(2006)]{Yu2006}
+Dan-Lin Yu.
+\newblock {Spatially varying development mechanisms in the Greater Beijing
+  Area: a geographically weighted regression investigation}.
+\newblock \emph{The Annals of Regional Science}, 40\penalty0 (1):\penalty0
+  173--190, January 2006.
+\newblock ISSN 0570-1864.
+\newblock \doi{10.1007/s00168-005-0038-2}.
+\newblock URL
+  \url{http://www.springerlink.com/index/10.1007/s00168-005-0038-2}.
+
+\bibitem[Yu(2007)]{Yu2007a}
+Danlin Yu.
+\newblock {Modeling owner-occupied single-family house values in the city of
+  milwaukee: A geographically weighted regression approach}.
+\newblock \emph{GIScience Remote Sensing}, 44\penalty0 (3):\penalty0 267--282,
+  2007.
+\newblock ISSN 15481603.
+\newblock \doi{10.2747/1548-1603.44.3.267}.
+\newblock URL
+  \url{http://bellwether.metapress.com/openurl.asp?genre=article\&id=doi:10.2747/1548-1603.44.3.267}.
+
+\bibitem[Yu et~al.(2007)Yu, Wei, and Wu]{Yu2007}
+Danlin Yu, Yehua~Dennis Wei, and Changshan Wu.
+\newblock {Modeling spatial dimensions of housing prices in Milwaukee, WI}.
+\newblock \emph{Environment and Planning BPlanning Design}, 34\penalty0
+  (6):\penalty0 1085--1102, 2007.
+\newblock ISSN 02658135.
+\newblock \doi{10.1068/b32119}.
+\newblock URL \url{http://www.envplan.com/abstract.cgi?id=b32119}.
 
 \end{thebibliography}
