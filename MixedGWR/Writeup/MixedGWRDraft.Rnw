@@ -33,7 +33,9 @@ library(plotrix)
 #setwd("MixedGWR/Writeup/")
 mcOutput = readRDS("../SimulationOutput/mcOutput20140218.rds")
 @
-
+\tableofcontents
+\listoffigures
+\listoftables
 
 \section{Background}
 
@@ -148,6 +150,16 @@ No one in our sample, but do a google scholar search and look for articles that 
 \https://scholar.google.com/scholar?as_ylo=2011&hl=en&as_sdt=5,24&sciodt=0,24&cites=9654495652239805234&scipsc=
 \end{verbatim}
 
+\subsection{Uses LOOCV}
+\citet{Brunsdon1998}
+\citet{Cho2006a}
+\citet{Cho2009}
+\citet{Huang2002}
+\citet{Lloyd2005}
+\citet{Lloyd2005}
+\citet{Lloyd2005}
+\citet{Lloyd2005}
+
 \subsubsection{Mixed Models?}
 
 \citet{Cahill2007} determine that a mixed model might be best because of Monte Carlo simulations.
@@ -155,6 +167,14 @@ No one in our sample, but do a google scholar search and look for articles that 
 \citet{Huang2010} find evidence consistent with a mixed model (some coefficients appear to stationary and others non-stationary), but do not estimate one.
 
 \citet{Yu2006} implement a mixed model after using tests of spatial stationarity 
+
+\citet{Chow2000} uses the AIC to select which variables are nonstationary.
+
+\citet{Mei2004} seems like an important article to talk about. It proposes a methodology for selecting a mixed model. Google Scholar has info on who cites this article.
+\begin{verbatim}
+https://scholar.google.com/scholar?cites=11649932945261630952&as_sdt=5,24&sciodt=0,24&hl=en
+\end{verbatim}
+
 
 \subsection{Experimental Design}
 

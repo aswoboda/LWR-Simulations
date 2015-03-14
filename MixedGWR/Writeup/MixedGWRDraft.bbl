@@ -1,4 +1,4 @@
-\begin{thebibliography}{27}
+\begin{thebibliography}{34}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -23,13 +23,24 @@ B~Y Richard~A Borst and William~J Mccluskey.
 \newblock URL
   \url{http://www.redi-bw.de/db/ebsco.php/search.ebscohost.com/login.aspx?direct=true\&db=buh\&AN=31846286\&site=ehost-live}.
 
-\bibitem[Brunsdon et~al.(1998)Brunsdon, Fotheringham, and
+\bibitem[Brunsdon et~al.(1998{\natexlab{a}})Brunsdon, Fotheringham, and
+  Charlton]{Brunsdon1998}
+Chris Brunsdon, Stewart Fotheringham, and Martin Charlton.
+\newblock {Geographically weighted regression-modelling spatial
+  non-stationarity}.
+\newblock \emph{Journal of the Royal Statistical Society Series D The
+  Statistician}, 47\penalty0 (3):\penalty0 431--443, 1998{\natexlab{a}}.
+\newblock ISSN 00390526.
+\newblock \doi{10.1111/1467-9884.00145}.
+\newblock URL \url{http://www.jstor.org/stable/2988625}.
+
+\bibitem[Brunsdon et~al.(1998{\natexlab{b}})Brunsdon, Fotheringham, and
   Charlton]{Brunsdon1998b}
 Chris Brunsdon, Stewart Fotheringham, and Martin Charlton.
 \newblock {Geographically weighted regression-modelling spatial
   non-stationarity}.
 \newblock \emph{Journal of the Royal Statistical Society Series D The
-  Statistician}, 47\penalty0 (3):\penalty0 431--443, 1998.
+  Statistician}, 47\penalty0 (3):\penalty0 431--443, 1998{\natexlab{b}}.
 \newblock ISSN 00390526.
 \newblock \doi{10.1111/1467-9884.00145}.
 \newblock URL \url{http://www.jstor.org/stable/2988625}.
@@ -43,6 +54,30 @@ M~Cahill and G~Mulligan.
 \newblock ISSN 08944393.
 \newblock \doi{10.1177/0894439307298925}.
 \newblock URL \url{http://ssc.sagepub.com/cgi/doi/10.1177/0894439307298925}.
+
+\bibitem[Cho et~al.(2006)Cho, Bowker, and Park]{Cho2006a}
+Seong-hoon Cho, J.~M Bowker, and William~M. Park.
+\newblock {Measuring the Contribution of Water and Green Space Amenities to
+  Housing Values: An Application and Comparison of Spatially Weighted Hedonic
+  Models}.
+\newblock \emph{Journal of Agricultural and Resource Economics}, 31\penalty0
+  (3):\penalty0 485--507, 2006.
+
+\bibitem[Cho et~al.(2009)Cho, Christopher, William, and Kim]{Cho2009}
+Seong-hoon Cho, D~Christopher, M~William, and Seung~Gyu Kim.
+\newblock {Spatial and Temporal Variation in the Housing Market Values of Lot
+  Size and Open Space}.
+\newblock \emph{Land Economics}, 85\penalty0 (1):\penalty0 51--73, 2009.
+
+\bibitem[Chow et~al.(2000)Chow, Zhao, Liu, Li, and Ubaka]{Chow2000}
+Lee-fang Chow, Fang Zhao, Xuemei Liu, Min-tang Li, and Ike Ubaka.
+\newblock {Transit Ridership Model Based on Geographically Weighted
+  Regression}.
+\newblock \emph{Transportation Research Record}, 1972\penalty0 (1972):\penalty0
+  105--114, 2000.
+\newblock ISSN 03611981.
+\newblock \doi{10.3141/1972-15}.
+\newblock URL \url{http://dx.doi.org/10.3141/1972-15}.
 
 \bibitem[Cleveland and Devlin(1988)]{Cleveland1988}
 William~S Cleveland and Susan~J Devlin.
@@ -129,6 +164,17 @@ Bo~Huang, Bo~Wu, and Michael Barry.
 \newblock URL
   \url{http://www.informaworld.com/openurl?genre=article\&doi=10.1080/13658810802672469\&magic=crossref}.
 
+\bibitem[Huang and Leung(2002)]{Huang2002}
+Yefang Huang and Yee Leung.
+\newblock {Analysing regional industrialisation in Jiangsu province using
+  geographically weighted regression}.
+\newblock \emph{Journal of Geographical Systems}, 4\penalty0 (2):\penalty0
+  233--249, 2002.
+\newblock ISSN 14355930.
+\newblock \doi{10.1007/s101090200081}.
+\newblock URL
+  \url{http://www.springerlink.com/openurl.asp?genre=article\&id=doi:10.1007/s101090200081}.
+
 \bibitem[Kestens et~al.(2005)Kestens, Th\'{e}riault, and {Des
   Rosiers}]{Kestens2005}
 Yan Kestens, Marius Th\'{e}riault, and Fran\c{c}ois {Des Rosiers}.
@@ -150,6 +196,16 @@ Yee Leung, Chang-Lin Mei, and Wen-Xiu Zhang.
 \newblock ISSN 0308518X.
 \newblock \doi{10.1068/a32117}.
 \newblock URL \url{http://www.envplan.com/abstract.cgi?id=a32117}.
+
+\bibitem[Lloyd and Shuttleworth(2005)]{Lloyd2005}
+Chris Lloyd and Ian Shuttleworth.
+\newblock {Analysing commuting using local regression techniques: scale,
+  sensitivity, and geographical patterning}.
+\newblock \emph{Environment and Planning - Part A}, 37\penalty0 (1):\penalty0
+  81--103, 2005.
+\newblock ISSN 0308518X.
+\newblock \doi{10.1068/a36116}.
+\newblock URL \url{http://www.envplan.com/abstract.cgi?id=a36116}.
 
 \bibitem[Loader(1999)]{Loader1999}
 Clive Loader.
@@ -175,6 +231,15 @@ Daniel~P. McMillen and Christian~L. Redfearn.
 \newblock ISSN 00224146.
 \newblock \doi{10.1111/j.1467-9787.2010.00664.x}.
 \newblock URL \url{http://doi.wiley.com/10.1111/j.1467-9787.2010.00664.x}.
+
+\bibitem[Mei et~al.(2004)Mei, He, and Fang]{Mei2004}
+Chang-Lin Mei, Shu-Yuan He, and Kai-Tai Fang.
+\newblock {A NOTE ON THE MIXED GEOGRAPHICALLY WEIGHTED REGRESSION MODEL}.
+\newblock \emph{Journal of Regional Science}, 44\penalty0 (1):\penalty0
+  143--157, 2004.
+\newblock ISSN 00224146.
+\newblock \doi{10.1111/j.1085-9489.2004.00331.x}.
+\newblock URL \url{http://doi.wiley.com/10.1111/j.1085-9489.2004.00331.x}.
 
 \bibitem[Paez et~al.(2011)Paez, Farber, and Wheeler]{Paez2011}
 Antonio Paez, Steven Farber, and David Wheeler.
