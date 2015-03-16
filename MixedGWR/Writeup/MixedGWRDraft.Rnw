@@ -8,6 +8,8 @@
 \usepackage{caption, amsmath, graphicx, setspace, multirow, color, hyperref, array}
 \usepackage{xcolor, colortbl}
 \usepackage{arydshln}
+\usepackage{caption}
+\captionsetup{margin=10pt,font=small,labelfont=bf, format = hang}
 
 \definecolor{Gray}{gray}{0.85}
 \definecolor{Gray95}{gray}{0.95}
@@ -64,11 +66,107 @@ A key decision in estimating LWR models is choosing the number of observations t
 
 \subsection{Mixed Geographic Models}
 
-Thus far two models have been discussed - the standard OLS model in which all of the coefficients are stationary and a local model in which all coefficients are estimated locally using some bandwidth. The two cases are identical in the extreme case of an infinite bandwidth. Other ``mixed'' models are also possible in which some coefficients are assumed to be stationary while others are estimated locally. 
+Thus far two models have been discussed - the standard OLS model in which all of the coefficients are stationary and a local model in which all coefficients are estimated locally using some bandwidth. The two cases are identical in the extreme case of an infinite bandwidth. Other ``mixed'' models are also possible in which some coefficients are assumed to be stationary while others are estimated locally. In the example described in Equation \eqref{eq:simpleOLS} with three coefficients , there are are eight ($2^3$) total models, ranging from the LWR model in which all three coefficients are assumed to be ``Local'', three models in which two coefficients are ``Local'' and one is assumed to be ``Global'', three models in which one coefficient is ``Local'' and the remaining two coefficients are ``Global'' and the OLS model in which all three coefficients are ``Global''.
 
-This choice of bandwidth is further complicated in the context of mixed models where only some coefficents exhibit spatial stationarity (in contrast to standard models in which all coefficients are treated as spatially stationary or LWR models in which no coefficients are treated as stationary). In this case, researchers must choose which variables to treat as spatially non-stationary and the bandwidth at which to perform the analysis. Little is known about model performance when models are selected across multiple mixed models and among multiple different potenial bandwidth sizes. This paper uses simulated data generated under multiple conditions to begin to answer some of the outstanding questions in the area of geographically mixed models. 
+In the presence of mixed models, the researcher is tasked with simultaneously choosing which variables to treat as spatially non-stationary and the bandwidth at which to perform the analysis. Little is known about model performance when models are selected across multiple mixed models and among multiple different potenial bandwidth sizes. This paper uses simulated data generated under multiple conditions to begin to answer some of the outstanding questions in the area of geographically mixed models. 
 
 
+\section{Experimental Design}
+
+\subsection{Data Generation Process}
+
+For a given sample size, $n$, we generate an $n \times 4$ matrix of  uniformly independently distributed values between 0 and 1.\footnote{For our simulation we set $n \in \{50, 100, 200, 800\}$.} Let the first two of these columns be called $East$ and $North$ and denote the location of each of our observations within a two-dimensional unit grid (East, North), while the remaining two columns be $X_1$ and $X_2$ and serve as the independent variables in our regression equation.
+
+Our goal is to generate data according to the following process:
+\begin{equation} \label{eq:DGP}
+Y_i = \beta _0 (East_i, North_i) + \beta _1 (East_i, North_i)*X_{1i} + \beta _2 (East_i, North_i) * X_{2i} + \epsilon _i.
+\end{equation}
+where $\epsilon _i$ is normally distributed with mean zero and variance $\sigma ^2$. Equation \ref{eq:DGP} states that the value of the dependent variable for a given observation depends on $X_1$, $X_2$, a normally distributed error term, and three $\beta$ coefficients that are a function of geographic location.
+
+For our simulations, the relationship between $\beta _1$ and location is given by,
+\begin{equation}\label{eq:beta1}
+\beta _1(East,North,\eta _1) =  2 + \eta _1 \times (East - .5) ,
+\end{equation}
+where $\eta _1 \in \{0, 2, 4\}$ represents a ``degree of spatial variation'' parameter. When $\eta _1 =0$, equation \eqref{eq:beta1} simplifies to $\beta _1 =2$ and there is no spatial variation in the coefficient while $\beta _1$ exhibits spatial non-stationarity when $\eta _1 \in \{2, 4\}$. Due to the functional form of equation \eqref{eq:beta1} and the uniform distribution of the $East$ variable between zero and one, the expected value of $\beta _1$ is two for all $\eta _1$. Figure \ref{fig:spvarBeta} shows a visual representation of the possible values for $\beta _1$ as a function of location and $\eta _1$. 
+
+Similar to $\beta _1$, the relationship between location and $\beta _2$ is given by,
+\begin{equation}\label{eq:beta2}
+\beta _2(East,North,\eta _2) =  2 + \eta _2 \times (North- .5)
+\end{equation}
+and is displayed in the second row of Figure \ref{fig:spvarBeta}. 
+
+The main difference between equations \eqref{eq:beta1} and \eqref{eq:beta2} is that $\beta _2$ is a function of $North$, while $\beta _1$ is a function of $East$, thus the $\beta _1$ and $\beta _2$ coefficients are orthogonal to one another. In order to introduce spatial non-stationarity in the $\beta _0$ coefficient without also creating high and/or perfect collinearity among the coefficients, we generated the $\beta _0$ coefficient by the following,
+\begin{equation}\label{eq:beta0}
+\beta _0(East,North,\eta _0) = 2 + \eta _0 \times \Bigg[C + cos\Bigg(2\pi\times\sqrt{\frac{(East - .5)^2 + (North- .5)^2}{.5}}\Bigg)\Bigg],
+\end{equation}
+where $C$ is a constant selected to yield $E(\beta _0) = 2$. Equation \eqref{eq:beta0} is presented visually in the third row of Figure \ref{fig:spvarBeta}.
+<<betaSpVar, echo = FALSE, results='hide', dev='tikz'>>=
+pdf("figure/SpatialVariationBetas.pdf", width = 8, height = 6)
+east <- north <- seq(0, 1, length = 21)
+B0func = function(east, north, B0.SpVar = 1) {
+  2 + B0.SpVar*(.387452 + cos(2*pi*sqrt((east - .5)^2 + (north- .5)^2)/sqrt(.5)))
+}
+B1func = function(east, north, B1.SpVar = 1) {
+  2 - .5*B1.SpVar + east*B1.SpVar
+}
+B2func = function(east, north, B2.SpVar = 1) {
+  2 - .5*B2.SpVar + north*B2.SpVar
+}
+
+par(mfrow = c(3, 3))
+par(mar = c(0, 0, 0, 0))
+par(oma = c(1, 3, 3, 0))
+B1.0 = outer(east, north, B1func, B1.SpVar = 0)
+persp(east, north, B1.0, zlim = c(-0.6, 7.6), theta = 30, phi = 30, zlab = "")
+B1.1 = outer(east, north, B1func, B1.SpVar = 2)
+persp(east, north, B1.1, zlim = c(-0.6, 7.6), theta = 30, phi = 30, zlab = "")
+B1.2 = outer(east, north, B1func, B1.SpVar = 4)
+persp(east, north, B1.2, zlim = c(-0.6, 7.6), theta = 30, phi = 30, zlab = "")
+
+B2.0 = outer(east, north, B2func, B2.SpVar = 0)
+persp(east, north, B2.0, zlim = c(-0.6, 7.6), theta = 30, phi = 30, zlab = "")
+B2.1 = outer(east, north, B2func, B2.SpVar = 2)
+persp(east, north, B2.1, zlim = c(-0.6, 7.6), theta = 30, phi = 30, zlab = "")
+B2.2 = outer(east, north, B2func, B2.SpVar = 4)
+persp(east, north, B2.2, zlim = c(-0.6, 7.6), theta = 30, phi = 30, zlab = "")
+
+B0.0 = outer(east, north, B0func, B0.SpVar = 0)
+persp(east, north, B0.0, zlim = c(-0.6, 7.6), theta = 30, phi = 30, zlab = "")
+B0.1 = outer(east, north, B0func, B0.SpVar = 2)
+persp(east, north, B0.1, zlim = c(-0.6, 7.6), theta = 30, phi = 30, zlab = "")
+B0.2 = outer(east, north, B0func, B0.SpVar = 4)
+persp(east, north, B0.2, zlim = c(-0.6, 7.6), theta = 30, phi = 30, zlab = "")
+
+mtext(expression(paste(eta, " = 0")), at = .15, side = 3, outer = TRUE, cex = 1.5)
+mtext(expression(paste(eta, " = 2")), at = .48, side = 3, outer = TRUE, cex = 1.5)
+mtext(expression(paste(eta, " = 4")), at = .81, side = 3, outer = TRUE, cex = 1.5)
+
+mtext(expression(beta[1]), at = .85, side = 2, outer = TRUE, las = 1, cex = 1.5)
+mtext(expression(beta[2]), at = .5 , side = 2, outer = TRUE, las = 1, cex = 1.5)
+mtext(expression(beta[0]), at = .15, side = 2, outer = TRUE, las = 1, cex = 1.5)
+dev.off()
+@
+
+\begin{figure}
+\caption*{Coefficient Spatial Variation}
+\makebox[\textwidth][c]{\includegraphics[width = 1.1\textwidth]{figure/SpatialVariationBetas}}
+\caption{A Visual Representation of the Spatial Variation for the Three Coefficients as Described in Equations \eqref{eq:beta1} - \eqref{eq:beta0}}
+\label{fig:spvarBeta}
+\end{figure}
+
+Figure \ref{fig:spvarBeta} shows the three different formulations possible for the three model coefficients. The leftmost column shows each coefficient constant over space, the middle column shows ``some'' spatial variation and the rightmost column shows more spatial variation. In other words, the left column shows the stationary, or ``Global'', specification for each coefficient, while the middle and right columns show the non-stationary, or ``Local'', specifications for the coefficients. 
+
+In each instance of our simulation we select a degree of spatial variation (none, some, more) for each of the three coefficients. These 27 different combinations can be categorized into one of eight possible models depending on whether each of the three coefficients is ``Global'' or ``Local''\footnote{Specifically, the eight models are GGG, GGL, GLG, LGG, GLL, LGL, LLG, and LLL.}
+
+In addition to changing the degree of spatial variation in the three regression coefficients, we also implement different error term variances, $\sigma ^2$, to explore the impact of ``noisier'' data. All told, each simulation can be described as a quintuple choosing from the following values:
+\begin{align}
+\makebox[.35 cm][l]{$\eta _0$} & \in \{0, 2, 4\}   \\ \nonumber
+\makebox[.35 cm][l]{$\eta _1$} & \in \{0, 2, 4\}  \\ \nonumber
+\makebox[.35 cm][l]{$\eta _2$} & \in \{0, 2, 4\} \\ \nonumber
+\makebox[.35 cm][l]{$n$} & \in \{50, 100, 200, 400, 800\}  \\ \nonumber
+\makebox[.35 cm][l]{$\sigma ^2$} & \in \{0.25, .5, 1, 2, 3\} 
+\end{align}
+yielding a total of 675 unique combinations. We replicate each combination 100 times for a total of 67,500 simulation iterations.
 
 \subsection{Model Selection}
 
@@ -143,14 +241,14 @@ where $\hat{\sigma}$ is the estimated standard error of the regression, n is the
 \citet{Yu2007a}
 \citet{Yu2007}
 
-\subsection{Uses SCV}
+\subsubsection{Uses SCV}
 No one in our sample, but do a google scholar search and look for articles that cite the original articles
 
 \begin{verbatim}
 \https://scholar.google.com/scholar?as_ylo=2011&hl=en&as_sdt=5,24&sciodt=0,24&cites=9654495652239805234&scipsc=
 \end{verbatim}
 
-\subsection{Uses LOOCV}
+\subsubsection{Uses LOOCV}
 \citet{Brunsdon1998}
 \citet{Cho2006a}
 \citet{Cho2009}
@@ -160,7 +258,7 @@ No one in our sample, but do a google scholar search and look for articles that 
 \citet{Lloyd2005}
 \citet{Lloyd2005}
 
-\subsubsection{Mixed Models?}
+\subsection{Mixed Models?}
 
 \citet{Cahill2007} determine that a mixed model might be best because of Monte Carlo simulations.
 
@@ -173,133 +271,6 @@ No one in our sample, but do a google scholar search and look for articles that 
 \citet{Mei2004} seems like an important article to talk about. It proposes a methodology for selecting a mixed model. Google Scholar has info on who cites this article.
 \begin{verbatim}
 https://scholar.google.com/scholar?cites=11649932945261630952&as_sdt=5,24&sciodt=0,24&hl=en
-\end{verbatim}
-
-
-\subsection{Experimental Design}
-
-For a given sample size, $n \in \{50, 100, 200, 800\}$ we generate an $n \times 4$ matrix of  uniformly independently distributed values between 0 and 1. Let the first two of these columns be called $East$ and $North$ and denote the location of each of our observations within a two-dimensional unit grid (East, North), while the remaining two columns be $X_1$ and $X_2$ and serve as the independent variables in our regression equation.
-
-Our goal is to generate data according to the following process:
-\begin{equation} \label{eq:DGP}
-Y_i = \beta _0 (East_i, North_i) + \beta _1 (East_i, North_i)*X_{1i} + \beta _2 (East_i, North_i) * X_{2i} + \epsilon _i ,
-\end{equation}
-where $\epsilon _i n(0, \sigma ^2)$. Equation \ref{eq:DGP} states that the dependent variable value for a given observation depends on the values of $X_1$, $X_2$, a normally distributed error term, and the values of three $\beta$ coefficients, each of which is a function of the location within our dataset.
-
-The relationship between location and $\beta _1$ is given by,
-\begin{equation}\label{eq:beta1}
-\beta _1 =  2 + \eta _1 \times (East - .5) ,
-\end{equation}
-where the $\eta _1$ parameter changes the degree to which the $\beta _1$ coefficient varies over space. When $\eta _1 =0$, equation \eqref{eq:beta1} simplifies to $\beta _1 =2$ and there is no spatial variation in the coefficient. When $\eta _1 \in \{1, 2\}$, there is a linear relationship between $\beta _1$ and the $East$ location of the data point. Note that the expected value of $\beta _1 = 2$ for all three cases of $\eta _1 \in \{0, 1, 2\}$ because of the uniform distribution of $East \in [\, 0, 1]\,$. A visual representation of the relationship is presented in the first row of Figure \ref{fig:spvarBeta}.
-
-Similar to $\beta _1$, the relationship between location and $\beta _2$ is given by,
-\begin{equation}\label{eq:beta2}
-\beta _2 =  2 + \eta _2 \times (North- .5),
-\end{equation}
-where the $\eta _2$ parameter changes the degree to which the $\beta _2$ coefficient varies over space. When $\eta _2 =0$, equation \eqref{eq:beta2} simplifies to $\beta _2 =2$ and there is no spatial variation in the coefficient. When $\eta _2 \in \{1, 2\}$, there is a linear relationship between $\beta _2$ and the $North$ location of the data point. Note that the expected value of $\beta _2 = 2$ for all three cases of $\eta _2 \in \{0, 1, 2\}$ because of the uniform distribution of $North \in [\, 0, 1]\,$. A visual representation of the relationship is presented in the second row of Figure \ref{fig:spvarBeta}.
-
-The $\beta _1$ and $\beta _2$ coefficients are orthogonal to one another ($\beta 1$ is a function of the $East$ locational variable, while $\beta _2$ is a function of $North$.) In order to introduce spatial non-stationarity in the $\beta _0$ coefficient without also creating high and/or perfect multicollinearity among the coefficients, we generated the $\beta _0$ coefficient by the following,
-\begin{equation}\label{eq:beta0}
-\beta _0 = 2 + \eta _0 \times \Bigg[C + cos\Bigg(2\pi\times\sqrt{\frac{(East - .5)^2 + (North- .5)^2}{.5}}\Bigg)\Bigg],
-\end{equation}
-where $C$ is a constant selected to yield an $E(\beta _0) = 2$. Equation \eqref{eq:beta0} is presented visually in the third row of Figure \ref{fig:spvarBeta}.
-<<betaSpVar, echo = FALSE, results='hide', dev='tikz'>>=
-pdf("SpatialVariationBetas.pdf", width = 8, height = 6)
-east <- north <- seq(0, 1, length = 21)
-B0func = function(east, north, B0.SpVar = 1) {
-  2 + B0.SpVar*(.387452 + cos(2*pi*sqrt((east - .5)^2 + (north- .5)^2)/sqrt(.5)))
-}
-B1func = function(east, north, B1.SpVar = 1) {
-  2 - .5*B1.SpVar + east*B1.SpVar
-}
-B2func = function(east, north, B2.SpVar = 1) {
-  2 - .5*B2.SpVar + north*B2.SpVar
-}
-
-par(mfrow = c(3, 3))
-par(mar = c(0, 0, 0, 0))
-par(oma = c(1, 3, 3, 0))
-B1.0 = outer(east, north, B1func, B1.SpVar = 0)
-persp(east, north, B1.0, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
-B1.1 = outer(east, north, B1func, B1.SpVar = 1)
-persp(east, north, B1.1, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
-B1.2 = outer(east, north, B1func, B1.SpVar = 2)
-persp(east, north, B1.2, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
-
-B2.0 = outer(east, north, B2func, B2.SpVar = 0)
-persp(east, north, B2.0, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
-B2.1 = outer(east, north, B2func, B2.SpVar = 1)
-persp(east, north, B2.1, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
-B2.2 = outer(east, north, B2func, B2.SpVar = 2)
-persp(east, north, B2.2, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
-
-B0.0 = outer(east, north, B0func, B0.SpVar = 0)
-persp(east, north, B0.0, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
-B0.1 = outer(east, north, B0func, B0.SpVar = 1)
-persp(east, north, B0.1, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
-B0.2 = outer(east, north, B0func, B0.SpVar = 2)
-persp(east, north, B0.2, zlim = c(0, 5), theta = 30, phi = 30, zlab = "")
-
-mtext(expression(paste(eta, " = 0")), at = .15, side = 3, outer = TRUE, cex = 1.5)
-mtext(expression(paste(eta, " = 1")), at = .48, side = 3, outer = TRUE, cex = 1.5)
-mtext(expression(paste(eta, " = 2")), at = .81, side = 3, outer = TRUE, cex = 1.5)
-
-mtext(expression(beta[1]), at = .85, side = 2, outer = TRUE, las = 1, cex = 1.5)
-mtext(expression(beta[2]), at = .5 , side = 2, outer = TRUE, las = 1, cex = 1.5)
-mtext(expression(beta[0]), at = .15, side = 2, outer = TRUE, las = 1, cex = 1.5)
-dev.off()
-@
-
-\begin{figure}
-\makebox[\textwidth][c]{\includegraphics[width = 1.1\textwidth]{SpatialVariationBetas}}
-\caption{Visual Representation of the Spatial Variation for the Three Coefficientsas Described in Equations \eqref{eq:beta1} - \eqref{eq:beta0}}
-\label{fig:spvarBeta}
-\end{figure}
-
-
-% We write $\beta _m (East, North)$, $m = \{0, 1, 2\}$, to denote that each of the three coefficients may vary over space (they are spatially non-stationary). If all three coefficients are instead stationary, $\beta _m(location) = \beta _m$, then Equation \ref{eq:DGP} is simply a standard regression equation and the three coefficients could be estimated using Ordinary Least Squares. 
-% 
-% We generate each of the $\beta _m$ coefficient vectors according to three different scenarios. First, we assume spatial stationarity in which each coefficient is equal to 2. We also generate each $\beta _m$ coefficient with \emph{some} spatial non-stationarity and \emph{more} non-stationarity. 
-% 
-% and other times it is non-stationary, $\beta _m (location_p) \neq \beta _m (location_q)$. With three coefficients each having the possibility of being stationary or not, there are eight different possible combinations of the three parameters, ranging from (stationary, stationary, stationary) to (non-stationary, non-stationary, non-stationary). We refer to any parameter combination containing both stationary and non-stationary coefficients as ``mixed.''
-% 
-% We generate data using all eight different combinations and then estimate all eight possible LWR models across seven different bandwidth sizes. We then calculate different Cross-Validation metrics and compare their values across models and bandwidths. 
-% 
-% We have three different values for each coefficient in our DGP, no variation, some variation, and more variation. We also change the sample size of our data as well as the variance of the model error term.
-% 
-% The following equations describe how the $\beta$s were calculated.
-% 
-
-
-
-
-Here are the parameters for the simulation.
-\begin{verbatim}
-sampleSizes <- c(50, 100, 200, 400, 800) 
-B0.SpVar <- c(0, 2, 4)  
-B1.SpVar <- c(0, 2, 4) 
-B2.SpVar <- c(0, 2, 4) 
-errors <- c(0.25, .5, 1, 2, 3)
-numRepeats <- 100
-\end{verbatim}
-
-which we use as follows:
-
-\begin{verbatim}
-  n = sampleSize # number of observations in our simulation
-  east = runif(n) # create a location variable
-  north = runif(n) # create another location variable
-  x0 = rep(1, n) # create a vector of 1's to serve as the intercept column
-  x1 = runif(n) # create a vector for x1 values
-  x2 = runif(n) # create a vector for x2 values
-  error = rnorm(n, 0, errorSD) # create an error term
-  
-  # now generating the betas...
-  # they will ALWAYS have an expectation of 2 and have an expected correlation of 0 
-  # (except for corner cases in LLL)  
-  B1 <- 2 - .5*B1.SpVar + east*B1.SpVar
-  B2 <- 2 - .5*B2.SpVar + north*B2.SpVar
-  B0 <- 2 + B0.SpVar*(.387452 + cos(2*pi*sqrt((east - .5)^2 + (north- .5)^2)/sqrt(.5)))
 \end{verbatim}
 
 \section{Simulation Results}

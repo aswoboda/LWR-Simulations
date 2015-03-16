@@ -1,21 +1,22 @@
 \contentsline {section}{\numberline {1}Background}{3}{section.1}
 \contentsline {subsection}{\numberline {1.1}Weighted Regression to the Rescue?}{3}{subsection.1.1}
 \contentsline {subsection}{\numberline {1.2}Mixed Geographic Models}{4}{subsection.1.2}
-\contentsline {subsection}{\numberline {1.3}Model Selection}{5}{subsection.1.3}
-\contentsline {subsubsection}{\numberline {1.3.1}Leave One Out Cross Validation}{5}{subsubsection.1.3.1}
-\contentsline {subsubsection}{\numberline {1.3.2}Generalized Cross Validation}{5}{subsubsection.1.3.2}
-\contentsline {subsubsection}{\numberline {1.3.3}Standardized Cross Validation}{6}{subsubsection.1.3.3}
-\contentsline {subsubsection}{\numberline {1.3.4}Akaike Information Criterion}{6}{subsubsection.1.3.4}
-\contentsline {subsection}{\numberline {1.4}Examples of citations using different methods...}{7}{subsection.1.4}
-\contentsline {subsubsection}{\numberline {1.4.1}Uses the AIC}{7}{subsubsection.1.4.1}
-\contentsline {subsection}{\numberline {1.5}Uses SCV}{7}{subsection.1.5}
-\contentsline {subsection}{\numberline {1.6}Uses LOOCV}{7}{subsection.1.6}
-\contentsline {subsubsection}{\numberline {1.6.1}Mixed Models?}{7}{subsubsection.1.6.1}
-\contentsline {subsection}{\numberline {1.7}Experimental Design}{7}{subsection.1.7}
-\contentsline {section}{\numberline {2}Simulation Results}{10}{section.2}
-\contentsline {subsection}{\numberline {2.1}Starting Simple: All Coefficients are Spatially Stationary}{10}{subsection.2.1}
-\contentsline {subsubsection}{\numberline {2.1.1}Model and Bandwidth}{12}{subsubsection.2.1.1}
-\contentsline {subsection}{\numberline {2.2}All Local Coefficients}{14}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}One Local Coefficient}{14}{subsection.2.3}
-\contentsline {subsection}{\numberline {2.4}Two Local Coefficients}{18}{subsection.2.4}
-\contentsline {section}{\numberline {3}Discussion}{18}{section.3}
+\contentsline {section}{\numberline {2}Experimental Design}{5}{section.2}
+\contentsline {subsection}{\numberline {2.1}Data Generation Process}{5}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Model Selection}{7}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Leave One Out Cross Validation}{7}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}Generalized Cross Validation}{8}{subsubsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.3}Standardized Cross Validation}{8}{subsubsection.2.2.3}
+\contentsline {subsubsection}{\numberline {2.2.4}Akaike Information Criterion}{9}{subsubsection.2.2.4}
+\contentsline {subsection}{\numberline {2.3}Examples of citations using different methods...}{9}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}Uses the AIC}{9}{subsubsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.2}Uses SCV}{9}{subsubsection.2.3.2}
+\contentsline {subsubsection}{\numberline {2.3.3}Uses LOOCV}{9}{subsubsection.2.3.3}
+\contentsline {subsection}{\numberline {2.4}Mixed Models?}{9}{subsection.2.4}
+\contentsline {section}{\numberline {3}Simulation Results}{10}{section.3}
+\contentsline {subsection}{\numberline {3.1}Starting Simple: All Coefficients are Spatially Stationary}{10}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {3.1.1}Model and Bandwidth}{12}{subsubsection.3.1.1}
+\contentsline {subsection}{\numberline {3.2}All Local Coefficients}{12}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}One Local Coefficient}{15}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Two Local Coefficients}{15}{subsection.3.4}
+\contentsline {section}{\numberline {4}Discussion}{15}{section.4}
