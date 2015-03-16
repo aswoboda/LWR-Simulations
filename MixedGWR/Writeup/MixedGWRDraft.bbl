@@ -1,4 +1,4 @@
-\begin{thebibliography}{34}
+\begin{thebibliography}{37}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -63,11 +63,24 @@ Seong-hoon Cho, J.~M Bowker, and William~M. Park.
 \newblock \emph{Journal of Agricultural and Resource Economics}, 31\penalty0
   (3):\penalty0 485--507, 2006.
 
-\bibitem[Cho et~al.(2009)Cho, Christopher, William, and Kim]{Cho2009}
+\bibitem[Cho et~al.(2009{\natexlab{a}})Cho, Christopher, William, and
+  Kim]{Cho2009}
 Seong-hoon Cho, D~Christopher, M~William, and Seung~Gyu Kim.
 \newblock {Spatial and Temporal Variation in the Housing Market Values of Lot
   Size and Open Space}.
-\newblock \emph{Land Economics}, 85\penalty0 (1):\penalty0 51--73, 2009.
+\newblock \emph{Land Economics}, 85\penalty0 (1):\penalty0 51--73,
+  2009{\natexlab{a}}.
+
+\bibitem[Cho et~al.(2009{\natexlab{b}})Cho, Lambert, Roberts, and
+  Kim]{Cho2009a}
+Seong-Hoon Cho, Dayton~M Lambert, Roland~K Roberts, and Seung~Gyu Kim.
+\newblock {Moderating urban sprawl: is there a balance between shared open
+  space and housing parcel size?}
+\newblock \emph{Journal of Economic Geography}, 10\penalty0 (5):\penalty0
+  763--783, 2009{\natexlab{b}}.
+\newblock ISSN 14682702.
+\newblock \doi{10.1093/jeg/lbp048}.
+\newblock URL \url{http://joeg.oxfordjournals.org/cgi/doi/10.1093/jeg/lbp048}.
 
 \bibitem[Chow et~al.(2000)Chow, Zhao, Liu, Li, and Ubaka]{Chow2000}
 Lee-fang Chow, Fang Zhao, Xuemei Liu, Min-tang Li, and Ike Ubaka.
@@ -122,6 +135,15 @@ A.~Stewart Fotheringham, Chris Brunsdon, and Martin Charlton.
 \newblock \emph{{Geographically Weighted Regression: the analysis of spatially
   varying relationships}}.
 \newblock John Wiley \& Sons, West Sussex, England, 2002.
+
+\bibitem[Geniaux et~al.(2011)Geniaux, Ay, and Napol\'{e}one]{Geniaux2011}
+Ghislain Geniaux, Jean-Sauveur Ay, and Claude Napol\'{e}one.
+\newblock {A SPATIAL HEDONIC APPROACH ON LAND USE CHANGE ANTICIPATIONS}.
+\newblock \emph{Journal of Regional Science}, 51\penalty0 (5):\penalty0
+  967--986, 2011.
+\newblock ISSN 00224146.
+\newblock \doi{10.1111/j.1467-9787.2011.00721.x}.
+\newblock URL \url{http://doi.wiley.com/10.1111/j.1467-9787.2011.00721.x}.
 
 \bibitem[Hanink et~al.(2010)Hanink, Cromley, and Ebenstein]{Hanink2010}
 Dean~M Hanink, Robert~G Cromley, and Avraham~Y Ebenstein.
@@ -292,6 +314,17 @@ Ana C~L S\'{a}, Jos\'{e} M~C Pereira, Martin~E Charlton, Bernardo Mota, Paulo~M
 \newblock \doi{10.1007/s10109-010-0123-7}.
 \newblock URL
   \url{http://www.springerlink.com/index/10.1007/s10109-010-0123-7}.
+
+\bibitem[Sunding and Swoboda(2010)]{Sunding2010}
+David~L. Sunding and Aaron~M. Swoboda.
+\newblock {Hedonic analysis with locally weighted regression: An application to
+  the shadow cost of housing regulation in Southern California}.
+\newblock \emph{Regional Science and Urban Economics}, 40\penalty0
+  (6):\penalty0 550--573, November 2010.
+\newblock ISSN 01660462.
+\newblock \doi{10.1016/j.regsciurbeco.2010.07.002}.
+\newblock URL
+  \url{http://linkinghub.elsevier.com/retrieve/pii/S0166046210000608}.
 
 \bibitem[Tu and Xia(2008)]{Tu2008}
 Jun Tu and Zong-Guo Xia.

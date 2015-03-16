@@ -109,6 +109,28 @@ Thus far two models have been discussed - the standard OLS model in which all of
 
 In the presence of mixed models, the researcher is tasked with simultaneously choosing which variables to treat as spatially non-stationary and the bandwidth at which to perform the analysis. Little is known about model performance when models are selected across multiple mixed models and among multiple different potenial bandwidth sizes. This paper uses simulated data generated under multiple conditions to begin to answer some of the outstanding questions in the area of geographically mixed models. 
 
+\section{Related Literature}
+\subsection{Mixed Models?}
+
+\citet{Cahill2007} determine that a mixed model might be best because of Monte Carlo simulations.
+
+\citet{Huang2010} find evidence consistent with a mixed model (some coefficients appear to stationary and others non-stationary), but do not estimate one.
+
+\citet{Yu2006} implement a mixed model after using tests of spatial stationarity 
+
+\citet{Chow2000} uses the AIC to select which variables are nonstationary.
+
+\citet{Mei2004} seems like an important article to talk about. It proposes a methodology for selecting a mixed model. Google Scholar has info on who cites this article.
+\begin{verbatim}
+https://scholar.google.com/scholar?cites=11649932945261630952&as_sdt=5,24&sciodt=0,24&hl=en
+\end{verbatim}
+
+
+Gotta say something about \citet{Leung2000a}. What does it do and what are some potential weaknesses?
+
+They talk about two things... first develop a test of stationarity for the model as a whole, then a step-wise model for adding/subtracting spatially varying variables. Weaknesses? Some quote about "not being able to undo" the addition or subtraction, which may be a problem in the presence of correlated coefficients.
+
+The \citet{Fotheringham2002} text suggests a system of Monte Carlo experiments.
 
 \section{Experimental Design}
 
@@ -164,24 +186,20 @@ yielding a total of 675 unique combinations. We replicate each combination 100 t
 
 \subsection{Model Selection}
 
-Gotta say something about \citet{Leung2000a}. What does it do and what are some potential weaknesses?
+After generating a dataset according the parameters described above, we approach the data as a researcher might - trying to understand the underlying DGP with only an $n \times 5$ matrix of data representing the dependent variable, $X_1$, $X_2$, and the $East$ and $North$ values for each observation. We estimate 50 different model-bandwidth combinations for each dataset - seven different bandwidths\footnote{Specifically, we use the following bandwidths: $n$, $n\left(\frac{2}{3}\right)$, $n\left(\frac{2}{3}\right)^2$, $n\left(\frac{2}{3}\right)^3$, $n\left(\frac{2}{3}\right)^4$, $n\left(\frac{2}{3}\right)^5$, and $n\left(\frac{2}{3}\right)^6$ rounded up to the nearest whole number. For the smallest sample size, 50, the smallest bandwidth is five observations.} for each of the seven mixed models with at least one ``Local'' variable plus the standard OLS model, which we denote as ``GGG.'' 
 
-They talk about two things... first develop a test of stationarity for the model as a whole, then a step-wise model for adding/subtracting spatially varying variables. Weaknesses? Some quote about "not being able to undo" the addition or subtraction, which may be a problem in the presence of correlated coefficients.
-
-The \citet{Fotheringham2002} text suggests a system of Monte Carlo experiments.
-
-
-We compare four important cross-validation/information criteria: Leave One Out Cross Validation (LOOCV), Generalized Cross Validation (GCV), Standardized Cross Validation (SCV), and the Akaike Information Criterion (AIC). How frequently can researchers utilizing these metrics identify the correct model among the various possible combinations? Are certain metrics more/less prone to false positive/negatives? Do they suggest no spatial variation when in fact it exists? Do they suggest spatial variation when in fact there is not? 
+For each model-bandwidth combination we calculate several model selection metrics. Researchers may use metrics like the Leave One Out Cross Validation (LOOCV), Generalized Cross Validation (GCV), Standardized Cross Validation (SCV) and Akaike Information Criterion (AIC) to choose bandwidth sizes and models. In addition to comparing these metric values across the model-bandwidth combinations, we also calculate the Root Mean Square Error (RMSE) for each of the three model coefficients, which allows us to compare the accuracy of the coefficient estimates across model-bandwidth combinations.
 
 \subsubsection{Leave One Out Cross Validation}
 Perhaps the most common cross validation metric used in the literature is the Leave One Out Cross Validation score (LOOCV), which is calculated as follows,
 \begin{equation}\label{eq:LOOCV}
 LOOCV = \frac{1}{N} \sqrt{\sum _{i = 1}^{N} (y - \hat{y}_{\neq i})^2},  
 \end{equation}
-where $\hat{y}_{\neq i}$ represents the dependent variable estimate for observation $i$ while excluding observation $i$ from the regression. This prevents the observation from having undue influence in the regression with small bandwidths and overfitting the model. Such a model, while intuitively appealing, can be computationally expensive, as regressions must be estimated first while excluding individual observations to calculate the LOOCV and then again while including the observation to obtain the regression coefficients.
+where $\hat{y}_{\neq i}$ represents the dependent variable estimate for observation $i$ while excluding observation $i$ from the regression. This prevents the observation from having undue influence in the regression with small bandwidths and overfitting the model. Such a model, while intuitively appealing, can be computationally expensive, as regressions must be estimated first while excluding individual observations to calculate the LOOCV and then again while including the observation to obtain the regression coefficients. Perhaps because of the intuitive appeal and despite the computational intensity, the LOOCV remains one of the most popular model selection metrics. A sampling of recent articles that use LOOCV in the context of LWR model selection include:
+\citet{Brunsdon1998}, \citet{Huang2002}, \citet{Lloyd2005}, \citet{Cho2006a}, \citet{Yu2006}, \citet{Cho2009}, \citet{Cho2009a}, and \citet{Huang2010}.
 
 \subsubsection{Generalized Cross Validation}
-An alternative cross validation metric is known as the Generalized Cross Validation (GCV) score, which only requires calculating the regressions once per location and explicitly calculates the leverage each observation has over the regression coefficients. The GCV score calculation is detailed in equation~\eqref{eq:GCV},
+An alternative cross validation metric is known as the Generalized Cross Validation (GCV) score. The GCV score is a convenient model selection metric that rewards models that provide a good fit to the data, while penalizing models with a greater number of model parameters \citep{Loader1999, McMillen2010}.  One advantage over the LOOCV is that it requires calculating the regressions only once per location and explicitly calculates the leverage each observation has over the regression coefficients. The GCV score calculation is detailed in equation~\eqref{eq:GCV},
 \begin{equation}\label{eq:GCV}
 n*\sum_{i=1}^{n}\frac{(y_i-\hat{y}_i)^2}{(n-v_1)^2}, 
 \end{equation} 
@@ -193,10 +211,10 @@ where $\hat{y}_i$ is the predicted dependent variable value for observation $i$,
                   \begin{equation}
                    r_i=X_i(X'W_iX)^{-1}X'W_i.
                    \end{equation}
-The GCV score is a convenient model selection metric that rewards models that provide a good fit to the data, while penalizing models with a greater number of model parameters \citep{Loader1999, McMillen2010}.  \citep{Paez2011, McMillen2010, McMillen2012}. 
+A few examples of works using the GCV include: \citet{McMillen2010}, \citet{Sunding2010}, \citet{Paez2011}, \citet{Geniaux2011}, and \citet{McMillen2012}.
 
 \subsubsection{Standardized Cross Validation}
-The Standardized Cross Validation Score was suggested by \citep{Farber2007b} and elaborated on in \citep{Paez2011} as an alternative to conventional metrics. This metric is designed to limit the influence of outliers which may disproportionately impact the choice of bandwidth. The Standardized Cross Validation score for a given observation $i$ and bandwidth $k$ is, 
+The (Row-)Standardized Cross Validation Score was suggested by \citep{Farber2007b} and elaborated on in \citep{Paez2011} as an alternative to conventional metrics like LOOCV and GCV. This metric is designed to limit the influence of outliers which may disproportionately impact the choice of bandwidth. The Standardized Cross Validation score for a given observation $i$ and bandwidth $k$ is, 
 \begin{equation}\label{eq:SCV}
 SCV_i (k) = \frac{\sum (y_i - \hat{y}_{-i}(k))^2} {\sum _k (y_i - \hat{y}_{-i})^2 },
 \end{equation}
@@ -206,68 +224,31 @@ SCV(k) = \sum _i SCV_i(k).
 \end{equation}
 Equation \eqref{eq:SCV} calculates a partial score for each observation as a proportion of the total squared deviance at that observation across the different bandwidths, while \eqref{eq:SCVtot} then calculates the sum across all observations for a given bandwidth. Note that, contrary to the other metrics described here, the SCV score has to be calculated after all possible bandwidths have been implemented.
 
+No one in our sample uses SCV, but do a google scholar search and look for articles that cite the original articles
+
+\begin{verbatim}
+\https://scholar.google.com/scholar?as_ylo=2011&hl=en&as_sdt=5,24&sciodt=0,24&cites=9654495652239805234&scipsc=
+\end{verbatim}
+
 \subsubsection{Akaike Information Criterion}
 As noted in \citep{Fotheringham2002}, the well-known Akaike Information Criterion is calculated in the geographically weighted regression framework as follows,
 \begin{equation}\label{eq:AIC}
   2*n*ln(\hat{\sigma}) + n*ln(2*\pi) + 
     n*\frac{n + v_1}{n - 2 - v_1}
     \end{equation}
-where $\hat{\sigma}$ is the estimated standard error of the regression, n is the sample size, and $v_1$ remains the ``effective number of parameters'' estimated by the model as described above.
+where $\hat{\sigma}$ is the estimated standard error of the regression, n is the sample size, and $v_1$ remains the ``effective number of parameters'' estimated by the model as described above. The AIC remains another popular metric in the literature, being used recently by: \citet{Foody2003}, \citet{Kestens2005}, \citet{Yu2006}, \citet{Yu2007}, \citet{Yu2007a}, \cite{Borst2007}, \citet{Partridge2007}, \citet{Cahill2007}, \citet{Eckey2007}, \citet{Partridge2008}, \citet{Tu2008}, \citet{Helbich2009}, \citet{Hanink2010}, \citet{Sa2010}, \citet{PinedaJaimes2010}, \citet{Axhausen2010}, and \citet{Haynes2011}.
 
+\subsubsection{Coefficient Root Mean Square Error}
 
-\subsection{Examples of citations using different methods...}
-\subsubsection{Uses the AIC}
-\cite{Borst2007}
-\citet{Axhausen2010}
-\citet{Cahill2007}
-\citet{Eckey2007}
-\citet{Foody2003}
-\citet{Hanink2010}
-\citet{Haynes2011}
-\citet{Helbich2009}
-\citet{Kestens2005}
-\citet{Partridge2008}
-\citet{Partridge2007}
-\citet{PinedaJaimes2010}
-\citet{Sa2010}
-\citet{Tu2008}
-\citet{Yu2006}
-\citet{Yu2007a}
-\citet{Yu2007}
-
-\subsubsection{Uses SCV}
-No one in our sample, but do a google scholar search and look for articles that cite the original articles
-
-\begin{verbatim}
-\https://scholar.google.com/scholar?as_ylo=2011&hl=en&as_sdt=5,24&sciodt=0,24&cites=9654495652239805234&scipsc=
-\end{verbatim}
-
-\subsubsection{Uses LOOCV}
-\citet{Brunsdon1998}
-\citet{Cho2006a}
-\citet{Cho2009}
-\citet{Huang2002}
-\citet{Lloyd2005}
-\citet{Lloyd2005}
-\citet{Lloyd2005}
-\citet{Lloyd2005}
-
-\subsection{Mixed Models?}
-
-\citet{Cahill2007} determine that a mixed model might be best because of Monte Carlo simulations.
-
-\citet{Huang2010} find evidence consistent with a mixed model (some coefficients appear to stationary and others non-stationary), but do not estimate one.
-
-\citet{Yu2006} implement a mixed model after using tests of spatial stationarity 
-
-\citet{Chow2000} uses the AIC to select which variables are nonstationary.
-
-\citet{Mei2004} seems like an important article to talk about. It proposes a methodology for selecting a mixed model. Google Scholar has info on who cites this article.
-\begin{verbatim}
-https://scholar.google.com/scholar?cites=11649932945261630952&as_sdt=5,24&sciodt=0,24&hl=en
-\end{verbatim}
+The goal of regression analyses tends to be the efficient, consistent, and unbiased estimation of a particular variable coefficient rather than necessarily correctly identifying the exact model specification. We therefore also calculated the Root Mean Square Error for each regression coefficient across all of our model specifications as,
+\begin{equation}
+\textrm{RMSE } \widehat{\beta} _m = \sqrt{\frac{1}{n} \sum _{i=1}^n (\widehat{\beta} _{mi} - \beta _{mi})^2},   
+\end{equation}
+where $i$ denotes the observation, $n$ is the sample size, and $m \in \{0, 1, 2\}$ specifies the model coefficient in question.  Unlike the metrics described previously, these model performance metrics are not available to researchers with observational data. These measures of estimated coefficient accuracy can only be calculated because we know the true underlying data generating process. 
 
 \section{Simulation Results}
+
+We compare four important cross-validation/information criteria: Leave One Out Cross Validation (LOOCV), Generalized Cross Validation (GCV), Standardized Cross Validation (SCV), and the Akaike Information Criterion (AIC). How frequently can researchers utilizing these metrics identify the correct model among the various possible combinations? Are certain metrics more/less prone to false positive/negatives? Do they suggest no spatial variation when in fact it exists? Do they suggest spatial variation when in fact there is not? 
 
 \subsection{Starting Simple: All Coefficients are Spatially Stationary}
 
@@ -299,11 +280,7 @@ We begin by examining the simulation resuts for the spatially stationary data ge
 
 Table \ref{tab:ModelbyMetricGGG} shows a distinct difference between LOOCV and the three other metrics. Almost three-fourths of the time the LOOCV was minimized using the model that was ``correct'' across all three coefficients. Conversely, the SCV metric selected the correct (`GGG') model in less than 10 percent of the simulations and both the GCV and AIC metrics selected the correct model less than 1 percent of the time. Interestingly, while the GCV, SCV, and AIC metrics did not choose the correct model nearly as frequently as the LOOCV metric, they tend to make a correctly identify the spatial (non-)stationarity for two out of three coefficients. The GCV and AIC metric almost exclusively selected one of the `LGG', `GLG', and `GGL' models. Almost 20 percent of the time the SCV metric selected a model that was incorrect about two (`LLG', `LGL', `GLL') or all (`LLL') of the coefficients stationarity.
 
-At first glance, the high frequency of type one error displayed in Table \ref{tab:ModelbyMetricGGG} is frustrating. However, the goal of regression analyses tends to be the efficient, consistent, and unbiased estimation of a particular variable coefficient rather than identifying the exact model specification. We therefore also calculated the Root Mean Square Error for each regression coefficient across all of our model specifications as,
-\begin{equation}
-\textrm{RMSE } \widehat{\beta} _m = \sqrt{\frac{1}{N} \sum _{i=1}^N (\widehat{\beta} _{mi} - \beta _{mi})^2},   
-\end{equation}
-where $i$ denotes the observation, $N$ is the sample size, and $m \in \{0, 1, 2\}$ specifies the model coefficient in question.  Unlike the metrics in Table \ref{tab:ModelbyMetricGGG}, these model performance metrics are not available to researchers with observational data. These measures of estimated coefficient accuracy can only be calculated because we know the true underlying data generating process. Table \ref{tab:RMSEGGG} shows the distribution of models selected by having the smallest RMSE for each coefficient. 
+At first glance, the high frequency of type one error displayed in Table \ref{tab:ModelbyMetricGGG} is frustrating. Table \ref{tab:RMSEGGG} shows the distribution of models selected by having the smallest RMSE for each coefficient. 
 
 \begin{table}[htb]
 \centering
