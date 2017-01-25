@@ -1,4 +1,4 @@
-% Created by tikzDevice version 0.8.1 on 2015-02-25 16:38:29
+% Created by tikzDevice version 0.8.1 on 2015-05-24 12:51:00
 % !TEX encoding = UTF-8 Unicode
 \documentclass{article}
 \nonstopmode
@@ -25,6 +25,8 @@
 \usepackage{caption, amsmath, graphicx, setspace, multirow, color, hyperref, array}
 \usepackage{xcolor, colortbl}
 \usepackage{arydshln}
+\usepackage{caption}
+\captionsetup{margin=10pt,font=small,labelfont=bf, format = hang}
 
 \definecolor{Gray}{gray}{0.85}
 \definecolor{Gray95}{gray}{0.95}
@@ -32,6 +34,7 @@
 
 \title{Can Conventional Measures Identify Geographically Varying Mixed Regression Relationships? A Simulation-based Analysis of Locally Weighted Regression}
 \author{Aaron Swoboda}
+\date{DRAFT: Do NOT Cite Without Permission}
 
 
 
@@ -231,7 +234,7 @@
 
 \node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.50] at (121.15,479.75) {metric:  LOOCV};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (121.15,463.91) {small < --- bandwidth --- > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (121.15,463.91) {smallest ---- bandwidth size ----  biggest};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (794.97,505.89);
@@ -424,7 +427,7 @@
 
 \node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.50] at (319.89,479.75) {metric:  GCV};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (319.89,463.91) {small < --- bandwidth --- > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (319.89,463.91) {smallest ---- bandwidth size ----  biggest};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (794.97,505.89);
@@ -642,7 +645,7 @@
 
 \node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.50] at (518.64,479.75) {metric:  SCV};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (518.64,463.91) {small < --- bandwidth --- > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (518.64,463.91) {smallest ---- bandwidth size ----  biggest};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (794.97,505.89);
@@ -825,7 +828,7 @@
 
 \node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.50] at (717.38,479.75) {metric:  AIC};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (717.38,463.91) {small < --- bandwidth --- > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (717.38,463.91) {smallest ---- bandwidth size ----  biggest};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (794.97,505.89);
@@ -1045,7 +1048,7 @@
 
 \node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.50] at (220.52,226.81) {metric:  B0RMSE};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (220.52,210.97) {small < --- bandwidth --- > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (220.52,210.97) {smallest ---- bandwidth size ----  biggest};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (794.97,505.89);
@@ -1262,7 +1265,7 @@
 
 \node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.50] at (419.26,226.81) {metric:  B1RMSE};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (419.26,210.97) {small < --- bandwidth --- > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (419.26,210.97) {smallest ---- bandwidth size ----  biggest};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (794.97,505.89);
@@ -1479,7 +1482,7 @@
 
 \node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.50] at (618.01,226.81) {metric:  B2RMSE};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (618.01,210.97) {small < --- bandwidth --- > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at (618.01,210.97) {smallest ---- bandwidth size ----  biggest};
 \end{scope}
 \end{tikzpicture}
 

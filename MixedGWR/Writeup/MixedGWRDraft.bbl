@@ -1,4 +1,4 @@
-\begin{thebibliography}{37}
+\begin{thebibliography}{35}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -81,16 +81,6 @@ Seong-Hoon Cho, Dayton~M Lambert, Roland~K Roberts, and Seung~Gyu Kim.
 \newblock ISSN 14682702.
 \newblock \doi{10.1093/jeg/lbp048}.
 \newblock URL \url{http://joeg.oxfordjournals.org/cgi/doi/10.1093/jeg/lbp048}.
-
-\bibitem[Chow et~al.(2000)Chow, Zhao, Liu, Li, and Ubaka]{Chow2000}
-Lee-fang Chow, Fang Zhao, Xuemei Liu, Min-tang Li, and Ike Ubaka.
-\newblock {Transit Ridership Model Based on Geographically Weighted
-  Regression}.
-\newblock \emph{Transportation Research Record}, 1972\penalty0 (1972):\penalty0
-  105--114, 2000.
-\newblock ISSN 03611981.
-\newblock \doi{10.3141/1972-15}.
-\newblock URL \url{http://dx.doi.org/10.3141/1972-15}.
 
 \bibitem[Cleveland and Devlin(1988)]{Cleveland1988}
 William~S Cleveland and Susan~J Devlin.
@@ -253,15 +243,6 @@ Daniel~P. McMillen and Christian~L. Redfearn.
 \newblock ISSN 00224146.
 \newblock \doi{10.1111/j.1467-9787.2010.00664.x}.
 \newblock URL \url{http://doi.wiley.com/10.1111/j.1467-9787.2010.00664.x}.
-
-\bibitem[Mei et~al.(2004)Mei, He, and Fang]{Mei2004}
-Chang-Lin Mei, Shu-Yuan He, and Kai-Tai Fang.
-\newblock {A NOTE ON THE MIXED GEOGRAPHICALLY WEIGHTED REGRESSION MODEL}.
-\newblock \emph{Journal of Regional Science}, 44\penalty0 (1):\penalty0
-  143--157, 2004.
-\newblock ISSN 00224146.
-\newblock \doi{10.1111/j.1085-9489.2004.00331.x}.
-\newblock URL \url{http://doi.wiley.com/10.1111/j.1085-9489.2004.00331.x}.
 
 \bibitem[Paez et~al.(2011)Paez, Farber, and Wheeler]{Paez2011}
 Antonio Paez, Steven Farber, and David Wheeler.

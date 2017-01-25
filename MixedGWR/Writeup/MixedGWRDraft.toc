@@ -1,20 +1,18 @@
-\contentsline {section}{\numberline {1}Background}{3}{section.1}
-\contentsline {subsection}{\numberline {1.1}Weighted Regression to the Rescue?}{3}{subsection.1.1}
-\contentsline {subsection}{\numberline {1.2}Mixed Geographic Models}{4}{subsection.1.2}
-\contentsline {section}{\numberline {2}Related Literature}{5}{section.2}
-\contentsline {subsection}{\numberline {2.1}Mixed Models?}{5}{subsection.2.1}
-\contentsline {section}{\numberline {3}Experimental Design}{5}{section.3}
-\contentsline {subsection}{\numberline {3.1}Data Generation Process}{5}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Model Selection}{8}{subsection.3.2}
-\contentsline {subsubsection}{\numberline {3.2.1}Leave One Out Cross Validation}{8}{subsubsection.3.2.1}
-\contentsline {subsubsection}{\numberline {3.2.2}Generalized Cross Validation}{9}{subsubsection.3.2.2}
-\contentsline {subsubsection}{\numberline {3.2.3}Standardized Cross Validation}{9}{subsubsection.3.2.3}
-\contentsline {subsubsection}{\numberline {3.2.4}Akaike Information Criterion}{10}{subsubsection.3.2.4}
-\contentsline {subsubsection}{\numberline {3.2.5}Coefficient Root Mean Square Error}{10}{subsubsection.3.2.5}
-\contentsline {section}{\numberline {4}Simulation Results}{10}{section.4}
-\contentsline {subsection}{\numberline {4.1}Starting Simple: All Coefficients are Spatially Stationary}{11}{subsection.4.1}
-\contentsline {subsubsection}{\numberline {4.1.1}Model and Bandwidth}{13}{subsubsection.4.1.1}
-\contentsline {subsection}{\numberline {4.2}All Local Coefficients}{13}{subsection.4.2}
-\contentsline {subsection}{\numberline {4.3}One Local Coefficient}{16}{subsection.4.3}
-\contentsline {subsection}{\numberline {4.4}Two Local Coefficients}{16}{subsection.4.4}
-\contentsline {section}{\numberline {5}Discussion}{16}{section.5}
+\contentsline {section}{\numberline {1}Background}{2}{section.1}
+\contentsline {subsection}{\numberline {1.1}Weighted Regression to the Rescue?}{2}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Mixed Geographic Models}{3}{subsection.1.2}
+\contentsline {section}{\numberline {2}Experimental Design}{4}{section.2}
+\contentsline {subsection}{\numberline {2.1}Data Generation Process}{4}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Model Selection}{6}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Leave One Out Cross Validation}{6}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}Generalized Cross Validation}{7}{subsubsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.3}Standardized Cross Validation}{7}{subsubsection.2.2.3}
+\contentsline {subsubsection}{\numberline {2.2.4}Akaike Information Criterion}{8}{subsubsection.2.2.4}
+\contentsline {subsubsection}{\numberline {2.2.5}Coefficient Root Mean Square Error}{8}{subsubsection.2.2.5}
+\contentsline {section}{\numberline {3}Simulation Results}{8}{section.3}
+\contentsline {subsection}{\numberline {3.1}Starting Simple: All Coefficients are Spatially Stationary}{9}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {3.1.1}Model and Bandwidth}{10}{subsubsection.3.1.1}
+\contentsline {subsection}{\numberline {3.2}All Local Coefficients}{11}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}One Local Coefficient}{15}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Two Local Coefficients}{15}{subsection.3.4}
+\contentsline {section}{\numberline {4}Discussion and Future Work}{15}{section.4}

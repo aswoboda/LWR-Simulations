@@ -8,7 +8,7 @@
 \usepackage{caption, amsmath, graphicx, setspace, multirow, color, hyperref, array}
 \usepackage{xcolor, colortbl}
 \usepackage{arydshln}
-\usepackage{caption}
+\usepackage{caption, floatpag}
 \captionsetup{margin=10pt,font=small,labelfont=bf, format = hang}
 
 \definecolor{Gray}{gray}{0.85}
@@ -16,7 +16,8 @@
 \definecolor{Gray75}{gray}{0.75}
 
 \title{Can Conventional Measures Identify Geographically Varying Mixed Regression Relationships? A Simulation-based Analysis of Locally Weighted Regression}
-\author{Aaron Swoboda}
+\author{Aaron Swoboda\thanks{Carleton College, email: aswoboda@carleton.edu}}
+\date{DRAFT: Please Do NOT Cite Without Permission}
 
 
 \begin{document}
@@ -35,9 +36,12 @@ library(plotrix)
 #setwd("MixedGWR/Writeup/")
 mcOutput = readRDS("../SimulationOutput/mcOutput20140218.rds")
 @
-\tableofcontents
-\listoffigures
-\listoftables
+% \tableofcontents
+% \listoffigures
+% \listoftables
+
+Regional scientists are increasingly utilizing data analysis techniques that allow for spatial heterogeneity of various forms. Regression specifications like Geographically Weighted Regression and Locally Weighted Regression allow the regression parameters to vary over space thereby reflecting spatially non-stationary relationships. Such spatial heterogeneity is appealling in a regional science context in which location is assumed to matter in various ways. Recent work has begun to estimate ``mixed" relationships in which some variables exert non-stationary effects on the dependent variable, while others exhibit a constant effect over space. With so many possibilities available, researchers face a daunting task determining which variables to estimate in a (non-)stationary fashion. In this paper we simulate "mixed" regression relationships to determine whether commonly used metrics (for example Leave One Out Cross Validation and the Akaike Information Criterion) can adequately be used to distinguish between the different possibilities.
+
 
 \section{Background}
 
@@ -54,11 +58,11 @@ It is possible to parameterize the variation in coefficients, for instance by in
 \subsection{Weighted Regression to the Rescue?}
 Locally Weighted Regression (LWR) techniques are one set of potential solutions to the challenge described. It is a weighted least squares methodology in which regression coefficients are estimated as a function of the local data. \citet{Cleveland1988} provides one of the first descriptions of the method, while more recently \citet{Brunsdon1998b} and \citet{Fotheringham2002} have explicitly incorporated geography/location into the methodology. Specifically, the coefficients are estimated,
 \begin{equation}\label{eq:LWRbeta}
-\hat{\beta}(location_i) = (X'W(location_i)X)^{-1}X'W(location_i)Y,
+\hat{\beta}(location_i) = (X'W(location_i)X)^{-1}(X'W(location_i)Y),
 \end{equation}
-where X is a $N \times m$ matrix of independent variables, $W_i$ is the $N \times N$ weights matrix, and Y is the $N \times 1$ vector of dependent variable values. The weights matrix, $W_i$ is a diagonal matrix where element $w_{jj}$ denotes the weight that the $j^{th}$ data point will receive in the regression coefficients estimated at location $i$ in the dataset.\footnote{If all diagonal elements of $W$ are one, then \eqref{eq:LWRbeta} simplifies to the standard OLS estimation.} We employ a bi-square weights function and a k-nearest neighbor bandwidth approach as described in equation~\eqref{eq:weights}, 
+where X is a $n \times m$ matrix of independent variables, $W_i$ is the $n \times n$ weights matrix, and Y is the $n \times 1$ vector of dependent variable values. The weights matrix, $W_i$ is a diagonal matrix where element $w_{jj}$ denotes the weight that the $j^{th}$ data point will receive in the regression coefficients estimated at location $i$ in the dataset.\footnote{If all diagonal elements of $W$ are one, then \eqref{eq:LWRbeta} simplifies to the standard OLS estimation.} We employ a bi-square weights function and a k-nearest neighbor bandwidth approach as described in equation~\eqref{eq:weights}, 
 \begin{equation}\label{eq:weights}
-w_{jj}=\left[1-\left(\frac{d_{ij}}{d_{k}}\right)^2 \right]^2 \textrm{ if }d_{ij}<d_{ik}\textrm{, otherwise = 0},
+w_{jj}=\left[1-\left(\frac{d_{ij}}{d_{ik}}\right)^2 \right]^2 \textrm{ if }d_{ij}<d_{ik}\textrm{, otherwise = 0},
 \end{equation}
 where $d_{ij}$ denotes the distance between observations $i$ and $j$, and $d_{ik}$ is the distance from observation $i$ to the $k^{th}$ nearest observation. This function assigns weights close to 1 for data points near observation $i$, weights positive but closer to zero for observations farther away, and zero for all $n-k$ observations farther away than the $k^{th}$ nearest observation. 
 
@@ -66,32 +70,30 @@ A key decision in estimating LWR models is choosing the number of observations t
 
 \subsection{Mixed Geographic Models}
 
-Thus far two models have been discussed - the standard OLS model in which all of the coefficients are stationary and a local model in which all coefficients are estimated locally using some bandwidth. The two cases are identical in the extreme case of an infinite bandwidth. Other ``mixed'' models are also possible in which some coefficients are assumed to be stationary while others are estimated locally. In the example described in Equation \eqref{eq:simpleOLS} with three coefficients , there are are eight ($2^3$) total models, ranging from the LWR model in which all three coefficients are assumed to be ``Local'', three models in which two coefficients are ``Local'' and one is assumed to be ``Global'', three models in which one coefficient is ``Local'' and the remaining two coefficients are ``Global'' and the OLS model in which all three coefficients are ``Global''.
+Thus far two models have been discussed - the standard OLS model in which all of the coefficients are stationary and a local model in which all coefficients are estimated locally using some bandwidth. The two cases are identical in the extreme case of an infinite bandwidth. Other ``mixed'' models are also possible in which some coefficients are assumed to be stationary while others are estimated locally. In the example described in Equation \eqref{eq:simpleOLS} with three coefficients, there are are eight ($2 \times 2 \times 2$) total models, ranging from the LWR model in which all three coefficients are assumed to be ``Local'', three models in which two coefficients are ``Local'' and one is assumed to be ``Global'', three models in which one coefficient is ``Local'' and the remaining two coefficients are ``Global'' and the OLS model in which all three coefficients are ``Global''.
 
 In the presence of mixed models, the researcher is tasked with simultaneously choosing which variables to treat as spatially non-stationary and the bandwidth at which to perform the analysis. Little is known about model performance when models are selected across multiple mixed models and among multiple different potenial bandwidth sizes. This paper uses simulated data generated under multiple conditions to begin to answer some of the outstanding questions in the area of geographically mixed models. 
 
-\section{Related Literature}
-\subsection{Mixed Models?}
-
-\citet{Cahill2007} determine that a mixed model might be best because of Monte Carlo simulations.
-
-\citet{Huang2010} find evidence consistent with a mixed model (some coefficients appear to stationary and others non-stationary), but do not estimate one.
-
-\citet{Yu2006} implement a mixed model after using tests of spatial stationarity 
-
-\citet{Chow2000} uses the AIC to select which variables are nonstationary.
-
-\citet{Mei2004} seems like an important article to talk about. It proposes a methodology for selecting a mixed model. Google Scholar has info on who cites this article.
-\begin{verbatim}
-https://scholar.google.com/scholar?cites=11649932945261630952&as_sdt=5,24&sciodt=0,24&hl=en
-\end{verbatim}
-
-
-Gotta say something about \citet{Leung2000a}. What does it do and what are some potential weaknesses?
-
-They talk about two things... first develop a test of stationarity for the model as a whole, then a step-wise model for adding/subtracting spatially varying variables. Weaknesses? Some quote about "not being able to undo" the addition or subtraction, which may be a problem in the presence of correlated coefficients.
-
-The \citet{Fotheringham2002} text suggests a system of Monte Carlo experiments.
+% \section{Related Literature}
+% \subsection{Mixed Models?}
+% 
+% \citet{Cahill2007} determine that a mixed model might be best because of Monte Carlo simulations.
+% 
+% \citet{Huang2010} find evidence consistent with a mixed model (some coefficients appear to stationary and others non-stationary), but do not estimate one.
+% 
+% \citet{Yu2006} implement a mixed model after using tests of spatial stationarity 
+% 
+% \citet{Chow2000} uses the AIC to select which variables are nonstationary.
+% 
+% \citet{Mei2004} seems like an important article to talk about. It proposes a methodology for selecting a mixed model. Google Scholar has info on who cites this article.
+% \url{https://scholar.google.com/scholar?cites=11649932945261630952&as_sdt=5,24&sciodt=0,24&hl=en}
+% 
+% 
+% Gotta say something about \citet{Leung2000a}. What does it do and what are some potential weaknesses?
+% 
+% They talk about two things... first develop a test of stationarity for the model as a whole, then a step-wise model for adding/subtracting spatially varying variables. Weaknesses? Some quote about "not being able to undo" the addition or subtraction, which may be a problem in the presence of correlated coefficients.
+% 
+% The \citet{Fotheringham2002} text suggests a system of Monte Carlo experiments.
 
 \section{Experimental Design}
 
@@ -207,7 +209,7 @@ where $\hat{y}_{\neq i}$ represents the dependent variable estimate for observat
 \subsubsection{Generalized Cross Validation}
 An alternative cross validation metric is known as the Generalized Cross Validation (GCV) score. The GCV score is a convenient model selection metric that rewards models that provide a good fit to the data, while penalizing models with a greater number of model parameters \citep{Loader1999, McMillen2010}.  One advantage over the LOOCV is that it requires calculating the regressions only once per location and explicitly calculates the leverage each observation has over the regression coefficients. The GCV score calculation is detailed in equation~\eqref{eq:GCV},
 \begin{equation}\label{eq:GCV}
-n*\sum_{i=1}^{n}\frac{(y_i-\hat{y}_i)^2}{(n-v_1)^2}, 
+GCV = n*\sum_{i=1}^{n}\frac{(y_i-\hat{y}_i)^2}{(n-v_1)^2}, 
 \end{equation} 
 where $\hat{y}_i$ is the predicted dependent variable value for observation $i$, and $v_1$ can be interpreted as the ``effective number of model parameters,'' and calculated as $v_1=$tr(\textbf{S}), where the matrix \textbf{S} is the ``hat matrix'' which maps $y$ onto $\hat{y}$,
                    \begin{equation}
@@ -222,7 +224,7 @@ A few examples of works using the GCV include: \citet{McMillen2010}, \citet{Sund
 \subsubsection{Standardized Cross Validation}
 The (Row-)Standardized Cross Validation Score was suggested by \citep{Farber2007b} and elaborated on in \citep{Paez2011} as an alternative to conventional metrics like LOOCV and GCV. This metric is designed to limit the influence of outliers which may disproportionately impact the choice of bandwidth. The Standardized Cross Validation score for a given observation $i$ and bandwidth $k$ is, 
 \begin{equation}\label{eq:SCV}
-SCV_i (k) = \frac{\sum (y_i - \hat{y}_{-i}(k))^2} {\sum _k (y_i - \hat{y}_{-i})^2 },
+SCV_i (k) = \frac{(y_i - \hat{y}_{\neq i}(k))^2} {\sum _k (y_i - \hat{y}_{\neq i})^2 },
 \end{equation}
 and the total score for bandwidth $k$ is then,
 \begin{equation}\label{eq:SCVtot}
@@ -230,16 +232,15 @@ SCV(k) = \sum _i SCV_i(k).
 \end{equation}
 Equation \eqref{eq:SCV} calculates a partial score for each observation as a proportion of the total squared deviance at that observation across the different bandwidths, while \eqref{eq:SCVtot} then calculates the sum across all observations for a given bandwidth. Note that, contrary to the other metrics described here, the SCV score has to be calculated after all possible bandwidths have been implemented.
 
-No one in our sample uses SCV, but do a google scholar search and look for articles that cite the original articles
+% No one in our sample uses SCV, but do a google scholar search and look for articles that cite the original articles
+% 
+% \url{https://scholar.google.com/scholar?as_ylo=2011&hl=en&as_sdt=5,24&sciodt=0,24&cites=9654495652239805234&scipsc=}
 
-\begin{verbatim}
-\https://scholar.google.com/scholar?as_ylo=2011&hl=en&as_sdt=5,24&sciodt=0,24&cites=9654495652239805234&scipsc=
-\end{verbatim}
 
 \subsubsection{Akaike Information Criterion}
 As noted in \citep{Fotheringham2002}, the well-known Akaike Information Criterion is calculated in the geographically weighted regression framework as follows,
 \begin{equation}\label{eq:AIC}
-  2*n*ln(\hat{\sigma}) + n*ln(2*\pi) + 
+AIC =  2*n*ln(\hat{\sigma}) + n*ln(2*\pi) + 
     n*\frac{n + v_1}{n - 2 - v_1}
     \end{equation}
 where $\hat{\sigma}$ is the estimated standard error of the regression, n is the sample size, and $v_1$ remains the ``effective number of parameters'' estimated by the model as described above. The AIC remains another popular metric in the literature, being used recently by: \citet{Foody2003}, \citet{Kestens2005}, \citet{Yu2006}, \citet{Yu2007}, \citet{Yu2007a}, \cite{Borst2007}, \citet{Partridge2007}, \citet{Cahill2007}, \citet{Eckey2007}, \citet{Partridge2008}, \citet{Tu2008}, \citet{Helbich2009}, \citet{Hanink2010}, \citet{Sa2010}, \citet{PinedaJaimes2010}, \citet{Axhausen2010}, and \citet{Haynes2011}.
@@ -306,7 +307,7 @@ At first glance, the high frequency of type one error displayed in Table \ref{ta
 \centering
 \begin{tabular}{crccc}
 \multicolumn{2}{c}{} & \multicolumn{3}{c}{Coefficient RMSE}  \\ \cline{3-5}
-\multicolumn{2}{c}{} & $\widehat{B_0}$ & $\widehat{B_1}$ & \multicolumn{1}{c}{$\widehat{B_2}$}  \\  
+\multicolumn{2}{c}{} & $\widehat{\beta_0}$ & $\widehat{\beta_1}$ & \multicolumn{1}{c}{$\widehat{\beta_2}$}  \\  
  \parbox[t]{2mm}{\multirow{8}{*}{\rotatebox[origin=c]{90}{Model Selected}}} & GGG & \cellcolor{Gray}6 & \cellcolor{Gray}6 & \cellcolor{Gray}7 \\ 
 & LGG &  3 & \cellcolor{Gray}23 & \cellcolor{Gray}24 \\ 
 &  GLG & \cellcolor{Gray}22 & 4 & \cellcolor{Gray}24  \\ 
@@ -363,7 +364,7 @@ layout(matrix(c(1,1,2,2,3,3,4,4, 8,5,5,6,6,7,7,9), 2, 8, byrow = TRUE))
          labels = rev(rownames(testdf)), tick = FALSE, las = 1, cex.axis = 1.2)
       mtext("model selected", 2, line = 4)
       mtext(paste("metric: ", mymetric), 3, line = 2.5, cex = 1.25)
-      mtext("small < --- bandwidth --- > big", 3, line = 0.5, cex = .7)
+      mtext("smallest ---- bandwidth size ----  biggest", 3, line = 0.5, cex = .7)
   }
 #dev.off()
 @
@@ -412,7 +413,7 @@ layout(matrix(c(1,1,2,2,3,3,4,4, 8,5,5,6,6,7,7,9), 2, 8, byrow = TRUE))
          labels = rev(rownames(testdf)), tick = FALSE, las = 1, cex.axis = 1.2)
       mtext("model selected", 2, line = 4)
       mtext(paste("metric: ", mymetric), 3, line = 2.5, cex = 1.25)
-      mtext("smallest  ---  bandwidth  ---  biggest", 3, line = 0.5, cex = .7)
+      mtext("smallest  ---  bandwidth size ---  biggest", 3, line = 0.5, cex = .7)
   }
 #dev.off()
 @
@@ -464,14 +465,14 @@ TrueModel1 = which(mcOutput[1, "B0 SpVar", ] == SpVar &
          labels = rev(rownames(testdf)), tick = FALSE, las = 1, cex.axis = 1.2)
       if(SpVar == 0) mtext("model selected", 2, line = 4, cex = .7)
       #mtext(paste("metric: ", mymetric), 3, line = 2.5, cex = 1.25)
-      mtext("small < - bandwidth - > big", 3, line = 0.5, cex = .6)
+      mtext("small --- bandwidth size ---  big", 3, line = 0.5, cex = .6)
   }
 }
 mtext(dimnames(mcOutput)[[1]][c(11, 9, 10, 8)], side = 2, outer = TRUE, las = 1, adj = 0, line = 5,
       at = c(.85, .58, .35, .1))
 mtext(c("none", "some", "more"), side = 3, outer = TRUE,
-      at = c(.24, .57, .9))
-mtext("Spatial Variation in All Three Coefficients:", side = 3, outer = TRUE, at = .58, line = 2, cex = 1.2)
+      at = c(.21, .54, .88))
+mtext("Spatial Variation in All Three Coefficients:", side = 3, outer = TRUE, at = .52, line = 2, cex = 1.2)
 mtext("Metric:", side = 2, outer = TRUE, las = 1, adj = 0, line = 5, at = .9, cex = 1.2)
 #dev.off()
 @
@@ -485,16 +486,15 @@ mtext("Metric:", side = 2, outer = TRUE, las = 1, adj = 0, line = 5, at = .9, ce
 
 \subsection{One Local Coefficient}
 
-What have we learned in the previous sections?
-\begin{enumerate}
-\item LOOCV does the best identifying the non-stationary models
-\item most accurate $\hat{\beta}$ estimates do not necessarily come from the correct model
-\item SCV sucks
-\item something else.
-\end{enumerate}
+% What have we learned in the previous sections?
+% \begin{enumerate}
+% \item LOOCV does the best identifying the non-stationary models
+% \item most accurate $\hat{\beta}$ estimates do not necessarily come from the correct model
+% \item SCV sucks
+% \item something else.
+% \end{enumerate}
 
-Now we explore the mosed model cases in which some of the coefficients are stationary and some are non-stationary. We begin with the case of a single non-stationary coefficient. 
-
+We now examine our results when exactly one model coefficient is non-stationary. Figure \ref{fig:modelIdentificationOneL} shows that most metrics can correctly identify the proper mixed model when only one coefficient is non-stationary. Interestingly, the most accurate estimates of the coefficients again are not necessarily associated with the correct overall model.
 
 <<ModelSelectionTabulations1, echo = FALSE, dev='tikz', include=FALSE, fig.width= 11, fig.height=4>>= 
 #, fig.height=14, fig.width=10>>=
@@ -540,17 +540,16 @@ for (i in c(2, 3, 5)) {
 
 \begin{sidewaysfigure}
   \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelSelectionTabulations1.pdf}}
-\caption{This figure shows }
+\caption{Model Selection with One Local Coefficient \\ This figure shows the model selected by each of the seven different metrics for the three underlying models containing one Local (and two Global) model coefficients. Values in each cell refer to the percentage that each model is selected by the metric. As such, each column sums to 100. The color saturation for each cell helps denote the relative frequency.}
 \label{fig:modelIdentificationOneL}
 \end{sidewaysfigure}
 
-Figure \ref{fig:modelIdentificationOneL} shows that most metrics can correctly identify the propoer mixed model when only one coefficient is non-stationary.
+
 
 \subsection{Two Local Coefficients}
 
 
-Now we explore the mixed model cases in which two of the coefficients are non-stationary. 
-
+We now examine our results when exactly one model coefficient is non-stationary. Figure \ref{fig:modelIdentificationOneG} shows that these conventional metrics are less successful at identifying the correct model under these conditions. Notably, only the ``GLL" model is easily identified with regularity. Figure \ref{fig:modelIdentificationOneG} shows that the ``LLG" and ``LGL" models are not misidentified uniformly across the other seven models. Instead, the ``LGG" model is the most commonly selected.
 
 <<ModelSelectionTabulations1G, echo = FALSE, dev='tikz', include=FALSE, fig.width= 11, fig.height=4>>= 
 #, fig.height=14, fig.width=10>>=
@@ -596,15 +595,15 @@ for (i in c(4, 6, 7)) {
 
 \begin{sidewaysfigure}
   \makebox[\textwidth][c]{\includegraphics[width = 1.0\textwidth]{figure/ModelSelectionTabulations1G.pdf}}
-\caption{This figure shows }
+\caption{Model Selection with Two Local Coefficients \\ This figure shows the model selected by each of the seven different metrics for the three underlying models containing two Local (and one Global) model coefficients. Values in each cell refer to the percentage that each model is selected by the metric. As such, each column sums to 100. The color saturation for each cell helps denote the relative frequency.}
 \label{fig:modelIdentificationOneG}
 \end{sidewaysfigure}
 
-Figure \ref{fig:modelIdentificationOneG} shows that most metrics can.
+\section{Discussion and Future Work}
 
-\section{Discussion}
+Figure \ref{fig:modelIdentificationAll8} summarizes the results of model selection across our eight different models. The models are arranged such that the left and right columns of Figure \ref{fig:modelIdentificationAll8} differ only by whether or not the model constant is stationary (left) or not (right). This arrangement shows an interesting pattern. In all four cases when the model intercept is considered ``Local'' (non-stationary), the most commonly selected model by most metrics is ``LGG'' model. In other words, if the model's constant is varying over space, these conventional metrics select a model that correctly identifies the spatially varying intercept, but seems indifferent to whether or not the other coefficients are stationary or not. What accounts for this behavior? Could it be that the specification and parameters selected in this work make proper identification of the spatial variation (or not) in the intercept term more important? 
 
-Let's show the model selection by metric across our 8 different models.
+
 
 <<ModelSelectionTabulationsAll8, echo = FALSE, dev='tikz', include=FALSE, fig.width= 8, fig.height=11>>= 
 #, fig.height=14, fig.width=10>>=
@@ -650,11 +649,16 @@ for (i in 1:8) {
 
 \begin{figure}
   \makebox[\textwidth][c]{\includegraphics[width = 1.2\textwidth]{figure/ModelSelectionTabulationsAll8.pdf}}
-\caption{This figure shows }
+\caption{This figure shows the model selected by each of the seven different metrics across all eight different true underlying data generation processes. Values in each cell refer to the percentage that each model is selected by the metric. As such, each column (of each table) sums to 100. The color saturation for each cell helps denote the relative frequency. The color scale is consistent across all tables.}
 \label{fig:modelIdentificationAll8}
+\thisfloatpagestyle{empty}
 \end{figure}
 
-The left (right) column in Figure \ref{fig:modelIdentificationAll8} contains the four models in which the intercept coefficient is (non-)stationary over the study area. In the top row of the figure both $\beta _1$ and $\beta _2$ are stationary, the middle two rows contain one stationary and one non-stationary coefficient, and in the bottom row both $\beta _1$ and $\beta _2$ are non-stationary. An interesting pattern is visible. The models on the left tend to be more accurately identified by the metrics than the models on the right. That is, if the intercept term is stationary, our information metrics do a pretty good job identifying whether or not the other coefficients are stationary or not. However, when the intercept term is stationary, our metrics commonly choose the `LGG' model even when one or both of the other coefficients is non-stationary. 
+A close examination of the rightmost columns in each table of Figure \ref{fig:modelIdentificationAll8} reveals other patterns, too. The models associated with the smallest Root Mean Square Error for each coefficient are not necessarily with the correct model. For instance, when the true model is ``LGG" (in the upper right hand corner). We see that this is an example of when the conventional cross validation metrics routinely identify ``LGG" as the correct model. The most accurate estimates of the interecpt term are obtained by the true model over 90 percent of the time. However, the most accurate estimates of the other two coefficients (and perhaps the coefficients researchers are most interested in the value of) are only obtained by the correct model roughly one third of the time. Other model forumations have the smallest RMSE for these two coefficients just as frequently (LGL for $\beta _1$ and LLG for $\beta _2$). Are there meangingful patterns to be found in these results?
+
+Thus far, this work has only examined the performance of different metrics in identifying the correct model and which models result in the smallest RMSE for each coefficient in our model. We have not yet compared the coefficient RMSE across model selection metrics. That is, does the model selected by the LOOCV systematically yield different RMSE values for the coefficients than any of the other metrics? Additionally, how might other selection strategies fare? For instance, future work should examine the hypothesis testing procedure put forth by \citet{Leung2000a} and the Monte Carlo simulation procedure described in \citet{Fotheringham2002}. 
+
+
 
 <<ModelAndBandwidthByMetric, echo = FALSE, dev='tikz', include=FALSE, fig.width= 12, fig.height=6>>=
 #pdf("figure/ModelAndBandwidthByMetric.pdf", width = 12, height = 6)
@@ -1081,7 +1085,7 @@ mtext("smaller sample <---------------------------------------------------------
 % summary(mylogit)
 % @
 
-\newpage
+% \newpage
 \begin{singlespace}
 \bibliographystyle{plainnat}
 \bibliography{MixedGWRbibliography}

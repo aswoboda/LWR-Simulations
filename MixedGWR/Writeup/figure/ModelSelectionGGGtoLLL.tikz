@@ -1,4 +1,4 @@
-% Created by tikzDevice version 0.8.1 on 2015-02-25 18:45:22
+% Created by tikzDevice version 0.8.1 on 2015-05-24 12:56:43
 % !TEX encoding = UTF-8 Unicode
 \documentclass{article}
 \nonstopmode
@@ -25,6 +25,8 @@
 \usepackage{caption, amsmath, graphicx, setspace, multirow, color, hyperref, array}
 \usepackage{xcolor, colortbl}
 \usepackage{arydshln}
+\usepackage{caption}
+\captionsetup{margin=10pt,font=small,labelfont=bf, format = hang}
 
 \definecolor{Gray}{gray}{0.85}
 \definecolor{Gray95}{gray}{0.95}
@@ -32,6 +34,7 @@
 
 \title{Can Conventional Measures Identify Geographically Varying Mixed Regression Relationships? A Simulation-based Analysis of Locally Weighted Regression}
 \author{Aaron Swoboda}
+\date{DRAFT: Do NOT Cite Without Permission}
 
 
 
@@ -229,7 +232,7 @@
 
 \node[text=drawColor,rotate= 90.00,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 61.78,465.30) {model selected};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (144.37,528.26) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (144.37,528.26) {small --- bandwidth size ---  big};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,578.16);
@@ -420,7 +423,7 @@
 
 \node[text=drawColor,rotate= 90.00,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 61.78,330.66) {model selected};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (144.37,393.62) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (144.37,393.62) {small --- bandwidth size ---  big};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,578.16);
@@ -636,7 +639,7 @@
 
 \node[text=drawColor,rotate= 90.00,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 61.78,196.02) {model selected};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (144.37,258.98) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (144.37,258.98) {small --- bandwidth size ---  big};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,578.16);
@@ -817,7 +820,7 @@
 
 \node[text=drawColor,rotate= 90.00,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.84] at ( 61.78, 61.38) {model selected};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (144.37,124.34) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (144.37,124.34) {small --- bandwidth size ---  big};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,578.16);
@@ -1002,7 +1005,7 @@
 
 \node[text=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  0.95] at (237.27,512.27) {GGG};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (294.52,528.26) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (294.52,528.26) {small --- bandwidth size ---  big};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,578.16);
@@ -1200,7 +1203,7 @@
 
 \node[text=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  0.95] at (237.27,377.63) {GGG};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (294.52,393.62) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (294.52,393.62) {small --- bandwidth size ---  big};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,578.16);
@@ -1414,7 +1417,7 @@
 
 \node[text=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  0.95] at (237.27,242.99) {GGG};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (294.52,258.98) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (294.52,258.98) {small --- bandwidth size ---  big};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,578.16);
@@ -1612,7 +1615,7 @@
 
 \node[text=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  0.95] at (237.27,108.35) {GGG};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (294.52,124.34) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (294.52,124.34) {small --- bandwidth size ---  big};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,578.16);
@@ -1786,7 +1789,7 @@
 
 \node[text=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  0.95] at (387.42,512.27) {GGG};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (444.67,528.26) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (444.67,528.26) {small --- bandwidth size ---  big};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,578.16);
@@ -1958,7 +1961,7 @@
 
 \node[text=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  0.95] at (387.42,377.63) {GGG};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (444.67,393.62) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (444.67,393.62) {small --- bandwidth size ---  big};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,578.16);
@@ -2160,7 +2163,7 @@
 
 \node[text=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  0.95] at (387.42,242.99) {GGG};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (444.67,258.98) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (444.67,258.98) {small --- bandwidth size ---  big};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,578.16);
@@ -2335,7 +2338,7 @@
 
 \node[text=drawColor,anchor=base east,inner sep=0pt, outer sep=0pt, scale=  0.95] at (387.42,108.35) {GGG};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (444.67,124.34) {small < - bandwidth - > big};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  0.72] at (444.67,124.34) {small --- bandwidth size ---  big};
 
 \node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.20] at (  7.92,453.64) {LOOCV};
 
@@ -2345,13 +2348,13 @@
 
 \node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.20] at (  7.92, 49.72) {AIC};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (155.63,540.14) {none};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (142.11,540.14) {none};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (304.28,540.14) {some};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (290.76,540.14) {some};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (452.92,540.14) {more};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (443.92,540.14) {more};
 
-\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.44] at (308.78,555.98) {Spatial Variation in All Three Coefficients:};
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.44] at (281.75,555.98) {Spatial Variation in All Three Coefficients:};
 
 \node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.44] at (  7.92,479.75) {Metric:};
 \end{scope}
